@@ -1,10 +1,10 @@
-amwa_id: INFO-TEMPLATE
-url: https://specs.amwa.tv/info-template
-name: Template for NMOS Implementation Guides
-status: Continuing
-repo_name: info-template
-alt_repo_name: nmos-implementation-guide-template
-repo_url: https://github.com/AMWA-TV/info-template
+amwa_id: INFO-DEVICE-CAPABILITIES-CONTROL
+url: https://specs.amwa.tv/info-device-capabilities-control
+name: Implementation guide for NMOS Device Capabilities Control
+status: Work In Progress
+repo_name: info-device-capabilities-control
+alt_repo_name: nmos-implementation-guide-device-capabilities-control
+repo_url: https://github.com/AMWA-TV/info-device-capabilities-control
 releases:
 default_branch: main
 show_in_index: false
