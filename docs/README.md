@@ -1,3 +1,5 @@
 - [Introduction](Introduction.md)
-- [Device implementation](Device%20implementation.md)
-- [Controller implementation](Controller%20implementation.md)
+- [Device implementation tutorial](Device%20implementation%20tutorial.md)
+- [Controller implementation tutorial](Controller%20implementation%20tutorial.md)
+- [Device implementation How To](Device%20implementation%20how%20to.md)
+- [Controller implementation How To](Controller%20implementation%20how%20to.md)
