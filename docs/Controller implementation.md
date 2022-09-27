@@ -11,6 +11,8 @@ This section covers the basis for quickly building an MS-05 / IS-12 controller i
 
 This section provides guidance in select focus areas required for controller implementations.
 
+The basic controller workflow follows the diagram below where individual steps are detailed in the following subsections.
+
 | ![Basic controller sequence](images/basic-controller-sequence.png) |
 |:--:|
 | _**Basic controller sequence**_ |
@@ -83,6 +85,10 @@ A minimal implementation of a device will have at least three managers listed in
 - Device manager
 - Subscription manager
 - Class manager
+
+| ![Typical device structure](images/typical-device-structure.png) |
+|:--:|
+| _**Typical device structure**_ |
 
 A controller is expected to [Discover the structure](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Exploring_the_device_tree.html) of a device by recursively querying the members of nested blocks. It will also discover the implemented managers in the root block by checking their class identity or roles.
 
