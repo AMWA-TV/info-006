@@ -52,7 +52,7 @@ The controller can then use the discovered control endpoint to make the initial 
 
 As per the [NMOS IS-12](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Protocol_messaging.html#session-creation) specification a controller first needs to create a control session by sending a [CreateSession](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Creating_a_session.html) message.
 
-The control session provides the control context for issuing subsequent commands, receiving responses and notifications. It also specifies how often heartbeats are sent (see [Sending heartbeats](Controller%20implementation#sending-heartbeats)).
+The control session provides the control context for issuing subsequent commands, receiving responses and notifications. It also specifies how often heartbeats are sent (see [Sending heartbeats](Controller%20implementation%20tutorial.md#sending-heartbeats)).
 
 The `value` received in the `Create session response` message is the control session id the device has allocated for use. It needs to be used in every subsequent communication with the device.
 
@@ -60,7 +60,7 @@ The `value` received in the `Create session response` message is the control ses
 
 ### Sending heartbeats
 
-As per the [NMOS IS-12](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Protocol_messaging.html#heartbeats) specification a controller needs to send [Heartbeat](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Sending_heartbeats.html) messages for their control sessions at the intervals specified when creating the session (see [Creating a control session](Controller%20implementation#creating-a-control-session)).
+As per the [NMOS IS-12](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Protocol_messaging.html#heartbeats) specification a controller needs to send [Heartbeat](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Sending_heartbeats.html) messages for their control sessions at the intervals specified when creating the session (see [Creating a control session](Controller%20implementation%20tutorial.md#creating-a-control-session)).
 
 Devices will acknowledge each heartbeat with a response.
 
@@ -124,7 +124,7 @@ As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Mana
 
 Vendor specific control classes can be created by branching off from a standard control class and following the class ID generation guidelines specified in [MS-05-01](https://specs.amwa.tv/ms-05-01/branches/v1.0-dev/docs/Appendix_A_-_Class_ID_Format.html).
 
-Here is an example of a new worker control class called `DemoClassAlpha`. It inherits from [NcWorker](https://github.com/AMWA-TV/ms-05-02/blob/v1.0-dev/idl/NC-Framework.webidl) which has an identity of [1, 2] and adds the authority key (in this case 0, but should be a negative number if the vendor has an OUI or CID) followed by the index 1.
+Here is an example of a new worker control class called `DemoClassAlpha`. It inherits from [NcWorker](https://github.com/AMWA-TV/ms-05-02/blob/v1.0-dev/idl/NC-Framework.webidl) which has an identity of `[1, 2]` and adds the authority key (in this case 0, but should be a negative number if the vendor has an OUI or CID) followed by the index 1.
 
 ```json
 {
