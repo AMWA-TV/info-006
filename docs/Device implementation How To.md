@@ -100,24 +100,802 @@ sudo docker ps
 ```
 
 **Expected Output**
+
+The output of `sudo docker ps` will show the EasyNMOS NMOS docker image is up and running and required ports are mapped from the host's network to the docker container network. 
+
 ```
-CONTAINER ID   IMAGE                     COMMAND                 CREATED      STATUS      PORTS                                                                                                                   NAMES
-cca7720881dd   rhastie/nmos-cpp:latest   "/home/entrypoint.sh"   2 days ago   Up 2 days   1883/tcp, 11000-11001/tcp, 5353/udp, 0.0.0.0:8011->8011/tcp, :::8011->8011/tcp, 0.0.0.0:80->8010/tcp, :::80->8010/tcp   RDS
+CONTAINER ID   IMAGE                     COMMAND                 CREATED         STATUS         PORTS                                                                                                                   NAMES
+9a8890946623   rhastie/nmos-cpp:latest   "/home/entrypoint.sh"   9 seconds ago   Up 8 seconds   1883/tcp, 11000-11001/tcp, 5353/udp, 0.0.0.0:8011->8011/tcp, :::8011->8011/tcp, 0.0.0.0:80->8010/tcp, :::80->8010/tcp   RDS
 
 ```
 
+Verify the web server in the EasyNMOS docker container is up and running by opening http://localhost/admin on your host. You should see the welcome screen for the open-source NVIDIA NMOS Commissioning Controller. 
+ 
 Now install the mock device from the repo:
 
 ``` 
 git clone https://github.com/AMWA-TV/nmos-device-control-mock.git
-git checkout release-1.0.0
 cd nmos-device-control-mock/code
 npm install
 npm run build-and-start
 
 ```
 
-## Recap of HOWTO
+**Expected Output**
+
+The output of npm run build-and-start will show status as the mock node is built and ran.  The last few lines of the output will show the mock device registering with the RDS running as part of the docker image started above.
+
+
+```
+App started
+Configuration: Reading config.json
+Configuration - CheckIdentifiers()
+Configuration- Writing back config.json
+RegistrationClient - RegisterOrUpdateResource(resourceType:node)
+Server started on port 8080
+RegistrationClient - RegisterOrUpdateResource(resourceType:device)
+RegistrationClient - RegisterOrUpdateResource(resourceType:receiver)
+Successfully wrote file
+
+
+```
+**Locate the NMOS Control WebSocket**
+
+You now have all the NMOS items needed to interact with the NMOS Control mock node.  Since IS-12 uses an advertized WebSocket we will next browse the RDS registry to find the advertised WebSocker and use a Chrome extension that allows opening that WebSocket and sending and receiving IS-12 JSON formated commands and responses.  
+
+From the NMOS Commmisioning Controller located at http://localhost/admin open the Device browser by clicking on the left `Devices` button.  The NMOS Control Mock Node will be present with name NC-01.  Click on the NC-01 link and locate the  IS-12 control WebSocket:
+
+`ws://127.0.0.1:8080/x-nmos/ncp/v1.0/connect urn:x-nmos:control:ncp/v1.0`
+
+This is the WebSocket used to interact with NMOS Control components.
+
+**Install Chrome WebSocket Plugin**
+
+We will install a Chrome WebSocket extension. Other WebSocket clients will work equally well. 
+
+Details on installing Chrome extensions can be found [here](https://support.google.com/chrome_webstore/answer/2664769?hl=en).  Follow the instructions to open the Chrome Web Store and search for WebSocket King Client.  Install this extension. 
+
+After completing the installation of WebSocket King open the extension in a new browser window.  Copy and paste the WebSocket located in the RDS for the NC-01 NMOS Control Mock node into the connections field and click `connect`.  The `Connect` button should turn to `Disconnect` indicating a successful connection the the NC-01 WebSocket.
+
+Next we will verify the ability to read and write to the NMOS Control components running on the mock node.  We will focus on reading and writing to the Receiver Control that is provided by the mock node.  Other aspects of control can also be explored by following the examples in the [IS-12 Specification](https://specs.amwa.tv/is-12/) example section. For purposes of this HOW-TO we will focus on working with the Receiver Control and adding code to extend this control then create a new control and interact with this new control.  
+
+**Open a Session and Obtain Information on Control of Interest**
+
+Use the JSON Command to open a new session to the NC-01 WebSocket control. Copy the JSON formatted message into the For more information about the format refer to [AMWA IS-12 NMOS Control Protocol](https://specs.amwa.tv/is-12/ ). Also note that in an actual system most of the manual steps we are performing here would be performed by an NMOS Controller using the IS-12 specification.  For more information about implementing and IS-12 NMOS Controller see the HOW-TO section for Controller implementations.
+
+
+```
+{
+  "protocolVersion": "1.0.0",
+  "messageType": 0,
+  "messages": [
+    {
+      "handle": 1,
+      "arguments": {
+        "heartBeatTime": 5000
+      }
+    }
+  ]
+}
+
+```
+
+**Expected Output from WebSocket King**
+
+```
+{
+  "protocolVersion": "1.0.0",
+  "messageType": 1,
+  "messages": [
+    {
+      "handle": 1,
+      "result": {
+        "status": 0,
+        "value": 3
+      }
+    }
+  ]
+}
+
+```
+
+We now have a WebSocket session `3` open for our WebSocket King client.  Next retrieve the Control elements and locate the Stereo Gain control block.  
+
+Send the following JSON Formatted command to the NC-01 WebSocket Use the Session ID received in the previous command. In our case `3`:
+
+```
+
+{
+  "protocolVersion": "1.0.0",
+  "sessionId": 3,
+  "messageType": 2,
+  "messages": [
+    {
+      "handle": 3,
+      "oid": 1,
+      "methodId": {
+        "level": 1,
+        "index": 1
+      },
+      "arguments": {
+        "id": {
+          "level": 2,
+          "index": 10
+        }
+      }
+    }
+  ]
+}
+
+```
+
+
+**Expected Output**
+
+The Control responds with a JSON containing top level managers and controls.  The Control we are interested in is the Stereo Gain block.  We see the block is present along with its Object ID (oid).  The oid is unique across all control elements and we will use it to retrieve the current value, change the value and verify the change.  The oid is 31. 
+
+```
+{
+  "protocolVersion": "1.0.0",
+  "messageType": 3,
+  "sessionId": 101,
+  "messages": [
+    {
+      "handle": 3,
+      "result": {
+        "status": 0,
+        "value": [
+          {
+            "role": "DeviceManager",
+            "oid": 2,
+            "constantOid": true,
+            "identity": {
+              "id": [
+                1,
+                3,
+                1
+              ],
+              "version": "1.0.0"
+            },
+            "userLabel": "Device manager",
+            "owner": 1,
+            "description": "The device manager offers information about the product this device is representing",
+            "constraints": null
+          },
+          {
+            "role": "ClassManager",
+            "oid": 3,
+            "constantOid": true,
+            "identity": {
+              "id": [
+                1,
+                3,
+                2
+              ],
+              "version": "1.0.0"
+            },
+            "userLabel": "Class manager",
+            "owner": 1,
+            "description": "The class manager offers access to control class and data type descriptors",
+            "constraints": null
+          },
+          {
+            "role": "SubscriptionManager",
+            "oid": 5,
+            "constantOid": true,
+            "identity": {
+              "id": [
+                1,
+                3,
+                4
+              ],
+              "version": "1.0.0"
+            },
+            "userLabel": "Subscription manager",
+            "owner": 1,
+            "description": "The subscription manager offers the ability to subscribe to events on particular objects and properties",
+            "constraints": null
+          },
+          {
+            "role": "ReceiverMonitor_01",
+            "oid": 11,
+            "constantOid": true,
+            "identity": {
+              "id": [
+                1,
+                2,
+                2
+              ],
+              "version": "1.0.0"
+            },
+            "userLabel": "Receiver monitor 01",
+            "owner": 1,
+            "description": "Receiver monitor worker",
+            "constraints": null
+          },
+          {
+            "role": "stereo-gain",
+            "oid": 31,
+            "constantOid": true,
+            "identity": {
+              "id": [
+                1,
+                1
+              ],
+              "version": "1.0.0"
+            },
+            "userLabel": "Stereo gain",
+            "owner": 1,
+            "description": "Stereo gain block",
+            "constraints": null,
+            "blockSpecId": null
+          },
+          {
+            "role": "DemoClass",
+            "oid": 111,
+            "constantOid": true,
+            "identity": {
+              "id": [
+                1,
+                2,
+                0,
+                1
+              ],
+              "version": "1.0.0"
+            },
+            "userLabel": "Demo class",
+            "owner": 1,
+            "description": "Demo control class",
+            "constraints": null
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+**Read, Write, Modify Stereo Gain**
+
+Use the IS-12 generic getter to discover the properties the Stereo Gain control.  Send the following JSON Formatted command to the NC-1 control WebSocket
+
+```
+{
+  "protocolVersion": "1.0.0",
+  "sessionId": 3,
+  "messageType": 2,
+  "messages": [
+    {
+      "handle": 3,
+      "oid": 31,
+      "methodId": {
+        "level": 1,
+        "index": 1
+      },
+      "arguments": {
+        "id": {
+          "level": 2,
+          "index": 10
+        }
+      }
+    }
+  ]
+}
+
+```
+ The above command has the sessionId set to 3 for our session and should be modified to use the session for your case. We use oid 31 which we discovered from the top level browse of the NMOS Controls was the oid for Stereo Gain.
+
+ **Expected Output**
+
+ IS-12 responds to the above query with a JSON formatted response containing all the parameters for the Stereo Gain block
+
+ ```
+{
+  "protocolVersion": "1.0.0",
+  "messageType": 3,
+  "sessionId": 3,
+  "messages": [
+    {
+      "handle": 3,
+      "result": {
+        "status": 0,
+        "value": [
+          {
+            "role": "channel-gain",
+            "oid": 21,
+            "constantOid": true,
+            "identity": {
+              "id": [
+                1,
+                1
+              ],
+              "version": "1.0.0"
+            },
+            "userLabel": "Channel gain",
+            "owner": 31,
+            "description": "Channel gain block",
+            "constraints": null,
+            "blockSpecId": null
+          },
+          {
+            "role": "master-gain",
+            "oid": 24,
+            "constantOid": true,
+            "identity": {
+              "id": [
+                1,
+                2,
+                1,
+                1,
+                1
+              ],
+              "version": "1.0.0"
+            },
+            "userLabel": "Master gain",
+            "owner": 31,
+            "description": "Master gain",
+            "constraints": null
+          }
+        ]
+      }
+    }
+  ]
+}
+
+ ```
+
+Next drill down one more level to resolve the left and right gains for the Channel Gain block (oid = 21)
+
+```
+{
+  "protocolVersion": "1.0.0",
+  "sessionId": 3,
+  "messageType": 2,
+  "messages": [
+    {
+      "handle": 3,
+      "oid": 21,
+      "methodId": {
+        "level": 1,
+        "index": 1
+      },
+      "arguments": {
+        "id": {
+          "level": 2,
+          "index": 10
+        }
+      }
+    }
+  ]
+}
+
+```
+
+**Expected Results**
+
+The JSON response to the above query gives us the two leaf control blocks `left-gain` and `right-gain` as shown below:
+
+```
+{
+  "protocolVersion": "1.0.0",
+  "messageType": 3,
+  "sessionId": 3,
+  "messages": [
+    {
+      "handle": 3,
+      "result": {
+        "status": 0,
+        "value": [
+          {
+            "role": "left-gain",
+            "oid": 22,
+            "constantOid": true,
+            "identity": {
+              "id": [
+                1,
+                2,
+                1,
+                1,
+                1
+              ],
+              "version": "1.0.0"
+            },
+            "userLabel": "Left gain",
+            "owner": 21,
+            "description": "Left channel gain",
+            "constraints": null
+          },
+          {
+            "role": "right-gain",
+            "oid": 23,
+            "constantOid": true,
+            "identity": {
+              "id": [
+                1,
+                2,
+                1,
+                1,
+                1
+              ],
+              "version": "1.0.0"
+            },
+            "userLabel": "Right gain",
+            "owner": 21,
+            "description": "Right channel gain",
+            "constraints": null
+          }
+        ]
+      }
+    }
+  ]
+}
+
+```
+
+Now retrieve the value for the `right-gain` using the generic getter for the property.
+
+Copy and paste the following into the WebSocket King Client.  The level and index of the gain value parameter is obtained from the mock node source code and will be more fully described when we modify the gain control to add a new parameter in the next sections.
+
+```
+{
+  "protocolVersion": "1.0.0",
+  "sessionId": 3,
+  "messageType": 2,
+  "messages": [
+    {
+      "handle": 2,
+      "oid": 23,
+      "methodId": {
+        "level": 1,
+        "index": 1
+      },
+      "arguments": {
+        "id": {
+          "level": 5,
+          "index": 1
+        }
+      }
+    }
+  ]
+}
+
+```
+
+**Expected Results**
+
+The default value set in the mock device for the right-gain is `0` so we expect the returned value to be zero. The  JSON response from `NC-01` confirms this:
+
+```
+
+{
+  "protocolVersion": "1.0.0",
+  "messageType": 3,
+  "sessionId": 3,
+  "messages": [
+    {
+      "handle": 2,
+      "result": {
+        "status": 0,
+        "value": 0
+      }
+    }
+  ]
+}
+```
+
+Now we will set the `right-gain` to a value of 11 and verify the change has taken effect.  Copy and paste the following JSON formatted command to set the value of the right-gain:
+
+```
+{
+  "protocolVersion": "1.0.0",
+  "sessionId": 3,
+  "messageType": 2,
+  "messages": [
+    {
+      "handle": 2,
+      "oid": 23,
+      "methodId": {
+        "level": 1,
+        "index": 2
+      },
+      "arguments": {
+        "id": {
+          "level": 5,
+          "index": 1
+        },
+        "value": "11.0"
+      }
+    }
+  ]
+}
+
+```
+**Expected Results**
+
+The command should be accepted with no errors.  JSON Response to the command should indicate status of 0.
+
+Next retrieve the new gain value by copying and pasting the following into the WebSocket King client:
+
+```
+{
+  "protocolVersion": "1.0.0",
+  "sessionId": 3,
+  "messageType": 2,
+  "messages": [
+    {
+      "handle": 2,
+      "oid": 23,
+      "methodId": {
+        "level": 1,
+        "index": 1
+      },
+      "arguments": {
+        "id": {
+          "level": 5,
+          "index": 1
+        }
+      }
+    }
+  ]
+}
+
+```
+
+**Expected Results**
+
+NC-01 returns the new value of the `right-gain` parameter for the Stereo Gain Block:
+
+```
+{
+  "protocolVersion": "1.0.0",
+  "messageType": 3,
+  "sessionId": 3,
+  "messages": [
+    {
+      "handle": 2,
+      "result": {
+        "status": 0,
+        "value": "11.0"
+      }
+    }
+  ]
+}
+
+```
+ **Conclusions for Section One HOW-TO**
+
+ In this section of the HOW-TO guide you setup all required NMOS infrastructure to run and interact with an NMOS Device that provides IS-12 NMOS Control functionality. You have loaded an NMOS RDS so that the NMOS device can register it's control endpoint for IS-12 in the form of a standard WebSocket. You have installed the NC-01 mock device and used it to explore how NMOS Control works for a simple Stereo Gain Control Block. You have used manual copy-and-paste of JSON protocol messages to act as an human-in-the-loop NMOS Controller.  
+
+ In the next section you will add a new parameter to the Stereo Gain Block's left and right gains.  You will become familiar with how to modify code to enhance existing control blocks to add functionality to an existing NMOS Control Block.
+
+
+ #### Modifications to the Stereo Gain Block 
+
+This section shows how to add in a simple `muted` parameter to the left and right gains that you worked with in the previous section. The requirements for this additional functionality are simple.  Each of the stereo channels will have an additional `boolean` parameter that controls if the channel is muted.  Turning on and off the muting does not effect the gain of the channel.  
+
+**Steps to Implement**
+
+- Edit the Features.ts file located in `code/src/NCModel` of the cloned mock node repo
+- Add in a boolean parameter to the gain blocks
+- Set the new parameter's level and index
+- Set the default value to `false`
+- Restart the Mock Node.
+- 
+
+**Editing Features.ts**
+
+Open the Features.ts file with any editor.   Make the following changes to the file:
+
+```
+@@ -144,11 +144,11 @@ try
+             new NcGain(22, true, 21, "left-gain", "Left gain", false, NcLockState.NoLock, [], true, [
+                 new NcPort('input_1', NcIoDirection.Input, null),
+                 new NcPort('output_1', NcIoDirection.Output, null),
+-            ], null, 0, "Left channel gain", sessionManager),
++            ], null, 0, false, "Left channel gain", sessionManager),
+             new NcGain(23, true, 21, "right-gain", "Right gain", false, NcLockState.NoLock, [], true, [
+                 new NcPort('input_1', NcIoDirection.Input, null),
+                 new NcPort('output_1', NcIoDirection.Output, null),
+-            ], null, 0, "Right channel gain", sessionManager)
++            ], null, 0, false, "Right channel gain", sessionManager)
+         ],
+         [ 
+             new NcPort('stereo_gain_input_1', NcIoDirection.Input, null),
+@@ -189,7 +189,7 @@ try
+                     new NcPort('input_2', NcIoDirection.Input, null),
+                     new NcPort('output_1', NcIoDirection.Output, null),
+                     new NcPort('output_2', NcIoDirection.Output, null),
+-                ], null, 0, "Master gain", sessionManager)
++                ], null, 0, false, "Master gain", sessionManager)
+             ],
+             [ 
+                 new NcPort('block_input_1', NcIoDirection.Input, null),
+
+```
+
+Modify the file `code/src/Server.ts` to make the following changes
+
+```
+@@ -162,6 +162,9 @@ export class NcGain extends NcActuator
+     @myIdDecorator('5p1')
+     public setPoint: number;
+ 
++    @myIdDecorator('5p2')
++    public mute: boolean;
++
+     public classID: number[] = [ 1, 2, 1, 1, 1 ];
+     public classVersion: string = "1.0.0";
+ 
+@@ -178,12 +181,14 @@ export class NcGain extends NcActuator
+         ports: NcPort[] | null,
+         latency: number | null,
+         setPoint: number,
++       mute: boolean,
+         description: string,
+         notificationContext: INotificationContext)
+     {
+         super(oid, constantOid, owner, role, userLabel, lockable, lockState, touchpoints, enabled, ports, latency, description, notificationContext);
+ 
+         this.setPoint = setPoint;
++       this.mute = mute;
+     }
+ 
+     //'1m1'
+@@ -197,6 +202,8 @@ export class NcGain extends NcActuator
+             {
+                 case '5p1':
+                     return new CommandResponseWithValue(handle, NcMethodStatus.OK, this.setPoint, null);
++               case '5p2':
++                   return new CommandResponseWithValue(handle, NcMethodStatus.OK, this.mute, null);
+                 default:
+                     return super.Get(oid, propertyId, handle);
+             }
+@@ -218,7 +225,11 @@ export class NcGain extends NcActuator
+                     this.setPoint = value;
+                     this.notificationContext.NotifyPropertyChanged(this.oid, id, this.setPoint);
+                     return new CommandResponseNoValue(handle, NcMethodStatus.OK, null);
+-                default:
++              case '5p2':
++                    this.mute = value;
++                    this.notificationContext.NotifyPropertyChanged(this.oid, id, this.mute);
++                    return new CommandResponseNoValue(handle, NcMethodStatus.OK, null);
++              default:
+                     return super.Set(oid, id, value, handle);
+             }
+         }
+
+```
+
+Now restart `npm run build-and-start` and explore the changes you have made to the `right-gain` control.  Note that since you have added in a `mute` to the base NCGain all objects of this type will have a `mute` capability including `left-gain`, and `master-gain` in the control hierarchy.  
+
+**Read the Default Value for Mute**
+
+```
+{
+  "protocolVersion": "1.0.0",
+  "sessionId": 3,
+  "messageType": 2,
+  "messages": [
+    {
+      "handle": 2,
+      "oid": 23,
+      "methodId": {
+        "level": 1,
+        "index": 1
+      },
+      "arguments": {
+        "id": {
+          "level": 5,
+          "index": 2
+        }
+      }
+    }
+  ]
+}
+
+```
+
+**Expected Value**
+
+```
+{
+  "protocolVersion": "1.0.0",
+  "messageType": 3,
+  "sessionId": 3,
+  "messages": [
+    {
+      "handle": 2,
+      "result": {
+        "status": 0,
+        "value": false
+      }
+    }
+  ]
+}
+
+```
+
+**Set the Mute for Right Channel to True**
+
+```
+{
+  "protocolVersion": "1.0.0",
+  "sessionId": 3,
+  "messageType": 2,
+  "messages": [
+    {
+      "handle": 2,
+      "oid": 23,
+      "methodId": {
+        "level": 1,
+        "index": 2
+      },
+      "arguments": {
+        "id": {
+          "level": 5,
+          "index": 2
+        },
+        "value": "true"
+      }
+    }
+  ]
+}
+
+```
+
+**Read New Value**
+
+```
+
+{
+  "protocolVersion": "1.0.0",
+  "sessionId": 3,
+  "messageType": 2,
+  "messages": [
+    {
+      "handle": 2,
+      "oid": 23,
+      "methodId": {
+        "level": 1,
+        "index": 1
+      },
+      "arguments": {
+        "id": {
+          "level": 5,
+          "index": 2
+        }
+      }
+    }
+  ]
+}
+
+```
+
+**Expected Value**
+
+The retrieved value for the mute on the `right-gain` shows the new value for `mute` as true as expected.
+
+```
+{
+  "protocolVersion": "1.0.0",
+  "messageType": 3,
+  "sessionId": 3,
+  "messages": [
+    {
+      "handle": 2,
+      "result": {
+        "status": 0,
+        "value": "true"
+      }
+    }
+  ]
+}
+
+```
+
+**Conclusions**
+
+
 
 This HOWTO has shown how to add controllability to an NMOS node using the NMOS Control Framework. ...
 
