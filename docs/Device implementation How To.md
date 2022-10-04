@@ -1,4 +1,4 @@
-# Device implementation How To
+
 
 {:.no_toc}
 
@@ -18,13 +18,13 @@ We hope you find this how-to guide to be useful.
 
 ## HOWTO Steps
 
-This HOWTO will present the steps:
+This HOWTO will present the steps to install, modify and try out the NMOS Control Framework. The HOW-TO uses a fresh Ubuntu 20.04 installation.  
 
 ### Basic Installation
 
 This section will do the most basic steps to get a NMOS Controllable Node running on your system. 
 
-- Install the NMOS Controlable Mock Device (NCMD)
+- Install the NMOS Controllable Mock Device (NCMD)
 - Install EasyNMOS Docker Container for NMOS RDS
 - Verify NCMD registers and exposes it's NMOS IS-12 Control Endpoint in the NMOS RDS
 - Install Chrome Websocket Extension
@@ -57,9 +57,65 @@ This section will make modifications to the basic system and show how to add in 
 
 ## Installing Mock NMOS Control Device
 
+Install the NMOS Mock control device from its location on the public github [repo](https://github.com/AMWA-TV/nmos-device-control-mock).  
 
-...
+Follow the steps below from any directory on your Ubuntu host:
+### Install Needed Packages
 
+You will need `docker` for running the NMOS RDS and `npm` for running the mock NMOS Controllable Node.  We first assume a fresh install of Ubuntu 20.04 and so do an update for packages prior to installation of required dependencies.
+
+```
+sudo apt-get update
+sudo apt install -y npm
+sudo apt install -y docker.io
+
+```
+
+Now install an NMOS RDS. We will use the RDS from [EasyNMOS](https://github.com/rhastie/easy-nmos)
+
+You will run the RDS from one terminal window and the mock node from another.  Open a terminal window and perform the following commands:
+
+```
+sudo docker pull rhastie/nmos-cpp:latest
+```
+
+**Expected Output**
+```
+latest: Pulling from rhastie/nmos-cpp
+3b65ec22a9e9: Pull complete 
+964e9f4b2501: Pull complete 
+5312be12420b: Pull complete 
+037321a10163: Pull complete 
+4f4fb700ef54: Pull complete 
+Digest: sha256:bd2cdeb5263d555cfe0e427099251d287f3f343af09789e82354deb3049d4a2d
+Status: Downloaded newer image for rhastie/nmos-cpp:latest
+docker.io/rhastie/nmos-cpp:latest
+
+```
+**Run and Verify the RDS**
+
+```
+sudo docker run -d -p 80:8010 -p 8011:8011 --name RDS  rhastie/nmos-cpp:latest
+sudo docker ps
+```
+
+**Expected Output**
+```
+CONTAINER ID   IMAGE                     COMMAND                 CREATED      STATUS      PORTS                                                                                                                   NAMES
+cca7720881dd   rhastie/nmos-cpp:latest   "/home/entrypoint.sh"   2 days ago   Up 2 days   1883/tcp, 11000-11001/tcp, 5353/udp, 0.0.0.0:8011->8011/tcp, :::8011->8011/tcp, 0.0.0.0:80->8010/tcp, :::80->8010/tcp   RDS
+
+```
+
+Now install the mock device from the repo:
+
+``` 
+git clone https://github.com/AMWA-TV/nmos-device-control-mock.git
+git checkout release-1.0.0
+cd nmos-device-control-mock/code
+npm install
+npm run build-and-start
+
+```
 
 ## Recap of HOWTO
 
