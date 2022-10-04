@@ -73,8 +73,6 @@ A device is expected to offer touchpoints to map identities wherever relevant (F
 
 #### Minimum requirements
 
-Mention the minimum structure, root block, managers
-
 As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Blocks.html) specification all MS-05 / IS-12 devices need to expose a structure starting with the root block which always has an `oid` of 1.
 
 A minimal implementation of a device will have at least three [managers](Device%20implementation%20tutorial.md#manager-control-classes) listed in the root block:
