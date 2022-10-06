@@ -29,8 +29,8 @@ This section will do the most basic steps to get a NMOS Controllable Node runnin
 - Verify NCMD registers and exposes it's NMOS IS-12 Control Endpoint in the NMOS RDS
 - Install Chrome Websocket Extension
 - Verify the NCMD can be reached via the WebSocket Control endpoint listed in the RDS
-- Add subscription for notification on change to control parameter
-- Verify notification event received when parameter changes
+- Locate the one of the control blocks provided by the NCMD
+- Verify ability to read, and write a parameter of the control block.
 
 ### Modifications to Basic Installation
 
@@ -157,7 +157,7 @@ Details on installing Chrome extensions can be found [here](https://support.goog
 
 After completing the installation of WebSocket King open the extension in a new browser window.  Copy and paste the WebSocket located in the RDS for the NC-01 NMOS Control Mock node into the connections field and click `connect`.  The `Connect` button should turn to `Disconnect` indicating a successful connection the the NC-01 WebSocket.
 
-Next we will verify the ability to read and write to the NMOS Control components running on the mock node.  We will focus on reading and writing to the Receiver Control that is provided by the mock node.  Other aspects of control can also be explored by following the examples in the [IS-12 Specification](https://specs.amwa.tv/is-12/) example section. For purposes of this HOW-TO we will focus on working with the Receiver Control and adding code to extend this control then create a new control and interact with this new control.  
+Next we will verify the ability to read and write to the NMOS Control components running on the mock node.  We will focus on reading and writing to the Stereo Gain Block and related objects provided by the mock node.  Other aspects of control can also be explored by following the examples in the [IS-12 Specification](https://specs.amwa.tv/is-12/) example section. For purposes of this HOW-TO we will focus on working with the Stereo Control and adding code to extend this control then create a new control and interact with this new control.  
 
 **Open a Session and Obtain Information on Control of Interest**
 
@@ -662,16 +662,154 @@ NC-01 returns the new value of the `right-gain` parameter for the Stereo Gain Bl
 }
 
 ```
+
+** Subscribe to Change Event for the `right-gain` Parameter**
+
+Add a subscription notification to changes on the `right-gain` parameter by opening a second  connection in WebSocket King Client.  Paste in the WebSocket for the NCMN and click `Connect`. Next paste in the JSON formatted command to open a new Session to the NCMN.  Next copy and paste the command below to subscribe for changes to the `right-gain` SetPoint parameter.  Note that the command being issues it directed to the Subscription Manager's (oid 5) method 3m1 which is described in the tutorial section of this document. 
+
+```
+{
+  "protocolVersion": "1.0.0",
+  "sessionId": 4,
+  "messageType": 2,
+  "messages": [
+    {
+      "handle": 5,
+      "oid": 5,
+      "methodId": {
+        "level": 3,
+        "index": 1
+      },
+      "arguments": {
+        "event": {
+          "emitterOid": 23,
+          "eventId": {
+            "level": 5,
+            "index": 1
+          }
+        }
+      }
+    }
+  ]
+}
+
+```
+**Expected Results**
+
+The Subscription Manager will respond with a message indicating the subscription request was accepted. The session will be notified of any changes.
+
+```
+{
+  "protocolVersion": "1.0.0",
+  "messageType": 3,
+  "sessionId": 4,
+  "messages": [
+    {
+      "handle": 5,
+      "result": {
+        "status": 0
+      }
+    }
+  ]
+}
+
+```
+
+**Modify `right-gain` and Verify Event**
+
+Now from WebSocket King `Connection #1`  modify the value of the `right-gain` control block parameter and observe responses in the WebSocket King Outputs for the two session.
+
+Copy and paste the following into `Connection #1` which will set the `right-gain` parameter to -3.0:
+
+```
+{
+  "protocolVersion": "1.0.0",
+  "sessionId": 3,
+  "messageType": 2,
+  "messages": [
+    {
+      "handle": 2,
+      "oid": 23,
+      "methodId": {
+        "level": 1,
+        "index": 2
+      },
+      "arguments": {
+        "id": {
+          "level": 5,
+          "index": 1
+        },
+        "value": "-3.0"
+      }
+    }
+  ]
+}
+
+```
+
+**Expected Results**
+
+Since you registered for notifications for changes to the `right-gain` value only in the second session you should see notifictions of that change in WebSocket King's second output window only.  Output for `Connection #1` will show only the response to the change value command.  Below is the expected results in the output 1 for WebSocket King:
+```
+{
+  "protocolVersion": "1.0.0",
+  "messageType": 3,
+  "sessionId": 3,
+  "messages": [
+    {
+      "handle": 2,
+      "result": {
+        "status": 0
+      }
+    }
+  ]
+}
+```
+WebSocket King's output 2 should show the notification of change event shown below:
+
+```
+
+{
+  "protocolVersion": "1.0.0",
+  "messageType": 6,
+  "sessionId": 4,
+  "messages": [
+    {
+      "type": 0,
+      "oid": 23,
+      "eventId": {
+        "level": 1,
+        "index": 1
+      },
+      "eventData": {
+        "propertyId": {
+          "level": 5,
+          "index": 1
+        },
+        "changeType": 0,
+        "propertyValue": "-3.0"
+      }
+    }
+  ]
+}
+```
+
+
+
  **Conclusions for Section One HOW-TO**
 
- In this section of the HOW-TO guide you setup all required NMOS infrastructure to run and interact with an NMOS Device that provides IS-12 NMOS Control functionality. You have loaded an NMOS RDS so that the NMOS device can register it's control endpoint for IS-12 in the form of a standard WebSocket. You have installed the NC-01 mock device and used it to explore how NMOS Control works for a simple Stereo Gain Control Block. You have used manual copy-and-paste of JSON protocol messages to act as an human-in-the-loop NMOS Controller.  
+ In this section of the HOW-TO guide you setup all required NMOS infrastructure to run and interact with an NMOS Device that provides IS-12 NMOS Control functionality. You loaded an NMOS RDS so that the NMOS device can register its control endpoint for IS-12 in the form of a standard WebSocket. You have installed the NC-01 mock device and used it to explore how NMOS Control works for a simple Stereo Gain Control Block. You have used manual copy-and-paste of JSON protocol messages to act as an human-in-the-loop NMOS Controller.  
+
+ In addition you have subscribed for a change event on a control block parameter of interest and verified your WebSocket session monitoring any changes received notification on a change event when you changed the parameter of interest.
 
  In the next section you will add a new parameter to the Stereo Gain Block's left and right gains.  You will become familiar with how to modify code to enhance existing control blocks to add functionality to an existing NMOS Control Block.
 
 
  #### Modifications to the Stereo Gain Block 
 
-This section shows how to add in a simple `muted` parameter to the left and right gains that you worked with in the previous section. The requirements for this additional functionality are simple.  Each of the stereo channels will have an additional `boolean` parameter that controls if the channel is muted.  Turning on and off the muting does not effect the gain of the channel.  
+This section shows how to add in a simple `muted` parameter to the left and right gains that you worked with in the previous section.Note that this section is for illustrative purposes and in practice you would not modify the existing framework but rather create a derived class for new functionality - something you will explore in the next section of this HOW-TO.
+ 
+ The requirements for this additional functionality are simple.  Each of the stereo channels will have an additional `boolean` parameter that controls if the channel is muted.  Turning on and off the muting does not effect the gain of the channel.  
 
 **Steps to Implement**
 
@@ -893,11 +1031,42 @@ The retrieved value for the mute on the `right-gain` shows the new value for `mu
 
 ```
 
+
+
 **Conclusions**
 
+In this section you have started to explore the code for the NMOS Control Framework by adding a new parameter to the existing framework. You have modified the code to add the parameter to an existing Control Block and then used IS-12 Protocol to read, write and verify your code changes are worked as expected. 
+
+You have seen how the overall framework supports additional functionality in a seamless manner. Some 15 odd code line changes provides full access to a new control parameter including read, write and notifications of changes.
+
+In the next section you will follow another path to extension of the framework by creating a derived class based on the `NCGain` Control Block you worked with in the previous section. This is the expected path of extension to the NMOS Control Framework envisioned by AMWA and the NMOS Community. Implementors and Venders can derive from the existing framework class structure to add functionality and remain discoverable and controllable by other venders that use the framework.  
+
+**Create a Derived Class from `NCGain`**
+
+In the previous section we modified the framework `NCGain` class to add a parameter `mute`.  We now want to create our own class called `MyComGain`.  The new class will fit into the overall framework with all the functionality of   `NCGain` but with an additional `mute` parameter.  
 
 
-This HOWTO has shown how to add controllability to an NMOS node using the NMOS Control Framework. ...
+**Create the Derived Class**
+TODO
+**Verify Class is Discoverable**
+TODO
+**Verify Existing Parameter Mods Work**
+TODO
+**Verify New Parameter Works**
+TODO
+**Set and Read**
+TODO
+**Subscription to Changes Work**
+TODO
+
+
+
+###Overall Conclusions
+
+This HOW-TO has shown how to work with the NMOS Control Framework.  You have created a simple NMOS Device that uses NMOS IS-04 to advertise its control endpoint with an NMOS RDS.  You have worked with the IS-12 protocol to discover a NMOS Control for Stereo Gain and modified a parameter of one leg of the Stereo Gain Block.  You have gained experience with making simple modifications to the code for a TypeScript implementation of a NMOS Controllable Device based on the open-sourced NMOS Control Mock Node.  
+
+We encourage you to continue exploration of how the NMOS Control Framework can enable compelling User-Stories for your customers and differentiate your products in the expanding [NMOS](https://www.amwa.tv/nmos-overview) community of venders and users while at the same time contributing to an open-standards based approach. 
+
 
 
 
