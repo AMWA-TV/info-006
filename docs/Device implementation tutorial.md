@@ -27,6 +27,15 @@ This base control class exposes important properties but also [generic methods](
 
 `NcObject` also defines the [PropertyChanged](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/NcObject.html#propertychanged-event) event which is fundamental for subscriptions and notifications to work.
 
+As per the [MS-05-01](https://specs.amwa.tv/ms-05-01/branches/v1.0-dev/docs/Identification.html) specification there are different types of identifiers which ultimately can be split into two categories:
+
+- dynamic identifiers (object identifiers)
+- persistent identifiers (roles and class identities)
+
+| ![Identities](images/identities.png) |
+|:--:|
+| _**Identities**_ |
+
 #### Block control classes
 
 As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Blocks.html) specification blocks are containers for other control classes.
