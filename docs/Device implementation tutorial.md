@@ -30,7 +30,7 @@ This base control class exposes important properties but also [generic methods](
 As per the [MS-05-01](https://specs.amwa.tv/ms-05-01/branches/v1.0-dev/docs/Identification.html) specification there are different types of identifiers which ultimately can be split into two categories:
 
 - dynamic identifiers (object identifiers)
-- persistent identifiers (roles and class identities)
+- persistent identifiers (roles, class identities and data type names)
 
 | ![Identities](images/identities.png) |
 |:--:|
