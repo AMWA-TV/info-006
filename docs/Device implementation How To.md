@@ -41,7 +41,7 @@ This section will make modifications to the basic system and show how to add in 
 - Add subscription in order to receive notifications for any changes experienced by the new property.
 - Modify the value of the new property and verify notification received
 
-### Addition of Custom Control
+### Addition of a vendor specific Control Class
 
 This section will make modifications to the basic system and show how to add in a new control to the mock node.  It will use a realistic control point that will check the status of network connections and return some statistics about these interfaces. It will also allow clearing the packet counters on the interfaces.
 
