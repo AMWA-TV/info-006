@@ -602,7 +602,7 @@ Copy and paste the following into the WebSocket King Client. The level and index
 
 **Expected Results**
 
-The default value set in the mock device for the right-gain is `0` so we expect the returned value to be zero. The  JSON response from `NC-01` confirms this:
+The default value set in the mock device for the right-gain set point value is `0`, so we expect the returned value to be zero. The JSON response from `NC-01` confirms this:
 
 ```
 
