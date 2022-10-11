@@ -719,7 +719,7 @@ The Subscription Manager will respond with a message indicating the subscription
 
 Now whenever we modify the value of the `right-gain` set point parameter we can see notifications arriving.
 
-Copy and paste the following into `Connection #1` which will set the `right-gain` parameter to -3.0:
+Copy and paste the following command which will set the `right-gain` set point parameter to -3.0:
 
 ```
 {
