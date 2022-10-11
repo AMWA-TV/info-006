@@ -195,7 +195,7 @@ Next we will verify the ability to read and write to the NMOS Control components
 
 **Open a Session and Obtain Information on Control of Interest**
 
-Use the JSON Command to open a new session to the NC-01 WebSocket control. Copy the JSON formatted message into the For more information about the format refer to [AMWA IS-12 NMOS Control Protocol](https://specs.amwa.tv/is-12/ ). Also note that in an actual system most of the manual steps we are performing here would be performed by an NMOS Controller using the IS-12 specification.  For more information about implementing and IS-12 NMOS Controller see the HOW-TO section for Controller implementations.
+Use the JSON Command to open a new session to the NC-01 WebSocket control. Copy the JSON formatted message into the payload area. For more information about the format refer to [AMWA IS-12 NMOS Control Protocol](https://specs.amwa.tv/is-12/). Also note that in an actual system most of the manual steps we are performing here would be performed by an NMOS Controller using the IS-12 specification. For more information about implementing an IS-12 NMOS Controller see the HOW-TO section for Controller implementations.
 
 
 ```
