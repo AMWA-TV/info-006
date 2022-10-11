@@ -189,7 +189,7 @@ We will install a Chrome WebSocket extension. Other WebSocket clients will work 
 
 Details on installing Chrome extensions can be found [here](https://support.google.com/chrome_webstore/answer/2664769?hl=en). Follow the instructions to open the Chrome Web Store and search for WebSocket King Client. Install this extension. 
 
-After completing the installation of WebSocket King open the extension in a new browser window.  Copy and paste the WebSocket located in the RDS for the NC-01 NMOS Control Mock node into the connections field and click `connect`.  The `Connect` button should turn to `Disconnect` indicating a successful connection the the NC-01 WebSocket.
+After completing the installation of WebSocket King open the extension in a new browser window. Copy and paste the WebSocket located in the RDS for the NC-01 NMOS Control Mock node into the connections field and click `connect`. The `Connect` button should turn to `Disconnect` indicating a successful connection to the NC-01 WebSocket endpoint.
 
 Next we will verify the ability to read and write to the NMOS Control components running on the mock node.  We will focus on reading and writing to the Stereo Gain Block and related objects provided by the mock node.  Other aspects of control can also be explored by following the examples in the [IS-12 Specification](https://specs.amwa.tv/is-12/) example section. For purposes of this HOW-TO we will focus on working with the Stereo Control and adding code to extend this control then create a new control and interact with this new control.  
 
