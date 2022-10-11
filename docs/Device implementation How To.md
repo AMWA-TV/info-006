@@ -571,7 +571,7 @@ The JSON response to the above command gives us the two nested control blocks `l
 
 ```
 
-Now retrieve the value for the `right-gain` using the generic getter for the property.
+Now retrieve the set point gain value for the `right-gain` using the generic getter for the property (5p1).
 
 Copy and paste the following into the WebSocket King Client.  The level and index of the gain value parameter is obtained from the mock node source code and will be more fully described when we modify the gain control to add a new parameter in the next sections.
 
