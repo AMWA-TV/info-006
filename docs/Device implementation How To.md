@@ -143,7 +143,41 @@ Successfully wrote file
 
 You now have all the NMOS items needed to interact with the NMOS Control mock node. Since IS-12 uses a WebSocket control endpoint we will next browse the RDS registry to find the advertised WebSocket endpoint and use a Chrome extension that allows opening that WebSocket and sending and receiving IS-12 JSON formated commands and responses.  
 
-From the NMOS Commmisioning Controller located at http://localhost/admin open the Device browser by clicking on the left `Devices` button.  The NMOS Control Mock Node will be present with name NC-01.  Click on the NC-01 link and locate the  IS-12 control WebSocket:
+Navigate in your preferred browser to the devices query location:
+`http://127.0.0.1/x-nmos/query/v1.3/devices/`
+
+**Expected output**
+
+```json
+[
+    {
+        "controls": [
+            {
+                "href": "http://127.0.0.1:8080/x-nmos/connection/v1.1/",
+                "type": "urn:x-nmos:control:sr-ctrl/v1.1"
+            },
+            {
+                "href": "http://127.0.0.1:8080/x-nmos/connection/v1.0/",
+                "type": "urn:x-nmos:control:sr-ctrl/v1.0"
+            },
+            {
+                "href": "ws://127.0.0.1:8080/x-nmos/ncp/v1.0/connect",
+                "type": "urn:x-nmos:control:ncp/v1.0"
+            }
+        ],
+        "description": "NC-01 device",
+        "id": "[7977373c-70f6-4e62-b713-3431f1ac4a2f](http://127.0.0.1/x-nmos/query/v1.3/devices/7977373c-70f6-4e62-b713-3431f1ac4a2f)",
+        "label": "NC-01 device",
+        "node_id": "[e0f9e1a3-2a2f-4f00-b02e-76d8286e1d98](http://127.0.0.1/x-nmos/query/v1.3/nodes/e0f9e1a3-2a2f-4f00-b02e-76d8286e1d98)",
+        "receivers": [
+            "[18eae0e9-dcf4-40ff-88a3-cb553993d1b8](http://127.0.0.1/x-nmos/query/v1.3/receivers/18eae0e9-dcf4-40ff-88a3-cb553993d1b8)"
+        ],
+        "senders": [],
+        "tags": {},
+        "type": "urn:x-nmos:device:generic",
+        "version": "1665129531:00000000"
+    }
+]
 
 `ws://127.0.0.1:8080/x-nmos/ncp/v1.0/connect urn:x-nmos:control:ncp/v1.0`
 
