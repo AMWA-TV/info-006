@@ -34,7 +34,7 @@ This section will do the most basic steps to get a mock NMOS Controllable Node r
 
 ### Modifications to Basic Installation
 
-This section will make modifications to the basic system and show how to add in a parameter to one of the controls provided by the mock node.
+This section will make modifications to the basic system and show how to add in a new property to one of the control classes provided by the mock node.
 
 - Modify Mock Device to add in extra read/write parameter to existing control 
 - Verify extra parameter can be modified via websocket
