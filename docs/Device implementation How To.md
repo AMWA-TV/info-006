@@ -573,7 +573,7 @@ The JSON response to the above command gives us the two nested control blocks `l
 
 Now retrieve the set point gain value for the `right-gain` using the generic getter for the property (5p1).
 
-Copy and paste the following into the WebSocket King Client.  The level and index of the gain value parameter is obtained from the mock node source code and will be more fully described when we modify the gain control to add a new parameter in the next sections.
+Copy and paste the following into the WebSocket King Client. The level and index of the gain set point value parameter is obtained from the definition of the `NcGain` class in the [MS-05-02](https://github.com/AMWA-TV/ms-05-02/blob/v1.0-dev/idl/NC-Framework.webidl) webIDL.
 
 ```
 {
