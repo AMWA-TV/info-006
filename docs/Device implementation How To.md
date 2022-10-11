@@ -772,7 +772,7 @@ The notification of the change event is shown below:
 {
   "protocolVersion": "1.0.0",
   "messageType": 6,
-  "sessionId": 4,
+  "sessionId": 3,
   "messages": [
     {
       "type": 0,
