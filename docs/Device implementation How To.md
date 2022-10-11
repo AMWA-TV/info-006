@@ -717,7 +717,7 @@ The Subscription Manager will respond with a message indicating the subscription
 
 **Modify `right-gain` and Verify Event**
 
-Now from WebSocket King `Connection #1`  modify the value of the `right-gain` control block parameter and observe responses in the WebSocket King Outputs for the two session.
+Now whenever we modify the value of the `right-gain` set point parameter we can see notifications arriving.
 
 Copy and paste the following into `Connection #1` which will set the `right-gain` parameter to -3.0:
 
