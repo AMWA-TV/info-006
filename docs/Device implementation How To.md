@@ -682,7 +682,7 @@ Next retrieve the new set point gain value by copying and pasting the following 
 
 **Expected Results**
 
-NC-01 returns the new value of the `right-gain` parameter for the Stereo Gain Block:
+NC-01 returns the new value of the `right-gain` set point gain value:
 
 ```
 {
