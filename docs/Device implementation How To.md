@@ -266,7 +266,7 @@ Send the following JSON Formatted command to the NC-01 WebSocket Use the Session
 
 **Expected Output**
 
-The Control responds with a JSON containing top level managers and controls.  The Control we are interested in is the Stereo Gain block.  We see the block is present along with its Object ID (oid).  The oid is unique across all control elements and we will use it to retrieve the current value, change the value and verify the change.  The oid is 31. 
+The device responds with a JSON containing member descriptors for the root block. The sub block we are interested in is the Stereo Gain block. We see the block is present along with its Object ID (oid). The oid is unique across all control elements and we will use it to further interogate the Stereo Gain block and find its members. The oid is 31.
 
 ```
 {
