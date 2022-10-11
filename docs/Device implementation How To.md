@@ -141,7 +141,7 @@ Successfully wrote file
 ```
 **Locate the NMOS Control WebSocket**
 
-You now have all the NMOS items needed to interact with the NMOS Control mock node.  Since IS-12 uses an advertized WebSocket we will next browse the RDS registry to find the advertised WebSocker and use a Chrome extension that allows opening that WebSocket and sending and receiving IS-12 JSON formated commands and responses.  
+You now have all the NMOS items needed to interact with the NMOS Control mock node. Since IS-12 uses a WebSocket control endpoint we will next browse the RDS registry to find the advertised WebSocket endpoint and use a Chrome extension that allows opening that WebSocket and sending and receiving IS-12 JSON formated commands and responses.  
 
 From the NMOS Commmisioning Controller located at http://localhost/admin open the Device browser by clicking on the left `Devices` button.  The NMOS Control Mock Node will be present with name NC-01.  Click on the NC-01 link and locate the  IS-12 control WebSocket:
 
