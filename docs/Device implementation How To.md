@@ -765,7 +765,7 @@ Since you registered for notifications for changes to the `right-gain` control y
   ]
 }
 ```
-WebSocket King's output 2 should show the notification of change event shown below:
+The notification of the change event is shown below:
 
 ```
 
