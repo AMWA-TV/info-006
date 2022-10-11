@@ -396,7 +396,7 @@ The device responds with a JSON containing member descriptors for the root block
 
 **Read, Write, Modify Stereo Gain**
 
-Use the IS-12 generic getter to discover the properties the Stereo Gain control.  Send the following JSON Formatted command to the NC-1 control WebSocket
+We then make use of the generic Get method (1m1) to find the members (2p10) of the Stereo gain block (oid: 31).  Send the following JSON Formatted command to the NC-1 control WebSocket.
 
 ```
 {
