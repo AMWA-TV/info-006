@@ -22,7 +22,7 @@ This HOWTO will present the steps to install, modify and try out the NMOS Contro
 
 ### Basic Installation
 
-This section will do the most basic steps to get a NMOS Controllable Node running on your system. 
+This section will do the most basic steps to get a mock NMOS Controllable Node running on your system. 
 
 - Install the NMOS Controllable Mock Device (NCMD)
 - Install EasyNMOS Docker Container for NMOS RDS
