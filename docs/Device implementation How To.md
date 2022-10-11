@@ -653,7 +653,7 @@ Now we will set the `right-gain` set point gain (5p1) value to 11 and verify the
 
 The command should be accepted with no errors. The JSON Response to the command should indicate a status of 0 (Ok).
 
-Next retrieve the new gain value by copying and pasting the following into the WebSocket King client:
+Next retrieve the new set point gain value by copying and pasting the following into the WebSocket King client:
 
 ```
 {
