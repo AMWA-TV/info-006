@@ -749,7 +749,7 @@ Copy and paste the following command which will set the `right-gain` set point p
 
 **Expected Results**
 
-Since you registered for notifications for changes to the `right-gain` value only in the second session you should see notifictions of that change in WebSocket King's second output window only.  Output for `Connection #1` will show only the response to the change value command.  Below is the expected results in the output 1 for WebSocket King:
+Since you registered for notifications for changes to the `right-gain` control you should see notifications of that change. Below is the expected result from invoking the Set method:
 ```
 {
   "protocolVersion": "1.0.0",
