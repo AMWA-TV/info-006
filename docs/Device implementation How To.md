@@ -651,7 +651,7 @@ Now we will set the `right-gain` to a value of 11 and verify the change has take
 ```
 **Expected Results**
 
-The command should be accepted with no errors.  JSON Response to the command should indicate status of 0.
+The command should be accepted with no errors. The JSON Response to the command should indicate a status of 0 (Ok).
 
 Next retrieve the new gain value by copying and pasting the following into the WebSocket King client:
 
