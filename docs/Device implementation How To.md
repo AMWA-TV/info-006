@@ -697,7 +697,7 @@ NC-01 returns the new value of the `right-gain` parameter for the Stereo Gain Bl
 
 ```
 
-** Subscribe to Change Event for the `right-gain` Parameter**
+**Subscribe to Change Event for the `right-gain` Parameter**
 
 Add a subscription notification to changes on the `right-gain` parameter by opening a second  connection in WebSocket King Client.  Paste in the WebSocket for the NCMN and click `Connect`. Next paste in the JSON formatted command to open a new Session to the NCMN.  Next copy and paste the command below to subscribe for changes to the `right-gain` SetPoint parameter.  Note that the command being issues it directed to the Subscription Manager's (oid 5) method 3m1 which is described in the tutorial section of this document. 
 
