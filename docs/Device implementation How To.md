@@ -29,7 +29,7 @@ This section will do the most basic steps to get a mock NMOS Controllable Node r
 - Verify NCMD registers and exposes it's NMOS IS-12 Control Endpoint in the NMOS RDS
 - Install Chrome Websocket Extension
 - Verify the NCMD can be reached via the WebSocket Control endpoint listed in the RDS
-- Locate the one of the control blocks provided by the NCMD
+- Locate one of the control classes provided by the NCMD
 - Verify ability to read, and write a parameter of the control block.
 
 ### Modifications to Basic Installation
