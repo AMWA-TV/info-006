@@ -187,7 +187,7 @@ This is the WebSocket used to interact with NMOS Control components.
 
 We will install a Chrome WebSocket extension. Other WebSocket clients will work equally well. 
 
-Details on installing Chrome extensions can be found [here](https://support.google.com/chrome_webstore/answer/2664769?hl=en).  Follow the instructions to open the Chrome Web Store and search for WebSocket King Client.  Install this extension. 
+Details on installing Chrome extensions can be found [here](https://support.google.com/chrome_webstore/answer/2664769?hl=en). Follow the instructions to open the Chrome Web Store and search for WebSocket King Client. Install this extension. 
 
 After completing the installation of WebSocket King open the extension in a new browser window.  Copy and paste the WebSocket located in the RDS for the NC-01 NMOS Control Mock node into the connections field and click `connect`.  The `Connect` button should turn to `Disconnect` indicating a successful connection the the NC-01 WebSocket.
 
