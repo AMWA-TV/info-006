@@ -741,7 +741,7 @@ The Subscription Manager will respond with a message indicating the subscription
 {
   "protocolVersion": "1.0.0",
   "messageType": 3,
-  "sessionId": 4,
+  "sessionId": 3,
   "messages": [
     {
       "handle": 5,
