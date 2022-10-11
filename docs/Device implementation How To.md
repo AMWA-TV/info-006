@@ -422,7 +422,7 @@ We then make use of the generic Get method (1m1) to find the members (2p10) of t
 }
 
 ```
- The above command has the sessionId set to 3 for our session and should be modified to use the session for your case. We use oid 31 which we discovered from the top level browse of the NMOS Controls was the oid for Stereo Gain.
+We use oid 31 which we discovered was the oid for Stereo Gain when interrogating the root block.
 
  **Expected Output**
 
