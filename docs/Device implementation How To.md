@@ -426,7 +426,7 @@ We use oid 31 which we discovered was the oid for Stereo Gain when interrogating
 
  **Expected Output**
 
- IS-12 responds to the above query with a JSON formatted response containing all the parameters for the Stereo Gain block
+The device responds to the above command with a JSON formatted response containing all the members of the Stereo Gain block.
 
  ```
 {
