@@ -45,7 +45,7 @@ This section will make modifications to the basic system and show how to add in 
 
 This section will make modifications to the basic system and show how to add in a new control class to the mock node.  The new control class will allow checking the status of network connections and return some statistics about these interfaces. It will also allow clearing the packet counters on the interfaces.
 
-- Add a new control to the mock node
+- Add a new control class to the mock node
 1.Create WebIDL
 2.Create implementation based on WebIDL 
 3.Extend protocol to connect to the control implementation
