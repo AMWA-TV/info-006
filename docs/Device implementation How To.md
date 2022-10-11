@@ -512,7 +512,7 @@ Next drill down one more level to resolve the left and right gains for the Chann
 
 **Expected Results**
 
-The JSON response to the above query gives us the two leaf control blocks `left-gain` and `right-gain` as shown below:
+The JSON response to the above command gives us the two nested control blocks `left-gain` and `right-gain` as shown below:
 
 ```
 {
