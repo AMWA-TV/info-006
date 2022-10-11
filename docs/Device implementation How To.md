@@ -754,7 +754,7 @@ The Subscription Manager will respond with a message indicating the subscription
 
 ```
 
-**Modify `right-gain` and Verify Event**
+**Modify `right-gain` set point value and check notification is received**
 
 Now whenever we modify the value of the `right-gain` set point parameter we can see notifications arriving.
 
