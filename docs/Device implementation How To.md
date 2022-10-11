@@ -148,7 +148,7 @@ Navigate in your preferred browser to the devices query location:
 
 **Expected output**
 
-```json
+```
 [
     {
         "controls": [
@@ -179,7 +179,12 @@ Navigate in your preferred browser to the devices query location:
     }
 ]
 
+```
+
+In the controls section of the JSON response you will find:
+
 `ws://127.0.0.1:8080/x-nmos/ncp/v1.0/connect urn:x-nmos:control:ncp/v1.0`
+
 
 This is the WebSocket used to interact with NMOS Control components.
 
