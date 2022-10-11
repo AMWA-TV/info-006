@@ -109,7 +109,7 @@ CONTAINER ID   IMAGE                     COMMAND                 CREATED        
 
 ```
 
-Verify the web server in the EasyNMOS docker container is up and running by opening http://localhost/admin on your host. You should see the welcome screen for the open-source NVIDIA NMOS Commissioning Controller. 
+Verify the web server in the EasyNMOS docker container is up and running by opening [http://localhost/admin](http://localhost/admin) on your host. You should see the welcome screen for the open-source NVIDIA NMOS Commissioning Controller. 
  
 Now install the mock device from the repo:
 
