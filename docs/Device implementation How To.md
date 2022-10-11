@@ -622,7 +622,7 @@ The default value set in the mock device for the right-gain set point value is `
 }
 ```
 
-Now we will set the `right-gain` to a value of 11 and verify the change has taken effect.  Copy and paste the following JSON formatted command to set the value of the right-gain:
+Now we will set the `right-gain` set point gain (5p1) value to 11 and verify the change has taken effect. We will use the generic Set method for this (1p2). Copy and paste the following JSON formatted command to set the new value:
 
 ```
 {
