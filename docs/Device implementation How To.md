@@ -38,7 +38,7 @@ This section will make modifications to the basic system and show how to add in 
 
 - Modify Mock Device to add in a new read/write property to an existing control class.
 - Verify that the new property can be modified using IS-12 via the WebSocket channel.
-- Add subscription notification to the new parameter
+- Add subscription in order to receive notifications for any changes experienced by the new property.
 - Modify the parameter and verify notification received
 
 ### Addition of Custom Control
