@@ -709,7 +709,7 @@ Add a subscription notification to changes on the `right-gain` control by sendin
 ```
 {
   "protocolVersion": "1.0.0",
-  "sessionId": 4,
+  "sessionId": 3,
   "messageType": 2,
   "messages": [
     {
