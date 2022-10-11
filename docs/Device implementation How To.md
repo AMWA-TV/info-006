@@ -36,7 +36,7 @@ This section will do the most basic steps to get a mock NMOS Controllable Node r
 
 This section will make modifications to the basic system and show how to add in a new property to one of the control classes provided by the mock node.
 
-- Modify Mock Device to add in extra read/write parameter to existing control 
+- Modify Mock Device to add in a new read/write property to an existing control class.
 - Verify that the new property can be modified using IS-12 via the WebSocket channel.
 - Add subscription notification to the new parameter
 - Modify the parameter and verify notification received
