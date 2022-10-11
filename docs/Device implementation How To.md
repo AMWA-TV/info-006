@@ -50,7 +50,7 @@ This section will make modifications to the basic system and show how to add in 
 2.Create implementation based on WebIDL 
 3.Map and expose the new control class implementation via the IS-12 protocol
 - Verify that we can discover the new control class instance using a Chrome Websocket Plugin
-- Verify values are correct for interface statistics
+- Verify we can retrieve interface statistics from the properties exposed by the new control class
 - Clear the counters on the control
 - Verify statistics provided by the new controller are correct
 
