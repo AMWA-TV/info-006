@@ -238,7 +238,7 @@ Use the JSON Command to open a new session to the NC-01 WebSocket control. Copy 
 
 ```
 
-We now have a WebSocket session `3` open for our WebSocket King client.  Next retrieve the Control elements and locate the Stereo Gain control block.  
+We now have a WebSocket session `3` open for our WebSocket King client. Next retrieve the members of the root block in order to identify the location of the Stereo gain block.
 
 Send the following JSON Formatted command to the NC-01 WebSocket Use the Session ID received in the previous command. In our case `3`:
 
