@@ -14,6 +14,8 @@ It is not intended to be a tutorial article, and therefore, it excludes explanat
 
 The reader is assumed to have some experience with an NMOS infrastructure including IS-04 and NMOS Registration and Discovery (RDS).  Also some experience in javascript and/or typescript will be helpful although not entirely required.  
 
+This HOW-TO also demonstrates to a certain extent how to construct and operate an NMOS Controller that interacts with the NMOS Control Device.  In the HOW-TO, you will be the controller - creating, issuing and reading information from JSON commands and responses sent and received via a standard WebSocket connecting you with the controlled device.  
+
 We hope you find this how-to guide to be useful.
 
 ## HOWTO Steps
@@ -31,28 +33,14 @@ This section will do the most basic steps to get a mock NMOS Controllable Node r
 - Verify the NCMD can be reached via the WebSocket Control endpoint listed in the RDS
 - Locate one of the control classes provided by the NCMD
 - Verify ability to read, and write a parameter of the control class instance.
-
-### Modifications to Basic Installation
-
-This section will make modifications to the basic system and show how to add in a new property to one of the control classes provided by the mock node.
-
-- Modify Mock Device to add in a new read/write property to an existing control class.
-- Verify that the new property can be modified using IS-12 via the WebSocket channel.
-- Add subscription in order to receive notifications for any changes experienced by the new property.
+- - Add subscription in order to receive notifications for any changes experienced by the new property.
 - Modify the value of the new property and verify notification received
 
-### Addition of a vendor specific Control Class
 
-This section will make modifications to the basic system and show how to add in a new control class to the mock node.  The new control class will allow checking the status of network connections and return some statistics about these interfaces. It will also allow clearing the packet counters on the interfaces.
 
-- Add a new control class to the mock node
-1.Create WebIDL
-2.Create implementation based on WebIDL 
-3.Map and expose the new control class implementation via the IS-12 protocol
-- Verify that we can discover the new control class instance using a Chrome Websocket Plugin
-- Verify we can retrieve interface statistics from the properties exposed by the new control class
-- Clear the counters on the new control class
-- Verify statistics provided by the new controller are correct
+### Addition of a Vendor Specific Control Class
+
+This section will make modifications to the basic system and show how to add in a new control class to the mock node.  The new control class will extend one of the NMOS Control Framework classes to add functionality.  You will learn how to extend the control framework in a manner that gives all of the functionality of the framework while providing additional control features to clients.
 
 
 ## Installing Mock NMOS Control Device
@@ -60,6 +48,7 @@ This section will make modifications to the basic system and show how to add in 
 Install the NMOS Mock control device from its location on the public github [repo](https://github.com/AMWA-TV/nmos-device-control-mock).  
 
 Follow the steps below from any directory on your Ubuntu host:
+
 ### Install Needed Packages
 
 You will need `docker` for running the NMOS RDS and `npm` for running the mock NMOS Controllable Node.  We first assume a fresh install of Ubuntu 20.04 and so do an update for packages prior to installation of required dependencies.
@@ -836,7 +825,7 @@ You should also the the notification of the change event is shown below. In the 
 
 
 
- **Conclusions for Section One HOW-TO**
+ ### Conclusions for Section One HOW-TO
 
  In this section of the HOW-TO guide you setup all required NMOS infrastructure to run and interact with an NMOS Device that provides IS-12 NMOS Control functionality. You loaded an NMOS RDS so that the NMOS device can register its control endpoint for IS-12 in the form of a standard WebSocket. You have installed the NC-01 mock device and used it to explore how NMOS Control works for a simple Stereo Gain Control Block. You have used manual copy-and-paste of JSON protocol messages to act as an human-in-the-loop NMOS Controller.  
 
@@ -845,7 +834,7 @@ You should also the the notification of the change event is shown below. In the 
  In the next section you will add a new parameter to the Stereo Gain Block's left and right gains.  You will become familiar with how to modify code to enhance existing control blocks to add functionality to an existing NMOS Control Block.
 
 
- #### Modifications to the Stereo Gain Block 
+ ## Modifications to the Stereo Gain Block 
 
 This section shows how to add in a simple `muted` parameter to the left and right gains that you worked with in the previous section. The requirements for this additional functionality are simple.  Each of the stereo channels will have an additional `boolean` parameter that controls if the channel is muted.  Turning on and off the muting does not effect the gain of the channel. The strategy we will take is the recommended practice for extending the framework. You will create a subclass of the NMOS Control Framework NcGain class and extend this class to add in a `mute` parameter.
 
@@ -1347,21 +1336,18 @@ The retrieved value for the mute on the `right-gain` shows the new value for `mu
 
 ```
 
-**Conclusions**
+### Conclusions
 
-In this section you have started to explore the code for the NMOS Control Framework by adding a new parameter to the existing framework. You have modified the code to add the parameter to an existing Control Block and then used IS-12 Protocol to read, write and verify your code changes are worked as expected. 
-
-You have seen how the overall framework supports additional functionality in a seamless manner by standard class inheritance of the framework.
+In this section you learned how extend the NMOS Control framework though class inheritance.  You created a derived class that added functionality to the `NcGain` control clock to allow a client to `mute` the master gain or the left or right channels independently. You saw how simple inheritance can create additional capabilities in the framework while the overall interaction with control blocks remains the same and all the functionality provided by the framework including discoverability, subscription for change events and control over a standard WebSocket comes for free.
 
 
-
-### Overall Conclusions
+## Overall Conclusions
 
 This HOW-TO has shown how to work with the NMOS Control Framework.  You have created a simple NMOS Device that uses NMOS IS-04 to advertise its control endpoint with an NMOS RDS.  You have worked with the IS-12 protocol to discover a NMOS Control for Stereo Gain and modified a parameter of one leg of the Stereo Gain Block.  You have gained experience with making simple modifications to the code for a TypeScript implementation of a NMOS Controllable Device based on the open-sourced NMOS Control Mock Node.  
 
-### Further Directions
+## Further Directions
 
-We encourage you to continue exploration of how the NMOS Control Framework can enable compelling User-Stories for your customers and differentiate your products in the expanding [NMOS](https://www.amwa.tv/nmos-overview) community of venders and users while at the same time contributing to an open-standards based approach. 
+All code and APIs provided by NMOS is completely open and free for any purposes, private or commercial. AMWA encourages you to continue exploration of how the NMOS Control Framework can enable compelling User-Stories for your customers and differentiate your products in the expanding [NMOS](https://www.amwa.tv/nmos-overview) community of venders and users while at the same time contributing to an open-standards based approach. 
 
 
 
