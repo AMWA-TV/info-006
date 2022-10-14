@@ -240,7 +240,7 @@ Use the JSON Command to open a new session to the NC-01 WebSocket control. Copy 
 
 We now have a WebSocket session `3` open for our WebSocket King client. Next retrieve the members of the root block in order to identify the location of the Stereo gain block.
 
-Send the following JSON Formatted command to the NC-01 WebSocket Use the Session ID received in the previous command. In our case `3`:
+Send the following JSON Formatted command to the NC-01 WebSocket Use the Session ID received in the previous command. In our case `3`: In the JSON command the value of `oid` 1 indicates we are directing this command at the root block.  The `methodId` 1 is the `getter` command and the `id` level and index of 2 and 10 respectively targets the `2p10` `NcBlockMemberDescriptor` members of the root block. 
 
 ```
 
@@ -271,7 +271,7 @@ Send the following JSON Formatted command to the NC-01 WebSocket Use the Session
 
 **Expected Output**
 
-The device responds with a JSON containing member descriptors for the root block. The sub block we are interested in is the Stereo Gain block. We see the block is present along with its Object ID (oid). The oid is unique across all control elements and we will use it to further interogate the Stereo Gain block and find its members. The oid is 31.
+The device responds with a JSON containing `NcBlockMemberDescriptor` member descriptors for the root block. The sub block we are interested in is the Stereo Gain block. We see the block is present along with its Object ID (oid). The oid is unique across all control elements and we will use it to further interrogate the Stereo Gain block and find its members. The oid is 31.
 
 ```
 {
@@ -396,7 +396,7 @@ The device responds with a JSON containing member descriptors for the root block
 
 **Read, Write, Modify Stereo Gain**
 
-We then make use of the generic Get method (1m1) to find the members (2p10) of the Stereo gain block (oid: 31).  Send the following JSON Formatted command to the NC-1 control WebSocket.
+You will now make use of the generic Get method `1m1` to find the members `2p10` of the Stereo gain block (oid: 31).  Send the following JSON Formatted command to the NC-1 control WebSocket.
 
 ```
 {
@@ -422,7 +422,6 @@ We then make use of the generic Get method (1m1) to find the members (2p10) of t
 }
 
 ```
-We use oid 31 which we discovered was the oid for Stereo Gain when interrogating the root block.
 
  **Expected Output**
 
@@ -483,7 +482,7 @@ The device responds to the above command with a JSON formatted response containi
 
  ```
 
-Next drill down one more level to resolve the left and right gains for the Channel Gain block (oid = 21)
+Next drill down one more level to resolve the left and right gains for the Channel Gain block (oid = 21) using the same `getter` command but now targeted at the `channel-gain` `oid` 21.
 
 ```
 {
@@ -512,7 +511,7 @@ Next drill down one more level to resolve the left and right gains for the Chann
 
 **Expected Results**
 
-The JSON response to the above command gives us the two nested control blocks `left-gain` and `right-gain` as shown below:
+The JSON response to the above command gives us the two control blocks `left-gain` and `right-gain` as shown below:
 
 ```
 {
@@ -571,7 +570,7 @@ The JSON response to the above command gives us the two nested control blocks `l
 
 ```
 
-Now retrieve the set point gain value for the `right-gain` using the generic getter for the property (5p1).
+Now retrieve the set point gain value for the `right-gain` `oid` 23 using the generic getter for the property (5p1).
 
 Copy and paste the following into the WebSocket King Client. The level and index of the gain set point value parameter is obtained from the definition of the `NcGain` class in the [MS-05-02](https://github.com/AMWA-TV/ms-05-02/blob/v1.0-dev/idl/NC-Framework.webidl) webIDL.
 
@@ -653,7 +652,7 @@ Now we will set the `right-gain` set point gain (5p1) value to 11 and verify the
 
 The command should be accepted with no errors. The JSON Response to the command should indicate a status of 0 (Ok).
 
-Next retrieve the new set point gain value by copying and pasting the following into the WebSocket King client:
+Next retrieve the new set point gain value by copying and pasting the following into the WebSocket King client. The JSON command uses the `right-gain` `oid` 23 `getter` and the `getter` methodId level and index 1,1.  The parameter for the `getter` is indicated by the `level` and `index` of arguments id field.
 
 ```
 {
@@ -682,7 +681,7 @@ Next retrieve the new set point gain value by copying and pasting the following 
 
 **Expected Results**
 
-NC-01 returns the new value of the `right-gain` set point gain value:
+NC-01 returns the new value of the `right-gain` set point gain value in the `results`.
 
 ```
 {
@@ -704,7 +703,7 @@ NC-01 returns the new value of the `right-gain` set point gain value:
 
 **Subscribe to Change Event for the `right-gain` Parameter**
 
-Add a subscription notification to changes on the `right-gain` control by sending a subscription command to the SubscriptionManager. Paste in the JSON formatted command below to subscribe for changes. Note that the command being issues it directed to the Subscription Manager's (oid 5) method (3m1) which is described in the tutorial section of this document.
+Add a subscription notification to changes on the `right-gain` control by sending a subscription command to the SubscriptionManager. Paste in the JSON formatted command below to subscribe for changes. Note that the command being issues it directed to the Subscription Manager's (oid 5) method (3m1) which is described in the tutorial section of this document and targets the `right-gain` by using its `oid` of 23.
 
 ```
 {
@@ -758,7 +757,7 @@ The Subscription Manager will respond with a message indicating the subscription
 
 Now whenever we modify the value of the `right-gain` set point parameter we can see notifications arriving.
 
-Copy and paste the following command which will set the `right-gain` set point parameter to -3.0:
+Copy and paste the following command which will set the `right-gain` set point parameter to -3.0.  The JSON command uses the `right-gain` oid of 23 along with the NMOS control framework's `setter` method to set the level.
 
 ```
 {
@@ -788,7 +787,8 @@ Copy and paste the following command which will set the `right-gain` set point p
 
 **Expected Results**
 
-Since you registered for notifications for changes to the `right-gain` control you should see notifications of that change. Below is the expected result from invoking the Set method:
+Since you registered for notifications for changes to the `right-gain` control you should see notifications of that change. Below is the expected result from invoking the Set method that you should see in your WebSocket Client when you send the command to set the value.
+
 ```
 {
   "protocolVersion": "1.0.0",
@@ -804,7 +804,8 @@ Since you registered for notifications for changes to the `right-gain` control y
   ]
 }
 ```
-The notification of the change event is shown below:
+
+You should also the the notification of the change event is shown below. In the JSON notification you see the `oid` of the `right-gain` 23 along with the `propertyId` that was changed.  Finally, the `changeType` and new `propertyValue` are provided in the change event notification.
 
 ```
 
@@ -974,11 +975,76 @@ Here you have created a subclass of NcGain which is a class in the NMOS Control 
 The code snippet below shows the additions needed to override the get and set functions inherited from the base class `NcObject`:
 
 ```
+ //'1m1'
+    public override Get(oid: number, propertyId: NcElementId, handle: number) : CommandResponseNoValue
+    {
+        if(oid == this.oid)
+        {
+            let key: string = `${propertyId.level}p${propertyId.index}`;
 
+            switch(key)
+            {
+    		case '6p1':
+		    return new CommandResponseWithValue(handle, NcMethodStatus.OK, this.mute, null);
+                default:
+                    return super.Get(oid, propertyId, handle);
+            }
+        }
+
+        return new CommandResponseNoValue(handle, NcMethodStatus.InvalidRequest, 'OID could not be found');
+    }
+
+    //'1m2'
+    public override Set(oid: number, id: NcElementId, value: any, handle: number) : CommandResponseNoValue
+    {
+        if(oid == this.oid)
+        {
+            let key: string = `${id.level}p${id.index}`;
+
+            switch(key)
+            {
+              case '6p1':
+                    this.mute = value;
+                    this.notificationContext.NotifyPropertyChanged(this.oid, id, this.mute);
+                    return new CommandResponseNoValue(handle, NcMethodStatus.OK, null);
+              default:
+                    return super.Set(oid, id, value, handle);
+            }
+        }
+
+        return new CommandResponseNoValue(handle, NcMethodStatus.InvalidRequest, 'OID could not be found');
+    }
 ```
+In this code you override the base class `Get` and `Set` functions to also handle the new `mute` parameter before passing back up to the base class for other inherited parameters.
   
+ Finally in the following code section you override the `GetClassDescriptor ` to provide information about your new derived class specific to the new class (in this case the additional `mute` parameter).  
+ ```
 
-Next, Modify the file `code/src/Server.ts` to make the following changes that plug in your new mutable gain block into the overall controls provided by the nmos mock control node.
+   public static override GetClassDescriptor(): NcClassDescriptor 
+    {
+        let baseDescriptor = super.GetClassDescriptor();
+
+        let currentClassDescriptor = new NcClassDescriptor("NcGainCustom class descriptor",
+            [ 
+                new NcPropertyDescriptor(new NcElementId(2, 1), "mute", "NcBoolean", false, true, false, false, null, "TRUE iff muted"),
+            ],
+            [],
+            []
+        );
+
+        currentClassDescriptor.properties = currentClassDescriptor.properties.concat(baseDescriptor.properties);
+        currentClassDescriptor.methods = currentClassDescriptor.methods.concat(baseDescriptor.methods);
+        currentClassDescriptor.events = currentClassDescriptor.events.concat(baseDescriptor.events);
+
+        return currentClassDescriptor;
+    }
+}
+
+ ```
+
+
+
+Next, Modify the file `code/src/Server.ts` to make the following changes that plug in your new `NcGainCustom` block into the overall controls provided by the NMOS device control mock code only in the replacement of the framework's `NcGain` with your new extended `NcGainCustom`.
 
 ```
 const channelGainBlock = new NcBlock(
@@ -1008,6 +1074,8 @@ const channelGainBlock = new NcBlock(
                 new NcPort('output_1', NcIoDirection.Output, null),
             ], null, 0, false, "Right channel gain with mute", sessionManager)
         ],
+
+        ... 
         [ 
             new NcPort('stereo_gain_input_1', NcIoDirection.Input, null),
             new NcPort('stereo_gain_input_2', NcIoDirection.Input, null),
@@ -1067,7 +1135,7 @@ const channelGainBlock = new NcBlock(
             sessionManager);
 
 ```
-The changes to the original Server.ts file are simply replacements of the NMOS Control Framework's NcGain with the new NcGainCustom. The mock NMOS Control device provides a Server that demonstrates several of the blocks including the NcGain.  A clearer picture of the changes is shown below as a standard `diff` format.
+The changes to the original Server.ts file are simply replacements of the NMOS Control Framework's NcGain with the new NcGainCustom. A clearer picture of the changes is shown below as a standard `diff` format.
 
 ```
 @@ -14,7 +14,7 @@ import { SessionManager } from './SessionManager';
@@ -1141,7 +1209,9 @@ The changes to the original Server.ts file are simply replacements of the NMOS C
 
 ```
 
-Now restart `npm run build-and-start` and explore the changes you have made to the `right-gain` control. Since you've uses the new NcGainCustom for `master gain` and `left-gain` these elements will also be mutable. The `oids` remain the same with this change but we must use the level and parameter index for the derived class to interact with the `mute` parameter. The level is now 6 in the class hierarchy and the parameter for `mute` is 1 as indicated in the code `@myIdDecorator('6p1')`.
+Now restart `npm run build-and-start` and explore the changes you have made to the `right-gain` control. Since you've uses the new NcGainCustom for `master gain` and `left-gain` these elements will also have the new `mute` parameter. 
+
+The `oids` remain the same with this change but we must use the level and parameter index for the derived class to interact with the `mute` parameter. The level is now 6 in the class hierarchy and the parameter for `mute` is 1 as indicated in the code `@myIdDecorator('6p1')`.
 
 **Read the Default Value for Mute**
 
@@ -1175,7 +1245,7 @@ Now paste in the JSON formatted command below into your WebSocket client. Note t
 
 **Expected Value**
 
-The JSON formatted response should be returned by the NMOS device.  
+The JSON formatted response should be returned by the NMOS device with the default value for `mute` which we set in the code to be `false`.  
 
 ```
 {
@@ -1195,11 +1265,9 @@ The JSON formatted response should be returned by the NMOS device.
 
 ```
 
-The return JSON shows the value for `mute` as `false` which is the default value used in the code modifications.
-
 **Set the Mute for Right Channel to True**
 
-Now paste in the JSON formatted command below into your WebSocket client. Note that the command being issues it directed to the NcGainCustom's (oid 23) method (1m2) which is the `set` method in the NcGainCustoms `1st` level class `NcObject`. The command sets the value of parameter 1 at level 6 which is the `mute` parameter for our instance of `NcGainCustom`. 
+Now paste in the JSON formatted command below into your WebSocket client. Note that the command being issues it directed to the NcGainCustom object (oid 23) method (1m2) which is the `set` method in the NcGainCustom class base class `1st` level `NcObject`. The command sets the value of parameter 1 at level 6 which is the `mute` parameter for our instance of `NcGainCustom`. 
 
 ```
 {
@@ -1229,7 +1297,7 @@ Now paste in the JSON formatted command below into your WebSocket client. Note t
 
 **Read New Value**
 
-Now paste in the JSON formatted command below to reread the value for the `NcGainCustom` object's `mute` parameter. The method is again `level` 1 `index` 1 which is the `getter` method for the `NcGainCustom` objects top level parent `NcObject`.
+Now paste in the JSON formatted command below to reread the value for the `NcGainCustom` object's `mute` parameter. The method is again `level` 1 `index` 1 which is the `getter` method for the `NcGainCustom` objects top level parent `NcObject`. The `arguments` for the command indicate the target parameter `level` 6 `index` 1 which is the `mute` parameter of our targeted object.
 
 ```
 
@@ -1279,22 +1347,22 @@ The retrieved value for the mute on the `right-gain` shows the new value for `mu
 
 ```
 
-
-
 **Conclusions**
 
 In this section you have started to explore the code for the NMOS Control Framework by adding a new parameter to the existing framework. You have modified the code to add the parameter to an existing Control Block and then used IS-12 Protocol to read, write and verify your code changes are worked as expected. 
 
-You have seen how the overall framework supports additional functionality in a seamless manner. Some 15 odd code line changes provides full access to a new control parameter including read, write and notifications of changes.
+You have seen how the overall framework supports additional functionality in a seamless manner by standard class inheritance of the framework.
 
-In the next section you will follow another path to extension of the framework by creating a derived class based on the `NCGain` Control Block you worked with in the previous section. This is the expected path of extension to the NMOS Control Framework envisioned by AMWA and the NMOS Community. Implementors and Venders can derive from the existing framework class structure to add functionality and remain discoverable and controllable by other venders that use the framework.  
 
 
 ### Overall Conclusions
 
 This HOW-TO has shown how to work with the NMOS Control Framework.  You have created a simple NMOS Device that uses NMOS IS-04 to advertise its control endpoint with an NMOS RDS.  You have worked with the IS-12 protocol to discover a NMOS Control for Stereo Gain and modified a parameter of one leg of the Stereo Gain Block.  You have gained experience with making simple modifications to the code for a TypeScript implementation of a NMOS Controllable Device based on the open-sourced NMOS Control Mock Node.  
 
+### Further Directions
+
 We encourage you to continue exploration of how the NMOS Control Framework can enable compelling User-Stories for your customers and differentiate your products in the expanding [NMOS](https://www.amwa.tv/nmos-overview) community of venders and users while at the same time contributing to an open-standards based approach. 
+
 
 
 
