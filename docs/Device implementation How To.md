@@ -231,6 +231,8 @@ We now have a WebSocket session `3` open for our WebSocket King client. Next ret
 
 Send the following JSON Formatted command to the NC-01 WebSocket Use the Session ID received in the previous command. In our case `3`: In the JSON command the value of `oid` 1 indicates we are directing this command at the root block.  The `methodId` 1 is the `getter` command and the `id` level and index of 2 and 10 respectively targets the `2p10` `NcBlockMemberDescriptor` members of the root block. 
 
+Note that the value for your session will depend on if other sessions are open to the control client. Typically, you will receive the value `1` for your initial session but in all cases you should use the session id you receive with the initial session creation for your subsequent interactions with the device.
+
 ```
 
 {
