@@ -956,9 +956,32 @@ export class NcGainCustom extends NcGain
 }
 ```
 
+Key modifications to the code for the derived class include the following code snippet:
+
+```
+export class NcGainCustom extends NcGain
+{
+    @myIdDecorator('6p1') 
+    public mute: Boolean; 
+
+    public classID: number[] = [ 1, 2, 1, 1, 1, 1 ]; // classID, 1 extra level below NcGain
+    public classVersion: string = "1.0.0";
+```
+
+Here you have created a subclass of NcGain which is a class in the NMOS Control Framework.  The new class has all the features of the framework including discoverability, event notification subscriptions and communications via the IS-12 protocol.  The 
+
 Key items to pay attention to in the above code are 
-- The addition of the new required  `mute` parameter as a boolean
 - The decorator 6p1 that locates the level of the parameter in the inheritance chain and the particular parameter for the new class
+
+```
+@myIdDecorator('6p1') 
+```
+
+- The addition of the new required  `mute` parameter as a boolean
+- ```
+- public mute: Boolean; 
+- ```
+- 
 - Minimal needed changes to support getting and setting the new parameter
 - Extensive use of the base classes to handle all other aspects such as discovery, notifications etc
   
