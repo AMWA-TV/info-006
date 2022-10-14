@@ -970,21 +970,12 @@ export class NcGainCustom extends NcGain
 
 Here you have created a subclass of NcGain which is a class in the NMOS Control Framework.  The new class has all the features of the framework including discoverability, event notification subscriptions and communications via the IS-12 protocol.  The 
 
-Key items to pay attention to in the above code are 
-- The decorator 6p1 that locates the level of the parameter in the inheritance chain and the particular parameter for the new class
+
+The code snippet below shows the additions needed to override the get and set functions inherited from the base class `NcObject`:
 
 ```
-@myIdDecorator('6p1') 
-```
 
-- The addition of the new required  `mute` parameter as a boolean
-- ```
-- public mute: Boolean; 
-- ```
-- 
-- Minimal needed changes to support getting and setting the new parameter
-- Extensive use of the base classes to handle all other aspects such as discovery, notifications etc
-  
+```
   
 
 Next, Modify the file `code/src/Server.ts` to make the following changes that plug in your new mutable gain block into the overall controls provided by the nmos mock control node.
@@ -1299,7 +1290,7 @@ You have seen how the overall framework supports additional functionality in a s
 In the next section you will follow another path to extension of the framework by creating a derived class based on the `NCGain` Control Block you worked with in the previous section. This is the expected path of extension to the NMOS Control Framework envisioned by AMWA and the NMOS Community. Implementors and Venders can derive from the existing framework class structure to add functionality and remain discoverable and controllable by other venders that use the framework.  
 
 
-###Overall Conclusions
+### Overall Conclusions
 
 This HOW-TO has shown how to work with the NMOS Control Framework.  You have created a simple NMOS Device that uses NMOS IS-04 to advertise its control endpoint with an NMOS RDS.  You have worked with the IS-12 protocol to discover a NMOS Control for Stereo Gain and modified a parameter of one leg of the Stereo Gain Block.  You have gained experience with making simple modifications to the code for a TypeScript implementation of a NMOS Controllable Device based on the open-sourced NMOS Control Mock Node.  
 
