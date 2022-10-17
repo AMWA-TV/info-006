@@ -96,6 +96,19 @@ A controller is expected to [Discover the structure](https://specs.amwa.tv/is-12
 |:--:|
 | _**Exploring device tree**_ |
 
+As per the [MS-05-01](https://specs.amwa.tv/ms-05-01/branches/v1.0-dev/docs/Identification.html) specification there are different types of identifiers which ultimately can be split into two categories:
+
+- dynamic identifiers (object identifiers)
+- persistent identifiers (roles, class identities and data type names)
+
+| ![Identities](images/identities.png) |
+|:--:|
+| _**Identities**_ |
+
+A controller is expected to be able to work with all the identifiers exposed by a device.
+
+`Note`: Persistent identifiers like role paths can be used to consistently identify a particular control class instance in the device structure and then rediscover some of its properties including the runtime object id.
+
 ### Subscribing and receiving notifications
 
 As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/NcObject.html#propertychanged-event) specification all control classes must inherit from `NcObject` which specifies the `PropertyChanged` event.
