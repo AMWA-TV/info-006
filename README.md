@@ -17,6 +17,6 @@ This repository holds the source for this Implementation Guide, part of the fami
 
 ### How does it work?
 
-- It provides tutorials and How-To examples in order to assist with implementing a compliant NMOS IS-12 device or controller.
+- It provides tutorials and How-To examples to assist with implementing a compliant NMOS IS-12 device or controller.
 
 <!-- INTRO-END -->
