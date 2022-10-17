@@ -201,4 +201,4 @@ Controllers are expected to use the [Class manager](https://specs.amwa.tv/is-12/
 
 ## How to
 
-A practical example HOW TO is available [here](Controller%20implementation%20How%20To.md).
+HOW TO practical examples are available [here](How%20To%20practical%20examples.md).

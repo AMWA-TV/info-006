@@ -1,4 +1,4 @@
-# How To
+# How To practical examples
 
 {:.no_toc}
 

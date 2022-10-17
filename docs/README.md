@@ -1,5 +1,4 @@
 - [Tutorials](Tutorials.md)
 - [Device implementation tutorial](Device%20implementation%20tutorial.md)
 - [Controller implementation tutorial](Controller%20implementation%20tutorial.md)
-- [Device implementation How To](Device%20implementation%20How%20To.md)
-- [Controller implementation How To](Controller%20implementation%20How%20To.md)
+- [How To practical examples](How%20To%20practical%20examples.md)

@@ -231,4 +231,4 @@ Devices are expected to acknowledge each heartbeat with a response.
 
 ## How to
 
-A practical example HOW TO is available [here](Device%20implementation%20How%20To.md).
+HOW TO practical examples are available [here](How%20To%20practical%20examples.md).
