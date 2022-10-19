@@ -26,4 +26,4 @@ Resources:
 
 >The Guide is a living document and suggestions, corrections or other input is welcome at all times.
 >
-> To provide feedback, please create an issue at <https://github.com/AMWA-TV/info-device-capabilities-control/issues>. We look forward to your feedback.
+> To provide feedback, please create an issue at <https://github.com/AMWA-TV/info-006/issues>. We look forward to your feedback.

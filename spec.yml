@@ -1,10 +1,10 @@
-amwa_id: INFO-DEVICE-CAPABILITIES-CONTROL
-url: https://specs.amwa.tv/info-device-capabilities-control
+amwa_id: INFO-006
+url: https://specs.amwa.tv/info-006
 name: Implementation guide for NMOS Device Capabilities Control
 status: Work In Progress
-repo_name: info-device-capabilities-control
-alt_repo_name: nmos-implementation-guide-device-capabilities-control
-repo_url: https://github.com/AMWA-TV/info-device-capabilities-control
+repo_name: info-006
+alt_repo_name: info-device-capabilities-control
+repo_url: https://github.com/AMWA-TV/info-006
 releases:
 default_branch: main
 show_in_index: false
