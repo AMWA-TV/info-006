@@ -7,4 +7,4 @@ alt_repo_name: info-device-capabilities-control
 repo_url: https://github.com/AMWA-TV/info-006
 releases:
 default_branch: main
-show_in_index: false
+show_in_index: true
