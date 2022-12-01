@@ -177,56 +177,16 @@ Details on installing Chrome extensions can be found [here](https://support.goog
 
 After completing the installation of WebSocket King open the extension in a new browser window. Copy and paste the WebSocket located in the RDS for the NC-01 NMOS Control Mock node into the connections field and click `connect`. The `Connect` button should turn to `Disconnect` indicating a successful connection to the NC-01 WebSocket endpoint.
 
-Next we will verify the ability to read and write to the NMOS Control components running on the mock node. We will focus on reading and writing to the Stereo Gain Block and related objects provided by the mock node. Other aspects of control can also be explored by following the examples in the [IS-12 Specification](https://specs.amwa.tv/is-12/) example section. For purposes of this HOW-TO we will focus on working with the Stereo Control and adding code to extend this control then create a new control and interact with this new control.
+Next we will verify the ability to read and write to the NMOS Control components running on the mock node. We will focus on reading and writing to the Stereo Gain Block and related objects provided by the mock node. Other aspects of control can also be explored by following the examples in the [IS-12 Specification](https://specs.amwa.tv/is-12/) example section. For purposes of this HOW-TO we will focus on working with the Stereo Control and adding code to extend this control then create a new control and interact with this new control. Also note that in an actual system most of the manual steps we are performing here would be performed by an NMOS Controller using the IS-12 specification. For more information about implementing an IS-12 NMOS Controller see the HOW-TO section for Controller implementations.
 
-**Open a Control Session and obtain information about the control of interest**
+Next retrieve the members of the root block in order to identify the location of the Stereo gain block.
 
-Use the JSON Command to open a new session to the NC-01 WebSocket control. Copy the JSON formatted message into the payload area. For more information about the format refer to [AMWA IS-12 NMOS Control Protocol](https://specs.amwa.tv/is-12/). Also note that in an actual system most of the manual steps we are performing here would be performed by an NMOS Controller using the IS-12 specification. For more information about implementing an IS-12 NMOS Controller see the HOW-TO section for Controller implementations.
+Send the following JSON formatted command to the NC-01 WebSocket. In the JSON command the value of `oid` 1 indicates we are directing this command at the root block. The `methodId` with level 1 and index 1 is the `getter` method and the `id` level and index of 2 and 10 respectively targets the `2p10` `members` property of the root block.
 
 ```json
 {
   "protocolVersion": "1.0.0",
   "messageType": 0,
-  "messages": [
-    {
-      "handle": 1,
-      "arguments": {
-        "heartBeatTime": 5000
-      }
-    }
-  ]
-}
-```
-
-**Expected Output from WebSocket King**
-
-```json
-{
-  "protocolVersion": "1.0.0",
-  "messageType": 1,
-  "messages": [
-    {
-      "handle": 1,
-      "result": {
-        "status": 0,
-        "value": 3
-      }
-    }
-  ]
-}
-```
-
-We now have a WebSocket session open for our WebSocket King client. Next retrieve the members of the root block in order to identify the location of the Stereo gain block.
-
-Send the following JSON formatted command to the NC-01 WebSocket Use the session ID received in the previous command. In our case `3`: In the JSON command the value of `oid` 1 indicates we are directing this command at the root block. The `methodId` with level 1 and index 1 is the `getter` method and the `id` level and index of 2 and 10 respectively targets the `2p10` `members` property of the root block.
-
-Note that the value for your session will depend on if other sessions are open to the control client. Typically, you will receive the value `1` for your initial session but in all cases you should use the session id you receive with the initial session creation for your subsequent interactions with the device.
-
-```json
-{
-  "protocolVersion": "1.0.0",
-  "sessionId": 3,
-  "messageType": 2,
   "messages": [
     {
       "handle": 3,
@@ -253,8 +213,7 @@ The device responds with a JSON containing `NcBlockMemberDescriptor` member desc
 ```json
 {
   "protocolVersion": "1.0.0",
-  "messageType": 3,
-  "sessionId": 101,
+  "messageType": 1,
   "messages": [
     {
       "handle": 3,
@@ -378,8 +337,7 @@ You will now make use of the generic Get method `1m1` (level 1, index 1) to find
 ```json
 {
   "protocolVersion": "1.0.0",
-  "sessionId": 3,
-  "messageType": 2,
+  "messageType": 0,
   "messages": [
     {
       "handle": 3,
@@ -406,8 +364,7 @@ The device responds to the above command with a JSON formatted response containi
 ```json
 {
   "protocolVersion": "1.0.0",
-  "messageType": 3,
-  "sessionId": 3,
+  "messageType": 1,
   "messages": [
     {
       "handle": 3,
@@ -462,8 +419,7 @@ Next drill down one more level to resolve the left and right gains for the Chann
 ```json
 {
   "protocolVersion": "1.0.0",
-  "sessionId": 3,
-  "messageType": 2,
+  "messageType": 0,
   "messages": [
     {
       "handle": 3,
@@ -490,8 +446,7 @@ The JSON response to the above command gives us the two control blocks `left-gai
 ```json
 {
   "protocolVersion": "1.0.0",
-  "messageType": 3,
-  "sessionId": 3,
+  "messageType": 2,
   "messages": [
     {
       "handle": 3,
@@ -550,8 +505,7 @@ Copy and paste the following into the WebSocket King Client. The level and index
 ```json
 {
   "protocolVersion": "1.0.0",
-  "sessionId": 3,
-  "messageType": 2,
+  "messageType": 0,
   "messages": [
     {
       "handle": 2,
@@ -578,8 +532,7 @@ The default value set in the mock device for the right-gain set point value is `
 ```json
 {
   "protocolVersion": "1.0.0",
-  "messageType": 3,
-  "sessionId": 3,
+  "messageType": 1,
   "messages": [
     {
       "handle": 2,
@@ -597,8 +550,7 @@ Now we will set the `right-gain` set point gain (5p1) value to 11 and verify the
 ```json
 {
   "protocolVersion": "1.0.0",
-  "sessionId": 3,
-  "messageType": 2,
+  "messageType": 0,
   "messages": [
     {
       "handle": 2,
@@ -628,8 +580,7 @@ Next retrieve the new set point gain value by copying and pasting the following 
 ```json
 {
   "protocolVersion": "1.0.0",
-  "sessionId": 3,
-  "messageType": 2,
+  "messageType": 0,
   "messages": [
     {
       "handle": 2,
@@ -656,8 +607,7 @@ NC-01 returns the new value of the `right-gain` set point gain value in the resp
 ```json
 {
   "protocolVersion": "1.0.0",
-  "messageType": 3,
-  "sessionId": 3,
+  "messageType": 1,
   "messages": [
     {
       "handle": 2,
@@ -677,8 +627,7 @@ Add a subscription notification to changes on the `right-gain` control by sendin
 ```json
 {
   "protocolVersion": "1.0.0",
-  "sessionId": 3,
-  "messageType": 2,
+  "messageType": 0,
   "messages": [
     {
       "handle": 5,
@@ -703,13 +652,12 @@ Add a subscription notification to changes on the `right-gain` control by sendin
 
 **Expected Results**
 
-The Subscription Manager will respond with a message indicating the subscription request was accepted. The session will be notified of any changes.
+The Subscription Manager will respond with a message indicating the subscription request was accepted.
 
 ```json
 {
   "protocolVersion": "1.0.0",
-  "messageType": 3,
-  "sessionId": 3,
+  "messageType": 1,
   "messages": [
     {
       "handle": 5,
@@ -730,8 +678,7 @@ Copy and paste the following command which will set the `right-gain` set point p
 ```json
 {
   "protocolVersion": "1.0.0",
-  "sessionId": 3,
-  "messageType": 2,
+  "messageType": 0,
   "messages": [
     {
       "handle": 2,
@@ -759,8 +706,7 @@ Since you registered for notifications for changes to the `right-gain` control y
 ```json
 {
   "protocolVersion": "1.0.0",
-  "messageType": 3,
-  "sessionId": 3,
+  "messageType": 1,
   "messages": [
     {
       "handle": 2,
@@ -777,8 +723,7 @@ You should also receive the notification of the change event as shown below. In 
 ```json
 {
   "protocolVersion": "1.0.0",
-  "messageType": 6,
-  "sessionId": 3,
+  "messageType": 2,
   "messages": [
     {
       "type": 0,
@@ -804,7 +749,7 @@ You should also receive the notification of the change event as shown below. In 
 
 In this section of the HOW-TO guide you have setup all required NMOS infrastructure to run and interacted with an NMOS Device that provides IS-12 NMOS Control functionality. You loaded an NMOS RDS so that the NMOS device can register its control endpoint for IS-12 in the form of a standard WebSocket. You have installed the NC-01 mock device and used it to explore how NMOS Control works for a simple Stereo Gain Control block. You have used manual copy-and-paste of JSON protocol messages to act as an human-in-the-loop NMOS Controller.
 
-In addition you have subscribed to property changes for the gain control of interest and verified your WebSocket session monitoring changes has received notifications when you changed the property of interest.
+In addition you have subscribed to property changes for the gain control of interest and verified your WebSocket session has received notifications when you changed the property of interest.
 
 In the next section you will add a new property to the Stereo Gain Block's left and right gains. You will become familiar with how to modify code to enhance existing NMOS Control classes.
 
@@ -1176,8 +1121,7 @@ Now paste in the JSON formatted command below into your WebSocket client. Note t
 ```json
 {
   "protocolVersion": "1.0.0",
-  "sessionId": 3,
-  "messageType": 2,
+  "messageType": 0,
   "messages": [
     {
       "handle": 2,
@@ -1204,8 +1148,7 @@ The JSON formatted response should be returned by the NMOS device with the defau
 ```json
 {
   "protocolVersion": "1.0.0",
-  "messageType": 3,
-  "sessionId": 3,
+  "messageType": 1,
   "messages": [
     {
       "handle": 2,
@@ -1225,8 +1168,7 @@ Now paste in the JSON formatted command below into your WebSocket client. Note t
 ```json
 {
   "protocolVersion": "1.0.0",
-  "sessionId": 3,
-  "messageType": 2,
+  "messageType": 0,
   "messages": [
     {
       "handle": 2,
@@ -1254,8 +1196,7 @@ Now paste in the JSON formatted command below to re-read the value of the `mute`
 ```json
 {
   "protocolVersion": "1.0.0",
-  "sessionId": 3,
-  "messageType": 2,
+  "messageType": 0,
   "messages": [
     {
       "handle": 2,
@@ -1282,8 +1223,7 @@ The retrieved value for the mute on the `right-gain` shows the new value for `mu
 ```json
 {
   "protocolVersion": "1.0.0",
-  "messageType": 3,
-  "sessionId": 3,
+  "messageType": 1,
   "messages": [
     {
       "handle": 2,

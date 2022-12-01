@@ -48,22 +48,6 @@ Control endpoint example:
 
 The controller can then use the discovered control endpoint to make the initial WebSocket connection which will subsequently be used for NMOS IS-12 parameter control.
 
-### Creating a control session
-
-As per the [NMOS IS-12](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Protocol_messaging.html#session-creation) specification a controller first needs to create a control session by sending a [CreateSession](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Creating_a_session.html) message.
-
-The control session provides the control context for issuing subsequent commands, receiving responses and notifications. It also specifies how often heartbeats are sent (see [Sending heartbeats](Controller%20implementation%20tutorial.md#sending-heartbeats)).
-
-The `value` received in the `Create session response` message is the control session id the device has allocated for use. It needs to be used in every subsequent communication with the device.
-
-`Note`: It is expected that if the WebSocket connection fails for any reason, the controller will reconnect to the WebSocket endpoint and create a new control session. Control sessions are not persisted across reconnections.
-
-### Sending heartbeats
-
-As per the [NMOS IS-12](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Protocol_messaging.html#heartbeats) specification a controller needs to send [Heartbeat](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Sending_heartbeats.html) messages for their control sessions at the intervals specified when creating the session (see [Creating a control session](Controller%20implementation%20tutorial.md#creating-a-control-session)).
-
-Devices will acknowledge each heartbeat with a response.
-
 ### Sending commands and receiving responses
 
 As per the [NMOS IS-12](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Protocol_messaging.html#command-message-type) specification a controller can send [Commands](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Sending_commands.html) and receive responses.
