@@ -187,16 +187,6 @@ Control endpoint example:
 }
 ```
 
-#### Keeping track of control sessions
-
-As per the [NMOS IS-12](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Protocol_messaging.html#session-creation) specification a device needs to be able to respond to a [CreateSession](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Creating_a_session.html) message being received.
-
-The control session provides the control context for subsequent commands, receiving responses and notifications. It also specifies how often heartbeats are sent (see [Handling heartbeats](Device%20implementation%20tutorial.md#handling-heartbeats)).
-
-A device is expected to allocate a `session id` and offer its value in the response message sent after a valid `Create session` message is received. This `session id` will be used in every subsequent communication and the device needs to use it whenever it determines if notifications need to be sent to a specific controller.
-
-Controllers will send the desired `heartbeat interval` when sending a `Create session` message. Devices then need to use this interval to validate if [heartbeat](Device%20implementation%20tutorial.md#handling-heartbeats) messages are sent at correct intervals.
-
 #### Mapping commands and returning responses
 
 As per the [NMOS IS-12](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Protocol_messaging.html#command-message-type) specification a device is expected to respond to [Commands](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Sending_commands.html) sent by a controller.
@@ -221,13 +211,7 @@ This means any properties in any control class can be subscribed to in order to 
 
 A device is expected to allow controllers to [Subscribe](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Subscribing_to_events.html) to object ids it is interested in by correctly handling commands sent to the `Subscription manager`.
 
-A device is also expected to use the [session id](Device%20implementation%20tutorial.md#keeping-track-of-control-sessions) context and the subscriptions received in order to determine when a notification message needs to be sent to a controller.
-
-#### Handling heartbeats
-
-As per the [NMOS IS-12](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Protocol_messaging.html#heartbeats) specification a controller is required to send [Heartbeat](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Sending_heartbeats.html) messages for their control sessions at the intervals specified when creating the session (see [Keeping track of control sessions](Device%20implementation%20tutorial.md#keeping-track-of-control-sessions)).
-
-Devices are expected to acknowledge each heartbeat with a response.
+A device is also expected to use the underlying WebSocket control protocol context and the subscriptions received in order to determine when a notification message needs to be sent to a controller.
 
 ## How to
 
