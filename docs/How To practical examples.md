@@ -446,12 +446,12 @@ The JSON response to the above command gives us the two control blocks `left-gai
 ```json
 {
   "protocolVersion": "1.0.0",
-  "messageType": 2,
+  "messageType": 1,
   "messages": [
     {
       "handle": 3,
       "result": {
-        "status": 0,
+        "status": 200,
         "value": [
           {
             "role": "left-gain",
