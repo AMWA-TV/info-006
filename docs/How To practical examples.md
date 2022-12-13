@@ -218,7 +218,7 @@ The device responds with a JSON containing `NcBlockMemberDescriptor` member desc
     {
       "handle": 3,
       "result": {
-        "status": 0,
+        "status": 200,
         "value": [
           {
             "role": "DeviceManager",
@@ -369,7 +369,7 @@ The device responds to the above command with a JSON formatted response containi
     {
       "handle": 3,
       "result": {
-        "status": 0,
+        "status": 200,
         "value": [
           {
             "role": "channel-gain",
@@ -446,12 +446,12 @@ The JSON response to the above command gives us the two control blocks `left-gai
 ```json
 {
   "protocolVersion": "1.0.0",
-  "messageType": 2,
+  "messageType": 1,
   "messages": [
     {
       "handle": 3,
       "result": {
-        "status": 0,
+        "status": 200,
         "value": [
           {
             "role": "left-gain",
@@ -537,7 +537,7 @@ The default value set in the mock device for the right-gain set point value is `
     {
       "handle": 2,
       "result": {
-        "status": 0,
+        "status": 200,
         "value": 0
       }
     }
@@ -612,8 +612,8 @@ NC-01 returns the new value of the `right-gain` set point gain value in the resp
     {
       "handle": 2,
       "result": {
-        "status": 0,
-        "value": "11.0"
+        "status": 200,
+        "value": 11.0
       }
     }
   ]
@@ -662,7 +662,7 @@ The Subscription Manager will respond with a message indicating the subscription
     {
       "handle": 5,
       "result": {
-        "status": 0
+        "status": 200
       }
     }
   ]
@@ -711,7 +711,7 @@ Since you registered for notifications for changes to the `right-gain` control y
     {
       "handle": 2,
       "result": {
-        "status": 0
+        "status": 200
       }
     }
   ]
@@ -1153,7 +1153,7 @@ The JSON formatted response should be returned by the NMOS device with the defau
     {
       "handle": 2,
       "result": {
-        "status": 0,
+        "status": 200,
         "value": false
       }
     }
@@ -1228,8 +1228,8 @@ The retrieved value for the mute on the `right-gain` shows the new value for `mu
     {
       "handle": 2,
       "result": {
-        "status": 0,
-        "value": "true"
+        "status": 200,
+        "value": true
       }
     }
   ]
