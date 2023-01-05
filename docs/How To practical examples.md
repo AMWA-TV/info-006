@@ -622,7 +622,7 @@ NC-01 returns the new value of the `right-gain` set point gain value in the resp
 
 **Subscribe to property changes for the `right-gain`**
 
-Add a subscription notification to changes on the `right-gain` control by sending a subscription command to the SubscriptionManager. Paste in the JSON formatted command below to subscribe for changes. Note that the command is directed to the Subscription Manager's (oid 5) method (3m1) which is described in the tutorial section of this document and targets the `right-gain` by using its `oid` of 23 as the `emitterOid`. The `eventId` is provided as level 1 and index 1 which represents the PropertyChanged event defined in NcObject.
+Add a subscription notification to changes on the `right-gain` control by sending a subscription command to the SubscriptionManager. Paste in the JSON formatted command below to subscribe for changes. Note that the command is directed to the Subscription Manager's (oid 5) method (3m1) which is described in the tutorial section of this document and targets the `right-gain` by using its `oid` of 23 as the emitter `oid`.
 
 ```json
 {
@@ -637,13 +637,7 @@ Add a subscription notification to changes on the `right-gain` control by sendin
         "index": 1
       },
       "arguments": {
-        "event": {
-          "emitterOid": 23,
-          "eventId": {
-            "level": 1,
-            "index": 1
-          }
-        }
+        "oid": 23
       }
     }
   ]
@@ -718,7 +712,7 @@ Since you registered for notifications for changes to the `right-gain` control y
 }
 ```
 
-You should also receive the notification of the change event as shown below. In the JSON notification you see the `oid` of the `right-gain` 23 along with the `propertyId` that was changed. Finally, the `changeType` and new `propertyValue` are provided in the change event notification.
+You should also receive the notification of the change event as shown below. In the JSON notification you see the `oid` of the `right-gain` 23 along with the `propertyId` that was changed. Finally, the `changeType` and new property `value` are provided in the change event notification.
 
 ```json
 {
@@ -738,7 +732,8 @@ You should also receive the notification of the change event as shown below. In 
           "index": 1
         },
         "changeType": 0,
-        "propertyValue": "-3.0"
+        "value": -3.0,
+        "sequenceItemIndex": null
       }
     }
   ]
