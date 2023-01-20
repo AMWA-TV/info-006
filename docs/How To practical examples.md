@@ -279,7 +279,7 @@ The device responds with a JSON containing `NcBlockMemberDescriptor` member desc
               "id": [
                 1,
                 2,
-                2
+                3
               ],
               "version": "1.0.0"
             },
@@ -498,9 +498,9 @@ The JSON response to the above command gives us the two control blocks `left-gai
 }
 ```
 
-Now retrieve the set point gain value for the `right-gain` `oid` 23 using the generic Get method targeted at property (5p1).
+Now retrieve the gain value for the `right-gain` `oid` 23 using the generic Get method targeted at property (5p1).
 
-Copy and paste the following into the WebSocket King Client. The level and index of the gain set point property is obtained from the definition of the `NcGain` class in the [MS-05-02](https://github.com/AMWA-TV/ms-05-02/blob/v1.0-dev/idl/NC-Framework.webidl) webIDL.
+Copy and paste the following into the WebSocket King Client. The level and index of the gain value property is obtained from the definition of the `NcGain` class in the [MS-05-02](https://github.com/AMWA-TV/ms-05-02/blob/v1.0-dev/idl/NC-Framework.webidl) webIDL.
 
 ```json
 {
@@ -527,7 +527,7 @@ Copy and paste the following into the WebSocket King Client. The level and index
 
 **Expected Results**
 
-The default value set in the mock device for the right-gain set point value is `0`, so we expect the returned value to be zero. The JSON response from `NC-01` confirms this:
+The default value set in the mock device for the right-gain value is `0`, so we expect the returned value to be zero. The JSON response from `NC-01` confirms this:
 
 ```json
 {
@@ -545,7 +545,7 @@ The default value set in the mock device for the right-gain set point value is `
 }
 ```
 
-Now we will set the `right-gain` set point gain (5p1) value to 11 and verify the change has taken effect. We will use the generic `Set` method for this `(1p2)`. Copy and paste the following JSON formatted command to set the new value:
+Now we will set the `right-gain` gain value (5p1) to 11 and verify the change has taken effect. We will use the generic `Set` method for this `(1p2)`. Copy and paste the following JSON formatted command to set the new value:
 
 ```json
 {
@@ -575,7 +575,7 @@ Now we will set the `right-gain` set point gain (5p1) value to 11 and verify the
 
 The command should be accepted with no errors. The JSON response to the command should indicate a status of 0 (Ok).
 
-Next retrieve the new set point gain value by copying and pasting the following into the WebSocket King client. The JSON command uses the `right-gain` `oid` 23 and the `get` methodId level and index (`1,1`). The argument for the `get` method is the id of the set point property of NcGain provided as level and index (`5,1`).
+Next retrieve the new gain value by copying and pasting the following into the WebSocket King client. The JSON command uses the `right-gain` `oid` 23 and the `get` methodId level and index (`1,1`). The argument for the `get` method is the id of the gain value property of NcGain provided as level and index (`5,1`).
 
 ```json
 {
@@ -602,7 +602,7 @@ Next retrieve the new set point gain value by copying and pasting the following 
 
 **Expected Results**
 
-NC-01 returns the new value of the `right-gain` set point gain value in the response.
+NC-01 returns the new value of the `right-gain` value in the response.
 
 ```json
 {
@@ -663,11 +663,11 @@ The Subscription Manager will respond with a message indicating the subscription
 }
 ```
 
-**Modify `right-gain` set point value and check notification is received**
+**Modify `right-gain` value and check notification is received**
 
-Now whenever we modify the value of the `right-gain` set point property we can see notifications arriving.
+Now whenever we modify the value of the `right-gain` gain value property we can see notifications arriving.
 
-Copy and paste the following command which will set the `right-gain` set point property to -3.0. The JSON command uses the `right-gain` oid of `23` and the `set` method to set the new value.
+Copy and paste the following command which will set the `right-gain` gain value property to -3.0. The JSON command uses the `right-gain` oid of `23` and the `set` method to set the new value.
 
 ```json
 {
@@ -787,12 +787,12 @@ export class NcGainCustom extends NcGain
         enabled: boolean,
         ports: NcPort[] | null,
         latency: number | null,
-        setPoint: number,
+        gainValue: number,
         mute: boolean,
         description: string,
         notificationContext: INotificationContext)
     {
-        super(oid, constantOid, owner, role, userLabel, lockable, lockState, touchpoints, enabled, ports, latency, setPoint, description, notificationContext);
+        super(oid, constantOid, owner, role, userLabel, lockable, lockState, touchpoints, enabled, ports, latency, gainValue, description, notificationContext);
 
         this.mute = mute;
     }
