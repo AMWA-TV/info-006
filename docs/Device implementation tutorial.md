@@ -160,7 +160,7 @@ After a device has initiated its device tree structure and allocated oids to eve
 
 #### Control endpoint advertisement (in NMOS IS-04)
 
-The [NMOS IS-12](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/IS-04_interactions.html) specification explains that the control endpoint is advertised in the controls array as part of the NMOS device resource. The schema for the NMOS device resource is available in the [NMOS IS-04](https://specs.amwa.tv/is-04/branches/v1.3.x/APIs/schemas/with-refs/device.html) specification.
+The [NMOS IS-12](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/IS-04_interactions.html) specification explains that the control endpoint is advertised in the controls array as part of the NMOS device resource. The schema for the NMOS device resource is available in the [NMOS IS-04](https://specs.amwa.tv/is-04/branches/v1.3.1/APIs/schemas/with-refs/device.html) specification.
 
 It is expected that an IS-12 enabled device exposes a `urn:x-nmos:control:ncp` control type in the controls array for its NMOS device resource.
 
