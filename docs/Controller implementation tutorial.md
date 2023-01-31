@@ -19,7 +19,7 @@ The basic controller workflow follows the diagram below where individual steps a
 
 ### Discovering the device control endpoint (in NMOS IS-04)
 
-The [NMOS IS-12](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/IS-04_interactions.html) specification explains that the control endpoint is advertised in the controls array as part of the NMOS device resource. The schema for the NMOS device resource is available in the [NMOS IS-04](https://specs.amwa.tv/is-04/branches/v1.3.x/APIs/schemas/with-refs/device.html) specification.
+The [NMOS IS-12](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/IS-04_interactions.html) specification explains that the control endpoint is advertised in the controls array as part of the NMOS device resource. The schema for the NMOS device resource is available in the [NMOS IS-04](https://specs.amwa.tv/is-04/branches/v1.3.1/APIs/schemas/with-refs/device.html) specification.
 
 This means that a controller can discover if an NMOS device exposes an NMOS IS-12 control endpoint by checking if the controls array in the NMOS device resource contains the control type of `urn:x-nmos:control:ncp`.
 

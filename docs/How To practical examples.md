@@ -187,7 +187,7 @@ Send the following JSON formatted command to the NC-01 WebSocket. In the JSON co
 {
   "protocolVersion": "1.0.0",
   "messageType": 0,
-  "messages": [
+  "commands": [
     {
       "handle": 3,
       "oid": 1,
@@ -214,7 +214,7 @@ The device responds with a JSON containing `NcBlockMemberDescriptor` member desc
 {
   "protocolVersion": "1.0.0",
   "messageType": 1,
-  "messages": [
+  "responses": [
     {
       "handle": 3,
       "result": {
@@ -338,7 +338,7 @@ You will now make use of the generic Get method `1m1` (level 1, index 1) to find
 {
   "protocolVersion": "1.0.0",
   "messageType": 0,
-  "messages": [
+  "commands": [
     {
       "handle": 3,
       "oid": 31,
@@ -365,7 +365,7 @@ The device responds to the above command with a JSON formatted response containi
 {
   "protocolVersion": "1.0.0",
   "messageType": 1,
-  "messages": [
+  "responses": [
     {
       "handle": 3,
       "result": {
@@ -420,7 +420,7 @@ Next drill down one more level to resolve the left and right gains for the Chann
 {
   "protocolVersion": "1.0.0",
   "messageType": 0,
-  "messages": [
+  "commands": [
     {
       "handle": 3,
       "oid": 21,
@@ -447,7 +447,7 @@ The JSON response to the above command gives us the two control blocks `left-gai
 {
   "protocolVersion": "1.0.0",
   "messageType": 1,
-  "messages": [
+  "responses": [
     {
       "handle": 3,
       "result": {
@@ -506,7 +506,7 @@ Copy and paste the following into the WebSocket King Client. The level and index
 {
   "protocolVersion": "1.0.0",
   "messageType": 0,
-  "messages": [
+  "commands": [
     {
       "handle": 2,
       "oid": 23,
@@ -533,7 +533,7 @@ The default value set in the mock device for the right-gain value is `0`, so we 
 {
   "protocolVersion": "1.0.0",
   "messageType": 1,
-  "messages": [
+  "responses": [
     {
       "handle": 2,
       "result": {
@@ -551,7 +551,7 @@ Now we will set the `right-gain` gain value (5p1) to 11 and verify the change ha
 {
   "protocolVersion": "1.0.0",
   "messageType": 0,
-  "messages": [
+  "commands": [
     {
       "handle": 2,
       "oid": 23,
@@ -581,7 +581,7 @@ Next retrieve the new gain value by copying and pasting the following into the W
 {
   "protocolVersion": "1.0.0",
   "messageType": 0,
-  "messages": [
+  "commands": [
     {
       "handle": 2,
       "oid": 23,
@@ -608,7 +608,7 @@ NC-01 returns the new value of the `right-gain` value in the response.
 {
   "protocolVersion": "1.0.0",
   "messageType": 1,
-  "messages": [
+  "responses": [
     {
       "handle": 2,
       "result": {
@@ -628,7 +628,7 @@ Add a subscription notification to changes on the `right-gain` control by sendin
 {
   "protocolVersion": "1.0.0",
   "messageType": 0,
-  "messages": [
+  "commands": [
     {
       "handle": 5,
       "oid": 5,
@@ -652,7 +652,7 @@ The Subscription Manager will respond with a message indicating the subscription
 {
   "protocolVersion": "1.0.0",
   "messageType": 1,
-  "messages": [
+  "responses": [
     {
       "handle": 5,
       "result": {
@@ -673,7 +673,7 @@ Copy and paste the following command which will set the `right-gain` gain value 
 {
   "protocolVersion": "1.0.0",
   "messageType": 0,
-  "messages": [
+  "commands": [
     {
       "handle": 2,
       "oid": 23,
@@ -701,7 +701,7 @@ Since you registered for notifications for changes to the `right-gain` control y
 {
   "protocolVersion": "1.0.0",
   "messageType": 1,
-  "messages": [
+  "responses": [
     {
       "handle": 2,
       "result": {
@@ -718,7 +718,7 @@ You should also receive the notification of the change event as shown below. In 
 {
   "protocolVersion": "1.0.0",
   "messageType": 2,
-  "messages": [
+  "notifications": [
     {
       "type": 0,
       "oid": 23,
@@ -1117,7 +1117,7 @@ Now paste in the JSON formatted command below into your WebSocket client. Note t
 {
   "protocolVersion": "1.0.0",
   "messageType": 0,
-  "messages": [
+  "commands": [
     {
       "handle": 2,
       "oid": 23,
@@ -1144,7 +1144,7 @@ The JSON formatted response should be returned by the NMOS device with the defau
 {
   "protocolVersion": "1.0.0",
   "messageType": 1,
-  "messages": [
+  "responses": [
     {
       "handle": 2,
       "result": {
@@ -1164,7 +1164,7 @@ Now paste in the JSON formatted command below into your WebSocket client. Note t
 {
   "protocolVersion": "1.0.0",
   "messageType": 0,
-  "messages": [
+  "commands": [
     {
       "handle": 2,
       "oid": 23,
@@ -1192,7 +1192,7 @@ Now paste in the JSON formatted command below to re-read the value of the `mute`
 {
   "protocolVersion": "1.0.0",
   "messageType": 0,
-  "messages": [
+  "commands": [
     {
       "handle": 2,
       "oid": 23,
@@ -1219,7 +1219,7 @@ The retrieved value for the mute on the `right-gain` shows the new value for `mu
 {
   "protocolVersion": "1.0.0",
   "messageType": 1,
-  "messages": [
+  "responses": [
     {
       "handle": 2,
       "result": {
