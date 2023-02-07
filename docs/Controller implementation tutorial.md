@@ -52,7 +52,7 @@ The controller can then use the discovered control endpoint to make the initial 
 
 As per the [NMOS IS-12](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Protocol_messaging.html#command-message-type) specification a controller can send [Commands](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Sending_commands.html) and receive responses.
 
-`Note`: Multiple commands can be sent in the messages array.
+`Note`: Multiple commands can be sent in the commands array.
 
 As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/NcObject.html#generic-getter-and-setter) specification all control classes must inherit from `NcObject` which specifies generic `Get` and `Set` methods.
 

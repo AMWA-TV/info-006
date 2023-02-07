@@ -686,7 +686,7 @@ Copy and paste the following command which will set the `right-gain` gain value 
           "level": 5,
           "index": 1
         },
-        "value": "-3.0"
+        "value": -3.0
       }
     }
   ]
@@ -1177,7 +1177,7 @@ Now paste in the JSON formatted command below into your WebSocket client. Note t
           "level": 6,
           "index": 1
         },
-        "value": "true"
+        "value": true
       }
     }
   ]
