@@ -500,7 +500,7 @@ The JSON response to the above command gives us the two control blocks `left-gai
 
 Now retrieve the gain value for the `right-gain` `oid` 23 using the generic Get method targeted at property (5p1).
 
-Copy and paste the following into the WebSocket King Client. The level and index of the gain value property is obtained from the definition of the `NcGain` class in the [MS-05-02](https://github.com/AMWA-TV/ms-05-02/blob/v1.0-dev/idl/NC-Framework.webidl) webIDL.
+Copy and paste the following into the WebSocket King Client. The level and index of the gain value property is obtained from the definition of the `NcGain` class in the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/idl/NC-Framework.html) webIDL.
 
 ```json
 {

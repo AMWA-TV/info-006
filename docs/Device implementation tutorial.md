@@ -11,7 +11,7 @@ This section covers the basis for quickly building an MS-05 / IS-12 device imple
 
 This section provides guidance in select focus areas required for device implementations.
 
-For full definitions of models referred to in this document please check the [IDL](https://github.com/AMWA-TV/ms-05-02/blob/v1.0-dev/idl/NC-Framework.webidl).
+For full definitions of models referred to in this document please check the [IDL](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/idl/NC-Framework.html).
 
 The basic device workflow follows the diagram below where individual steps are detailed in the following subsections.
 
@@ -42,7 +42,7 @@ As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Bloc
 
 All devices have at the very least a `root block` which is the top most block in the device tree. The root block has an `oid` of 1 and the role of `root`.
 
-Control classes which are nested inside a block are advertised using descriptors in the members property (`2p10`) of [NcBlock](https://github.com/AMWA-TV/ms-05-02/blob/v1.0-dev/idl/NC-Framework.webidl).
+Control classes which are nested inside a block are advertised using descriptors in the members property (`2p10`) of [NcBlock](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/idl/NC-Framework.html).
 
 The members property in blocks enables [tree discovery](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Blocks.html#tree-discovery) of the device structure.
 
@@ -100,7 +100,7 @@ A device is expected to allow its structure to be discovered (see [Block control
 
 Vendor specific control classes can be created by branching off from a standard control class and following the class ID generation guidelines specified in [MS-05-01](https://specs.amwa.tv/ms-05-01/branches/v1.0-dev/docs/Appendix_A_-_Class_ID_Format.html).
 
-Here is an example of a new worker control class called `DemoClassAlpha`. It inherits from [NcWorker](https://github.com/AMWA-TV/ms-05-02/blob/v1.0-dev/idl/NC-Framework.webidl) which has an identity of `[1, 2]` and adds the authority key (in this case 0, but should be a negative number if the vendor has an OUI or CID) followed by the index 1.
+Here is an example of a new worker control class called `DemoClassAlpha`. It inherits from [NcWorker](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/idl/NC-Framework.html) which has an identity of `[1, 2]` and adds the authority key (in this case 0, but should be a negative number if the vendor has an OUI or CID) followed by the index 1.
 
 ```json
 {
@@ -197,7 +197,7 @@ As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/NcOb
 
 These methods can be used by a controller to get the value of a property in a control class or set the value of a property in a control class if write allowed. Furthermore, any control class may have its own methods which can be invoked in the same way as the generic methods.
 
-As specified by the [IDL](https://github.com/AMWA-TV/ms-05-02/blob/v1.0-dev/idl/NC-Framework.webidl) any method response must inherit from the base data type `NcMethodResult`.
+As specified by the [IDL](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/idl/NC-Framework.html) any method response must inherit from the base data type `NcMethodResult`.
 
 | ![Command example](images/command-example.png) |
 |:--:|
