@@ -55,7 +55,6 @@ As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Mana
 Typical managers included in the root block are:
 
 - Device manager (holds general information about the device including product information and serial numbers)
-- Subscription manager (offers means of subscribing to events thus enabling notifications)
 - Class manager (offers means of class and data type discovery)
 
 #### Worker control classes
@@ -84,10 +83,9 @@ A device is expected to offer touchpoints to map identities wherever relevant (F
 
 As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Blocks.html) specification all MS-05 / IS-12 devices need to expose a structure starting with the root block which always has an `oid` of 1.
 
-A minimal implementation of a device will have at least three [managers](Device%20implementation%20tutorial.md#manager-control-classes) listed in the root block:
+A minimal implementation of a device will have at least two [managers](Device%20implementation%20tutorial.md#manager-control-classes) listed in the root block:
 
 - Device manager
-- Subscription manager
 - Class manager
 
 | ![Typical device structure](images/typical-device-structure.png) |
@@ -207,9 +205,8 @@ As specified by the [IDL](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/idl/N
 
 As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/NcObject.html#propertychanged-event) specification all control classes must inherit from `NcObject` which specifies the `PropertyChanged` event.
 
-This means any properties in any control class can be subscribed to in order to receive change notifications. Subscriptions are handled by the [Subscription manager](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Managers.html#subscription-manager).
-
-A device is expected to allow controllers to [Subscribe](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Subscribing_to_events.html) to object ids it is interested in by correctly handling commands sent to the `Subscription manager`.
+This means any properties in any control class can be subscribed to in order to receive change notifications.
+A device is expected to allow controllers to [Subscribe](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Subscribing_to_events.html) to object ids it is interested in by correctly handling `Subscription` messages and sending back `SubscriptionResponse` messages as specified in [NMOS IS-12](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Protocol_messaging.html).
 
 A device is also expected to use the underlying WebSocket control protocol context and the subscriptions received in order to determine when a notification message needs to be sent to a controller.
 
