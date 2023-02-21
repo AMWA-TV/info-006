@@ -67,7 +67,6 @@ The root block, among other things holds [Managers](https://specs.amwa.tv/ms-05-
 A minimal implementation of a device will have at least three managers listed in the root block:
 
 - Device manager
-- Subscription manager
 - Class manager
 
 | ![Typical device structure](images/typical-device-structure.png) |
@@ -97,9 +96,9 @@ A controller is expected to be able to work with all the identifiers exposed by 
 
 As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/NcObject.html#propertychanged-event) specification all control classes must inherit from `NcObject` which specifies the `PropertyChanged` event.
 
-This means any properties in any control class can be subscribed to in order to receive change notifications. Subscriptions are handled by the [Subscription manager](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Managers.html#subscription-manager).
+This means any properties in any control class can be subscribed to in order to receive change notifications.
 
-A controller is expected to [Subscribe](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Subscribing_to_events.html) to object ids it is interested in by sending commands to the `Subscription manager`.
+A controller is expected to [Subscribe](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Subscribing_to_events.html) to object ids it is interested in by sending `Subscription` messages as specified in [NMOS IS-12](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Protocol_messaging.html).
 
 ### Context identity mapping (Receiver monitor example)
 

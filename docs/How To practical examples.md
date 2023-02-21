@@ -255,23 +255,6 @@ The device responds with a JSON containing `NcBlockMemberDescriptor` member desc
             "constraints": null
           },
           {
-            "role": "SubscriptionManager",
-            "oid": 5,
-            "constantOid": true,
-            "identity": {
-              "id": [
-                1,
-                3,
-                4
-              ],
-              "version": "1.0.0"
-            },
-            "userLabel": "Subscription manager",
-            "owner": 1,
-            "description": "The subscription manager offers the ability to subscribe to events on particular objects and properties",
-            "constraints": null
-          },
-          {
             "role": "ReceiverMonitor_01",
             "oid": 11,
             "constantOid": true,
@@ -622,43 +605,28 @@ NC-01 returns the new value of the `right-gain` value in the response.
 
 **Subscribe to property changes for the `right-gain`**
 
-Add a subscription notification to changes on the `right-gain` control by sending a subscription command to the SubscriptionManager. Paste in the JSON formatted command below to subscribe for changes. Note that the command is directed to the Subscription Manager's (oid 5) method (3m1) which is described in the tutorial section of this document and targets the `right-gain` by using its `oid` of 23 as the emitter `oid`.
+Add a subscription to changes on the `right-gain` control by sending a `Subscription` message. Paste in the JSON formatted command below to subscribe for changes. Note that the message targets the `right-gain` by using its `oid` of 23 as the emitter `oid`.
 
 ```json
 {
   "protocolVersion": "1.0.0",
-  "messageType": 0,
-  "commands": [
-    {
-      "handle": 5,
-      "oid": 5,
-      "methodId": {
-        "level": 3,
-        "index": 1
-      },
-      "arguments": {
-        "oid": 23
-      }
-    }
+  "messageType": 3,
+  "subscriptions": [
+    23
   ]
 }
 ```
 
 **Expected Results**
 
-The Subscription Manager will respond with a message indicating the subscription request was accepted.
+The device will respond with a `SubscriptionResponse` message indicating the subscription request was accepted.
 
 ```json
 {
   "protocolVersion": "1.0.0",
-  "messageType": 1,
-  "responses": [
-    {
-      "handle": 5,
-      "result": {
-        "status": 200
-      }
-    }
+  "messageType": 4,
+  "subscriptions": [
+    23
   ]
 }
 ```
@@ -1037,7 +1005,7 @@ The changes to the original Server.ts file are simply replacements of the NMOS C
 ```typescript
 @@ -14,7 +14,7 @@ import { SessionManager } from './SessionManager';
  import { NcBlock, RootBlock } from './NCModel/Blocks';
- import { NcClassManager, NcDeviceManager, NcSubscriptionManager } from './NCModel/Managers';
+ import { NcClassManager, NcDeviceManager } from './NCModel/Managers';
  import { NcIoDirection, NcLockState, NcPort, NcPortReference, NcSignalPath, NcTouchpointNmos, NcTouchpointResourceNmos } from './NCModel/Core';
 -import { NcDemo, NcGain, NcReceiverMonitor } from './NCModel/Features';
 +import { NcDemo, NcGainCustom, NcReceiverMonitor } from './NCModel/Features';
