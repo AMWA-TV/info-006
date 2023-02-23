@@ -224,14 +224,11 @@ The device responds with a JSON containing `NcBlockMemberDescriptor` member desc
             "role": "DeviceManager",
             "oid": 2,
             "constantOid": true,
-            "identity": {
-              "id": [
+            "classId": [
                 1,
                 3,
                 1
               ],
-              "version": "1.0.0"
-            },
             "userLabel": "Device manager",
             "owner": 1,
             "description": "The device manager offers information about the product this device is representing",
@@ -241,14 +238,11 @@ The device responds with a JSON containing `NcBlockMemberDescriptor` member desc
             "role": "ClassManager",
             "oid": 3,
             "constantOid": true,
-            "identity": {
-              "id": [
+            "classId": [
                 1,
                 3,
                 2
               ],
-              "version": "1.0.0"
-            },
             "userLabel": "Class manager",
             "owner": 1,
             "description": "The class manager offers access to control class and data type descriptors",
@@ -258,14 +252,11 @@ The device responds with a JSON containing `NcBlockMemberDescriptor` member desc
             "role": "ReceiverMonitor_01",
             "oid": 11,
             "constantOid": true,
-            "identity": {
-              "id": [
+            "classId": [
                 1,
                 2,
                 3
               ],
-              "version": "1.0.0"
-            },
             "userLabel": "Receiver monitor 01",
             "owner": 1,
             "description": "Receiver monitor worker",
@@ -275,13 +266,10 @@ The device responds with a JSON containing `NcBlockMemberDescriptor` member desc
             "role": "stereo-gain",
             "oid": 31,
             "constantOid": true,
-            "identity": {
-              "id": [
+            "classId": [
                 1,
                 1
               ],
-              "version": "1.0.0"
-            },
             "userLabel": "Stereo gain",
             "owner": 1,
             "description": "Stereo gain block",
@@ -292,15 +280,12 @@ The device responds with a JSON containing `NcBlockMemberDescriptor` member desc
             "role": "DemoClass",
             "oid": 111,
             "constantOid": true,
-            "identity": {
-              "id": [
+            "classId": [
                 1,
                 2,
                 0,
                 1
               ],
-              "version": "1.0.0"
-            },
             "userLabel": "Demo class",
             "owner": 1,
             "description": "Demo control class",
@@ -358,13 +343,10 @@ The device responds to the above command with a JSON formatted response containi
             "role": "channel-gain",
             "oid": 21,
             "constantOid": true,
-            "identity": {
-              "id": [
+            "classId": [
                 1,
                 1
               ],
-              "version": "1.0.0"
-            },
             "userLabel": "Channel gain",
             "owner": 31,
             "description": "Channel gain block",
@@ -375,16 +357,13 @@ The device responds to the above command with a JSON formatted response containi
             "role": "master-gain",
             "oid": 24,
             "constantOid": true,
-            "identity": {
-              "id": [
+            "classId": [
                 1,
                 2,
                 1,
                 1,
                 1
               ],
-              "version": "1.0.0"
-            },
             "userLabel": "Master gain",
             "owner": 31,
             "description": "Master gain",
@@ -440,16 +419,13 @@ The JSON response to the above command gives us the two control blocks `left-gai
             "role": "left-gain",
             "oid": 22,
             "constantOid": true,
-            "identity": {
-              "id": [
+            "classId": [
                 1,
                 2,
                 1,
                 1,
                 1
               ],
-              "version": "1.0.0"
-            },
             "userLabel": "Left gain",
             "owner": 21,
             "description": "Left channel gain",
@@ -459,16 +435,13 @@ The JSON response to the above command gives us the two control blocks `left-gai
             "role": "right-gain",
             "oid": 23,
             "constantOid": true,
-            "identity": {
-              "id": [
+            "classId": [
                 1,
                 2,
                 1,
                 1,
                 1
               ],
-              "version": "1.0.0"
-            },
             "userLabel": "Right gain",
             "owner": 21,
             "description": "Right channel gain",
@@ -547,7 +520,7 @@ Now we will set the `right-gain` gain value (5p1) to 11 and verify the change ha
           "level": 5,
           "index": 1
         },
-        "value": "11.0"
+        "value": 11.0
       }
     }
   ]
@@ -656,7 +629,7 @@ Copy and paste the following command which will set the `right-gain` gain value 
         },
         "value": -3.0
       }
-    }
+    }F
   ]
 }
 ```
@@ -741,7 +714,6 @@ export class NcGainCustom extends NcGain
     public mute: Boolean;
 
     public classID: number[] = [ 1, 2, 1, 1, 1, 0, 1 ];
-    public classVersion: string = "1.0.0";
 
     public constructor(
         oid: number,
@@ -835,7 +807,6 @@ export class NcGainCustom extends NcGain
     public mute: Boolean;
 
     public classID: number[] = [ 1, 2, 1, 1, 1, 0, 1 ]; // classID, 1 extra level below NcGain (includes the authority key 0 in this case)
-    public classVersion: string = "1.0.0";
 }
 ```
 
