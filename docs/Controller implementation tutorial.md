@@ -127,15 +127,12 @@ Here is an example of a new worker control class called `DemoClassAlpha`. It inh
   "role": "DemoClassAlpha",
   "oid": 111,
   "constantOid": true,
-  "identity": {
-    "id": [
+  "classId": [
       1,
       2,
       0,
       1
     ],
-    "version": "1.0.0"
-  },
   "userLabel": "Demo class alpha",
   "owner": 1,
   "description": "Demo control class alpha",
@@ -150,15 +147,12 @@ A subsequent vendor specific worker would look like this:
   "role": "DemoClassBeta",
   "oid": 150,
   "constantOid": true,
-  "identity": {
-    "id": [
+  "classId": [
       1,
       2,
       0,
       2
     ],
-    "version": "1.0.0"
-  },
   "userLabel": "Demo class beta",
   "owner": 1,
   "description": "Demo control class beta",
