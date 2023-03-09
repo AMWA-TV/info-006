@@ -102,7 +102,7 @@ A controller is expected to [Subscribe](https://specs.amwa.tv/is-12/branches/v1.
 
 ### Context identity mapping (Receiver monitor example)
 
-[MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/NcObject.html#touchpoints) specifies an identity mapping mechanism available in the base `NcObject` class. This touchpoint mechanism can be used to expose and associate identities from outside contexts with entities inside the control structure of the device.
+[MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/NcObject.html#touchpoints) specifies an identity mapping mechanism available in the base `NcObject` class. This touchpoint mechanism can be used to associate identities from outside contexts with entities inside the control structure of the device.
 
 One such example is the [ReceiverMonitor](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Feature_sets.html#ncreceivermonitor) control class which is used to express connection and payload statuses for an attached stream receiver.
 
