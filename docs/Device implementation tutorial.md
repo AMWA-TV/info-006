@@ -42,9 +42,9 @@ As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Bloc
 
 All devices have at the very least a `root block` which is the top most block in the device tree. The root block has an `oid` of 1 and the role of `root`.
 
-Control classes which are nested inside a block are advertised using descriptors in the members property of [NcBlock](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Framework.html#ncblock).
+Control classes which are nested inside a block are advertised using descriptors in the `members` property of [NcBlock](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Framework.html#ncblock).
 
-The members property in blocks enables [tree discovery](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Blocks.html#tree-discovery) of the device structure.
+The `members` property in blocks enables [tree discovery](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Blocks.html#tree-discovery) of the device structure.
 
 Blocks are also useful for quickly finding a particular control class by using the [search methods](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Blocks.html#tree-discovery) provided.
 
