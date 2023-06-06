@@ -73,11 +73,11 @@ A minimal implementation of a device has at least two managers listed in the roo
 |:--:|
 | _**Typical device structure**_ |
 
-A controller is expected to [Discover the structure](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Exploring_the_device_tree.html) of a device by recursively querying the members of nested blocks. It also discovers the implemented managers in the root block by checking their class identity or roles.
+A controller is expected to [Discover the structure](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Exploring_the_device_model.html) of a device by recursively querying the members of nested blocks. It also discovers the implemented managers in the root block by checking their class identity or roles.
 
-| ![Exploring device tree](images/exploring-device-tree.png) |
+| ![Exploring device model](images/exploring-device-model.png) |
 |:--:|
-| _**Exploring device tree**_ |
+| _**Exploring the device model**_ |
 
 As per the [MS-05-01](https://specs.amwa.tv/ms-05-01/branches/v1.0-dev/docs/Identification.html) specification there are different types of identifiers which ultimately can be split into two categories:
 
