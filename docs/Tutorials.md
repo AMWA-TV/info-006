@@ -11,7 +11,6 @@ Target specifications:
 
 - [MS-05-01 NMOS Control Architecture](https://specs.amwa.tv/ms-05-01)
 - [MS-05-02 NMOS Control Framework](https://specs.amwa.tv/ms-05-02)
-- [MS-05-03 NMOS Control Block Specifications](https://specs.amwa.tv/ms-05-03)
 - [AMWA IS-12 NMOS Control Protocol](https://specs.amwa.tv/is-12)
 
 `Note:` This guide assumes some previous familiarity with two existing NMOS specifications:

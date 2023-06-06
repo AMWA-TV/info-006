@@ -54,17 +54,17 @@ As per the [NMOS IS-12](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Proto
 
 `Note`: Multiple commands can be sent in the commands array.
 
-As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/NcObject.html#generic-getter-and-setter) specification all control classes must inherit from `NcObject` which specifies generic `Get` and `Set` methods.
+As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/NcObject.html#generic-getter-and-setter) specification all control classes inherit from `NcObject` which specifies generic `Get` and `Set` methods.
 
-These methods can be used by a controller to get the value of a property in a control class or set the value of a property in a control class if write allowed.
+These methods can be used by a controller to get the value of a property in an object or set the value of a property in an object if write allowed.
 
-### Exploring the device tree structure
+### Exploring the device model
 
-As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Blocks.html) specification all MS-05 / IS-12 devices will expose a structure starting with the root block which always has an `oid` of 1.
+As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Blocks.html) specification all MS-05 / IS-12 devices expose a structure starting with the root block which always has an `oid` of 1.
 
 The root block, among other things holds [Managers](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Managers.html) which are special singleton control classes which collate information which pertains to the entire device.
 
-A minimal implementation of a device will have at least three managers listed in the root block:
+A minimal implementation of a device has at least two managers listed in the root block:
 
 - Device manager
 - Class manager
@@ -73,7 +73,7 @@ A minimal implementation of a device will have at least three managers listed in
 |:--:|
 | _**Typical device structure**_ |
 
-A controller is expected to [Discover the structure](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Exploring_the_device_tree.html) of a device by recursively querying the members of nested blocks. It will also discover the implemented managers in the root block by checking their class identity or roles.
+A controller is expected to [Discover the structure](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Exploring_the_device_tree.html) of a device by recursively querying the members of nested blocks. It also discovers the implemented managers in the root block by checking their class identity or roles.
 
 | ![Exploring device tree](images/exploring-device-tree.png) |
 |:--:|
@@ -94,9 +94,9 @@ A controller is expected to be able to work with all the identifiers exposed by 
 
 ### Subscribing and receiving notifications
 
-As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/NcObject.html#propertychanged-event) specification all control classes must inherit from `NcObject` which specifies the `PropertyChanged` event.
+As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/NcObject.html#propertychanged-event) specification all control classes inherit from `NcObject` which specifies the `PropertyChanged` event.
 
-This means any properties in any control class can be subscribed to in order to receive change notifications.
+This means any object can be subscribed to in order to receive property change notifications.
 
 A controller is expected to [Subscribe](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Subscribing_to_events.html) to object ids it is interested in by sending `Subscription` messages as specified in [NMOS IS-12](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Protocol_messaging.html).
 
@@ -104,11 +104,11 @@ A controller is expected to [Subscribe](https://specs.amwa.tv/is-12/branches/v1.
 
 [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/NcObject.html#touchpoints) specifies an identity mapping mechanism available in the base `NcObject` class. This touchpoint mechanism can be used to associate identities from outside contexts with entities inside the control structure of the device.
 
-One such example is the [ReceiverMonitor](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Feature_sets.html#ncreceivermonitor) control class which is used to express connection and payload statuses for an attached stream receiver.
+One such example is the [ReceiverMonitor](https://specs.amwa.tv/nmos-control-feature-sets/branches/main/monitoring/#ncreceivermonitor) control class which is used to express connection and payload statuses for an attached stream receiver.
 
-This allows for a `Receiver monitor` to be associated with a specific [NMOS IS-04](https://specs.amwa.tv/is-04/) receiver.
+The touchpoint mechanism allows for a `Receiver monitor` to be associated with a specific [NMOS IS-04](https://specs.amwa.tv/is-04/) receiver.
 
-A controller is expected to decode touchpoint information where available and associate identities if it has access to the data domains exposed (For example a controller would be able to identity which NMOS IS-04 receiver is associated with a given `Receiver monitor` control class instance).
+A controller is expected to decode touchpoint information where available and associate identities if it has access to the data domains exposed (For example a controller would be able to identity which NMOS IS-04 receiver is associated with a given `Receiver monitor` object).
 
 | ![Context identity mapping](images/context-identity-mapping.png) |
 |:--:|
@@ -120,7 +120,7 @@ As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Mana
 
 Vendor specific control classes can be created by branching off from a standard control class and following the class ID generation guidelines specified in [MS-05-01](https://specs.amwa.tv/ms-05-01/branches/v1.0-dev/docs/Appendix_A_-_Class_ID_Format.html).
 
-Here is an example of a new worker control class called `DemoClassAlpha`. It inherits from [NcWorker](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/idl/NC-Framework.html) which has an identity of `[1, 2]` and adds the authority key (in this case 0, but should be a negative number if the vendor has an OUI or CID) followed by the index 1.
+Here is an example of a new worker control class called `DemoClassAlpha`. It inherits from [NcWorker](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Framework.html#ncworker) which has an identity of `[1, 2]` and adds the authority key (in this case 0, but would be a negative number if the vendor has an OUI or CID) followed by the index 1.
 
 ```json
 {
