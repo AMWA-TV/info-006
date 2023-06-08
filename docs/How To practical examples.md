@@ -31,14 +31,14 @@ This section will cover the basic steps to get a mock NMOS Controllable Node run
 - Verify NCMD registers and exposes it's NMOS IS-12 Control endpoint in the NMOS RDS
 - Install a Chrome WebSocket extension
 - Verify the NCMD can be reached via the WebSocket Control endpoint listed in the RDS
-- Locate one of the control classes provided by the NCMD
-- Verify the ability to read, and write a property of the control class instance
-- Add a subscription in order to receive notifications for any changes experienced by the properties of the control class instance
+- Explore the device model by getting the members of blocks
+- Verify the ability to read, and write a property of the NCMD
+- Add a subscription in order to receive notifications for any changes experienced by properties of the NCMD
 - Modify the value of a property and verify notification are received
 
-### Addition of a Vendor Specific Control Class
+### Non-standard control classes
 
-This section will make modifications to the basic system and show how to add in a new control class to the mock node. The new control class will extend one of the NMOS Control Framework classes to add functionality. You will learn how to extend a standard control class in a manner that gives all of the functionality of the framework while providing additional control features to clients.
+This section will explain how the NCMD has created a non-standard control class to expose vendor specific functionality in the form of a `GainControl` class.
 
 ## Installing the Mock NMOS Control Device
 
@@ -54,7 +54,6 @@ You will need `docker` for running the NMOS RDS and `npm` for running the mock N
 sudo apt-get update
 sudo apt install -y npm
 sudo apt install -y docker.io
-
 ```
 
 Now install an NMOS RDS. We will use the RDS from [EasyNMOS](https://github.com/rhastie/easy-nmos)
@@ -114,15 +113,14 @@ The output of npm run build-and-start will show status as the mock node is built
 App started
 Configuration: Reading config.json
 Configuration - CheckIdentifiers()
-Configuration- Writing back config.json
+Configuration - CheckDistinguishingInformation()
 RegistrationClient - RegisterOrUpdateResource(resourceType:node)
 Server started on port 8080
 RegistrationClient - RegisterOrUpdateResource(resourceType:device)
 RegistrationClient - RegisterOrUpdateResource(resourceType:receiver)
-Successfully wrote file
 ```
 
-**Locate the NMOS Control WebSocket**
+**Locate the NMOS IS-12 Control WebSocket**
 
 You now have all the NMOS items needed to interact with the NMOS Control mock node. Since IS-12 uses a WebSocket control endpoint we will next browse the RDS registry to find the advertised WebSocket endpoint and use a Chrome extension that allows opening that WebSocket and sending and receiving IS-12 JSON formatted commands and responses.
 
@@ -133,41 +131,54 @@ Navigate in your preferred browser to the devices query location:
 
 ```json
 [
-    {
-        "controls": [
-            {
-                "href": "http://127.0.0.1:8080/x-nmos/connection/v1.1/",
-                "type": "urn:x-nmos:control:sr-ctrl/v1.1"
-            },
-            {
-                "href": "http://127.0.0.1:8080/x-nmos/connection/v1.0/",
-                "type": "urn:x-nmos:control:sr-ctrl/v1.0"
-            },
-            {
-                "href": "ws://127.0.0.1:8080/x-nmos/ncp/v1.0/connect",
-                "type": "urn:x-nmos:control:ncp/v1.0"
-            }
-        ],
-        "description": "NC-01 device",
-        "id": "[7977373c-70f6-4e62-b713-3431f1ac4a2f](http://127.0.0.1/x-nmos/query/v1.3/devices/7977373c-70f6-4e62-b713-3431f1ac4a2f)",
-        "label": "NC-01 device",
-        "node_id": "[e0f9e1a3-2a2f-4f00-b02e-76d8286e1d98](http://127.0.0.1/x-nmos/query/v1.3/nodes/e0f9e1a3-2a2f-4f00-b02e-76d8286e1d98)",
-        "receivers": [
-            "[18eae0e9-dcf4-40ff-88a3-cb553993d1b8](http://127.0.0.1/x-nmos/query/v1.3/receivers/18eae0e9-dcf4-40ff-88a3-cb553993d1b8)"
-        ],
-        "senders": [],
-        "tags": {},
-        "type": "urn:x-nmos:device:generic",
-        "version": "1665129531:00000000"
-    }
+  {
+    "controls": [
+      {
+        "href": "http://127.0.0.1:8080/x-nmos/connection/v1.1/",
+        "type": "urn:x-nmos:control:sr-ctrl/v1.1"
+      },
+      {
+        "href": "http://127.0.0.1:8080/x-nmos/connection/v1.0/",
+        "type": "urn:x-nmos:control:sr-ctrl/v1.0"
+      },
+      {
+        "href": "ws://127.0.0.1:8080/x-nmos/ncp/v1.0/connect",
+        "type": "urn:x-nmos:control:ncp/v1.0"
+      }
+    ],
+    "description": "NC-01 device",
+    "id": "7977373c-70f6-4e62-b713-3431f1ac4a2f",
+    "label": "NC-01 device",
+    "node_id": "e0f9e1a3-2a2f-4f00-b02e-76d8286e1d98",
+    "receivers": [
+      "18eae0e9-dcf4-40ff-88a3-cb553993d1b8"
+    ],
+    "senders": [],
+    "tags": {
+      "urn:x-nmos:tag:asset:function/v1.0": [
+        "UHD Decoder"
+      ],
+      "urn:x-nmos:tag:asset:instance-id/v1.0": [
+        "XYZ123-456789-D"
+      ],
+      "urn:x-nmos:tag:asset:manufacturer/v1.0": [
+        "ACME-D"
+      ],
+      "urn:x-nmos:tag:asset:product/v1.0": [
+        "Widget Pro-D"
+      ]
+    },
+    "type": "urn:x-nmos:device:generic",
+    "version": "1686060930:0"
+  }
 ]
 ```
 
-In the controls section of the JSON response you will find:
+In the controls section of the JSON response you will find a control with the type of `urn:x-nmos:control:ncp/v1.0`. The href of this control is the uri we need to connect to:
 
 `ws://127.0.0.1:8080/x-nmos/ncp/v1.0/connect`
 
-This is the WebSocket used to interact with NMOS Control components.
+This is the IS-12 WebSocket control endpoint used to interact with the device.
 
 **Install Chrome WebSocket Plugin**
 
@@ -177,11 +188,209 @@ Details on installing Chrome extensions can be found [here](https://support.goog
 
 After completing the installation of WebSocket King open the extension in a new browser window. Copy and paste the WebSocket located in the RDS for the NC-01 NMOS Control Mock node into the connections field and click `connect`. The `Connect` button should turn to `Disconnect` indicating a successful connection to the NC-01 WebSocket endpoint.
 
-Next we will verify the ability to read and write to the NMOS Control components running on the mock node. We will focus on reading and writing to the Stereo Gain Block and related objects provided by the mock node. Other aspects of control can also be explored by following the examples in the [IS-12 Specification](https://specs.amwa.tv/is-12/) example section. For purposes of this HOW-TO we will focus on working with the Stereo Control and adding code to extend this control then create a new control and interact with this new control. Also note that in an actual system most of the manual steps we are performing here would be performed by an NMOS Controller using the IS-12 specification. For more information about implementing an IS-12 NMOS Controller see the HOW-TO section for Controller implementations.
+Next we will verify the ability to read and write to the device model on the mock node.  
+For purposes of this HOW-TO we will focus on working with the root block and its properties. Note that in an actual system most of the manual steps we are performing here would be performed by an NMOS Controller using the IS-12 specification. For more information about implementing an IS-12 NMOS Controller see the HOW-TO section for [Controller implementations](Controller%20implementation%20tutorial.md).
 
-Next retrieve the members of the root block in order to identify the location of the Stereo gain block.
+Next retrieve the members of the root block by sending the following JSON formatted command to the NC-01 WebSocket. In the JSON command the value of `oid` 1 indicates we are directing this command at the [root block](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Blocks.html). The `methodId` with level 1 and index 1 is the [getter](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/NcObject.html#generic-getter-and-setter) method and the `id` level and index of 2 and 2 respectively targets the `2p2` `members` property of the root [block](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Framework.html#ncblock).
 
-Send the following JSON formatted command to the NC-01 WebSocket. In the JSON command the value of `oid` 1 indicates we are directing this command at the root block. The `methodId` with level 1 and index 1 is the `getter` method and the `id` level and index of 2 and 10 respectively targets the `2p10` `members` property of the root block.
+```json
+{
+  "protocolVersion": "1.0.0",
+  "messageType": 0,
+  "commands": [
+    {
+      "handle": 1,
+      "oid": 1,
+      "methodId": {
+        "level": 1,
+        "index": 1
+      },
+      "arguments": {
+        "id": {
+          "level": 2,
+          "index": 2
+        }
+      }
+    }
+  ]
+}
+```
+
+**Expected Output**
+
+The device responds with a JSON containing [NcBlockMemberDescriptor](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Framework.html#ncblockmemberdescriptor) member descriptors for the root block. Every member class can be determined by reading the `classId` field and they can be targeted with commands by using their `oid` value.
+
+```json
+{
+  "protocolVersion": "1.0.0",
+  "messageType": 1,
+  "responses": [
+    {
+      "handle": 1,
+      "result": {
+        "status": 200,
+        "value": [
+          {
+            "role": "DeviceManager",
+            "oid": 2,
+            "constantOid": true,
+            "classId": [
+              1,
+              3,
+              1
+            ],
+            "userLabel": "Device manager",
+            "owner": 1,
+            "description": "The device manager offers information about the product this device is representing"
+          },
+          {
+            "role": "ClassManager",
+            "oid": 3,
+            "constantOid": true,
+            "classId": [
+              1,
+              3,
+              2
+            ],
+            "userLabel": "Class manager",
+            "owner": 1,
+            "description": "The class manager offers access to control class and data type descriptors"
+          },
+          {
+            "role": "receivers",
+            "oid": 10,
+            "constantOid": true,
+            "classId": [
+              1,
+              1
+            ],
+            "userLabel": "Receivers",
+            "owner": 1,
+            "description": "Receivers block"
+          },
+          {
+            "role": "stereo-gain",
+            "oid": 31,
+            "constantOid": true,
+            "classId": [
+              1,
+              1
+            ],
+            "userLabel": "Stereo gain",
+            "owner": 1,
+            "description": "Stereo gain block"
+          },
+          {
+            "role": "ExampleControl",
+            "oid": 111,
+            "constantOid": true,
+            "classId": [
+              1,
+              2,
+              0,
+              2
+            ],
+            "userLabel": "Example control worker",
+            "owner": 1,
+            "description": "Example control worker"
+          },
+          {
+            "role": "IdentBeacon",
+            "oid": 51,
+            "constantOid": true,
+            "classId": [
+              1,
+              2,
+              2
+            ],
+            "userLabel": "Identification beacon",
+            "owner": 1,
+            "description": "Identification beacon"
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+In the response above we can see that the "Stereo gain" member is a block because of its classId of `[1, 1]`. That means we can next retrieve the members of the "Stereo gain" block by sending the following JSON formatted command to the NC-01 WebSocket. In the JSON command the value of `oid` 31 indicates we are directing this command at the "Stereo gain" object.
+
+```json
+{
+  "protocolVersion": "1.0.0",
+  "messageType": 0,
+  "commands": [
+    {
+      "handle": 2,
+      "oid": 31,
+      "methodId": {
+        "level": 1,
+        "index": 1
+      },
+      "arguments": {
+        "id": {
+          "level": 2,
+          "index": 2
+        }
+      }
+    }
+  ]
+}
+```
+
+**Expected Output**
+
+The device responds with a JSON containing the member descriptors for the "Stereo gain" block.
+
+```json
+{
+  "protocolVersion": "1.0.0",
+  "messageType": 1,
+  "responses": [
+    {
+      "handle": 2,
+      "result": {
+        "status": 200,
+        "value": [
+          {
+            "role": "channel-gain",
+            "oid": 21,
+            "constantOid": true,
+            "classId": [
+              1,
+              1
+            ],
+            "userLabel": "Channel gain",
+            "owner": 31,
+            "description": "Channel gain block"
+          },
+          {
+            "role": "master-gain",
+            "oid": 24,
+            "constantOid": true,
+            "classId": [
+              1,
+              2,
+              0,
+              1
+            ],
+            "userLabel": "Master gain",
+            "owner": 31,
+            "description": "Master gain"
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+Repeating the process of retrieving the members for all nested blocks allows a controller to discover the entire device model.
+
+**Read, Write the root block user label**
+
+You will now make use of the generic [Get method](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/NcObject.html#generic-getter-and-setter) (level 1, index 1) to read the value of the `userLabel` (level 1, index 6) property of the root block. All classes contain the `userLabel` property as defined in [NcObject](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Framework.html#ncobject).
 
 ```json
 {
@@ -197,8 +406,8 @@ Send the following JSON formatted command to the NC-01 WebSocket. In the JSON co
       },
       "arguments": {
         "id": {
-          "level": 2,
-          "index": 10
+          "level": 1,
+          "index": 6
         }
       }
     }
@@ -208,99 +417,25 @@ Send the following JSON formatted command to the NC-01 WebSocket. In the JSON co
 
 **Expected Output**
 
-The device responds with a JSON containing `NcBlockMemberDescriptor` member descriptors for the root block. The sub block we are interested in is the Stereo Gain block. We see the block is present along with its Object ID (oid). The oid is unique across all control elements and we will use it to further interrogate the Stereo Gain block and find its members. The oid is 31.
+The device responds to the above command with a JSON formatted response containing a result of type [NcMethodResultPropertyValue](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Framework.html#ncmethodresultpropertyvalue) holding the value of "Root".
 
 ```json
 {
   "protocolVersion": "1.0.0",
-  "messageType": 1,
+  "messageType": 3,
   "responses": [
     {
       "handle": 3,
       "result": {
         "status": 200,
-        "value": [
-          {
-            "role": "DeviceManager",
-            "oid": 2,
-            "constantOid": true,
-            "classId": [
-                1,
-                3,
-                1
-              ],
-            "userLabel": "Device manager",
-            "owner": 1,
-            "description": "The device manager offers information about the product this device is representing",
-            "constraints": null
-          },
-          {
-            "role": "ClassManager",
-            "oid": 3,
-            "constantOid": true,
-            "classId": [
-                1,
-                3,
-                2
-              ],
-            "userLabel": "Class manager",
-            "owner": 1,
-            "description": "The class manager offers access to control class and data type descriptors",
-            "constraints": null
-          },
-          {
-            "role": "ReceiverMonitor_01",
-            "oid": 11,
-            "constantOid": true,
-            "classId": [
-                1,
-                2,
-                3
-              ],
-            "userLabel": "Receiver monitor 01",
-            "owner": 1,
-            "description": "Receiver monitor worker",
-            "constraints": null
-          },
-          {
-            "role": "stereo-gain",
-            "oid": 31,
-            "constantOid": true,
-            "classId": [
-                1,
-                1
-              ],
-            "userLabel": "Stereo gain",
-            "owner": 1,
-            "description": "Stereo gain block",
-            "constraints": null,
-            "blockSpecId": null
-          },
-          {
-            "role": "DemoClass",
-            "oid": 111,
-            "constantOid": true,
-            "classId": [
-                1,
-                2,
-                0,
-                1
-              ],
-            "userLabel": "Demo class",
-            "owner": 1,
-            "description": "Demo control class",
-            "constraints": null
-          }
-        ]
+        "value": "Root"
       }
     }
   ]
 }
 ```
 
-**Read, Write, Modify Stereo Gain**
-
-You will now make use of the generic Get method `1m1` (level 1, index 1) to find the members `2p10` of the Stereo gain block (oid: 31). Send the following JSON formatted command to the NC-1 control WebSocket.
+Now we will set the `userLabel` (1p6) to "My mock device HOWTO" and verify the change has taken effect. We will use the generic [Set method](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/NcObject.html#generic-getter-and-setter) for this (level 1, index 2). Copy and paste the following JSON formatted command to set the new value:
 
 ```json
 {
@@ -308,230 +443,29 @@ You will now make use of the generic Get method `1m1` (level 1, index 1) to find
   "messageType": 0,
   "commands": [
     {
-      "handle": 3,
-      "oid": 31,
-      "methodId": {
-        "level": 1,
-        "index": 1
-      },
-      "arguments": {
-        "id": {
-          "level": 2,
-          "index": 10
-        }
-      }
-    }
-  ]
-}
-```
-
-**Expected Output**
-
-The device responds to the above command with a JSON formatted response containing all the members of the Stereo Gain block.
-
-```json
-{
-  "protocolVersion": "1.0.0",
-  "messageType": 1,
-  "responses": [
-    {
-      "handle": 3,
-      "result": {
-        "status": 200,
-        "value": [
-          {
-            "role": "channel-gain",
-            "oid": 21,
-            "constantOid": true,
-            "classId": [
-                1,
-                1
-              ],
-            "userLabel": "Channel gain",
-            "owner": 31,
-            "description": "Channel gain block",
-            "constraints": null,
-            "blockSpecId": null
-          },
-          {
-            "role": "master-gain",
-            "oid": 24,
-            "constantOid": true,
-            "classId": [
-                1,
-                2,
-                1,
-                1,
-                1
-              ],
-            "userLabel": "Master gain",
-            "owner": 31,
-            "description": "Master gain",
-            "constraints": null
-          }
-        ]
-      }
-    }
-  ]
-}
-```
-
-Next drill down one more level to resolve the left and right gains for the Channel Gain block (oid = 21) using the same `Get` method but now targeted at the `channel-gain` `oid` 21.
-
-```json
-{
-  "protocolVersion": "1.0.0",
-  "messageType": 0,
-  "commands": [
-    {
-      "handle": 3,
-      "oid": 21,
-      "methodId": {
-        "level": 1,
-        "index": 1
-      },
-      "arguments": {
-        "id": {
-          "level": 2,
-          "index": 10
-        }
-      }
-    }
-  ]
-}
-```
-
-**Expected Results**
-
-The JSON response to the above command gives us the two control blocks `left-gain` and `right-gain` as shown below:
-
-```json
-{
-  "protocolVersion": "1.0.0",
-  "messageType": 1,
-  "responses": [
-    {
-      "handle": 3,
-      "result": {
-        "status": 200,
-        "value": [
-          {
-            "role": "left-gain",
-            "oid": 22,
-            "constantOid": true,
-            "classId": [
-                1,
-                2,
-                1,
-                1,
-                1
-              ],
-            "userLabel": "Left gain",
-            "owner": 21,
-            "description": "Left channel gain",
-            "constraints": null
-          },
-          {
-            "role": "right-gain",
-            "oid": 23,
-            "constantOid": true,
-            "classId": [
-                1,
-                2,
-                1,
-                1,
-                1
-              ],
-            "userLabel": "Right gain",
-            "owner": 21,
-            "description": "Right channel gain",
-            "constraints": null
-          }
-        ]
-      }
-    }
-  ]
-}
-```
-
-Now retrieve the gain value for the `right-gain` `oid` 23 using the generic Get method targeted at property (5p1).
-
-Copy and paste the following into the WebSocket King Client. The level and index of the gain value property is obtained from the definition of the `NcGain` class in the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/idl/NC-Framework.html) webIDL.
-
-```json
-{
-  "protocolVersion": "1.0.0",
-  "messageType": 0,
-  "commands": [
-    {
-      "handle": 2,
-      "oid": 23,
-      "methodId": {
-        "level": 1,
-        "index": 1
-      },
-      "arguments": {
-        "id": {
-          "level": 5,
-          "index": 1
-        }
-      }
-    }
-  ]
-}
-```
-
-**Expected Results**
-
-The default value set in the mock device for the right-gain value is `0`, so we expect the returned value to be zero. The JSON response from `NC-01` confirms this:
-
-```json
-{
-  "protocolVersion": "1.0.0",
-  "messageType": 1,
-  "responses": [
-    {
-      "handle": 2,
-      "result": {
-        "status": 200,
-        "value": 0
-      }
-    }
-  ]
-}
-```
-
-Now we will set the `right-gain` gain value (5p1) to 11 and verify the change has taken effect. We will use the generic `Set` method for this `(1p2)`. Copy and paste the following JSON formatted command to set the new value:
-
-```json
-{
-  "protocolVersion": "1.0.0",
-  "messageType": 0,
-  "commands": [
-    {
-      "handle": 2,
-      "oid": 23,
+      "handle": 4,
+      "oid": 1,
       "methodId": {
         "level": 1,
         "index": 2
       },
       "arguments": {
         "id": {
-          "level": 5,
-          "index": 1
+          "level": 1,
+          "index": 6
         },
-        "value": 11.0
+        "value": "My mock device HOWTO"
       }
     }
   ]
 }
 ```
 
-**Expected Results**
+**Expected result**
 
-The command should be accepted with no errors. The JSON response to the command should indicate a status of 0 (Ok).
+The command should be accepted with no errors. The JSON response to the command should indicate a status of 200 (Ok).
 
-Next retrieve the new gain value by copying and pasting the following into the WebSocket King client. The JSON command uses the `right-gain` `oid` 23 and the `get` methodId level and index (`1,1`). The argument for the `get` method is the id of the gain value property of NcGain provided as level and index (`5,1`).
+Now retrieve the `userLabel` property again.
 
 ```json
 {
@@ -539,16 +473,16 @@ Next retrieve the new gain value by copying and pasting the following into the W
   "messageType": 0,
   "commands": [
     {
-      "handle": 2,
-      "oid": 23,
+      "handle": 5,
+      "oid": 1,
       "methodId": {
         "level": 1,
         "index": 1
       },
       "arguments": {
         "id": {
-          "level": 5,
-          "index": 1
+          "level": 1,
+          "index": 6
         }
       }
     }
@@ -556,9 +490,9 @@ Next retrieve the new gain value by copying and pasting the following into the W
 }
 ```
 
-**Expected Results**
+**Expected result**
 
-NC-01 returns the new value of the `right-gain` value in the response.
+The device returns the new value of "My mock device HOWTO" in the response.
 
 ```json
 {
@@ -566,31 +500,31 @@ NC-01 returns the new value of the `right-gain` value in the response.
   "messageType": 1,
   "responses": [
     {
-      "handle": 2,
+      "handle": 5,
       "result": {
         "status": 200,
-        "value": 11.0
+        "value": "My mock device HOWTO"
       }
     }
   ]
 }
 ```
 
-**Subscribe to property changes for the `right-gain`**
+**Subscribe to property changes for the `userLabel`**
 
-Add a subscription to changes on the `right-gain` control by sending a `Subscription` message. Paste in the JSON formatted command below to subscribe for changes. Note that the message targets the `right-gain` by using its `oid` of 23 as the emitter `oid`.
+Add a subscription to changes on the root block by sending a `Subscription` message. Paste in the JSON formatted command below to subscribe for changes. Note that the message targets the root block by including its `oid` of 1 in the subscriptions array.
 
 ```json
 {
   "protocolVersion": "1.0.0",
   "messageType": 3,
   "subscriptions": [
-    23
+    1
   ]
 }
 ```
 
-**Expected Results**
+**Expected result**
 
 The device will respond with a `SubscriptionResponse` message indicating the subscription request was accepted.
 
@@ -599,16 +533,16 @@ The device will respond with a `SubscriptionResponse` message indicating the sub
   "protocolVersion": "1.0.0",
   "messageType": 4,
   "subscriptions": [
-    23
+    1
   ]
 }
 ```
 
-**Modify `right-gain` value and check notification is received**
+**Modify the `userLabel` value and check a notification is received**
 
-Now whenever we modify the value of the `right-gain` gain value property we can see notifications arriving.
+Now whenever we modify the value of the `userLabel` property we can see notifications arriving.
 
-Copy and paste the following command which will set the `right-gain` gain value property to -3.0. The JSON command uses the `right-gain` oid of `23` and the `set` method to set the new value.
+Try it now by changing the `userLabel` property again to "My mock device HOWTO changed"
 
 ```json
 {
@@ -616,44 +550,27 @@ Copy and paste the following command which will set the `right-gain` gain value 
   "messageType": 0,
   "commands": [
     {
-      "handle": 2,
-      "oid": 23,
+      "handle": 6,
+      "oid": 1,
       "methodId": {
         "level": 1,
         "index": 2
       },
       "arguments": {
         "id": {
-          "level": 5,
-          "index": 1
+          "level": 1,
+          "index": 6
         },
-        "value": -3.0
-      }
-    }F
-  ]
-}
-```
-
-**Expected Results**
-
-Since you registered for notifications for changes to the `right-gain` control you should see notifications of that change. Below is the expected result from invoking the `Set` method that you should see in your WebSocket Client when you send the command to set the value.
-
-```json
-{
-  "protocolVersion": "1.0.0",
-  "messageType": 1,
-  "responses": [
-    {
-      "handle": 2,
-      "result": {
-        "status": 200
+        "value": "My mock device HOWTO changed"
       }
     }
   ]
 }
 ```
 
-You should also receive the notification of the change event as shown below. In the JSON notification you see the `oid` of the `right-gain` 23 along with the `propertyId` that was changed. Finally, the `changeType` and new property `value` are provided in the change event notification.
+**Expected notification**
+
+Since you subscribed for changes on the root block you should see notifications of that change. In the JSON notification you see the `oid` of the root block along with the `propertyId` that was changed (userLabel or 1p6). Finally, the `changeType` and new property `value` are provided in the `eventData`.
 
 ```json
 {
@@ -661,19 +578,18 @@ You should also receive the notification of the change event as shown below. In 
   "messageType": 2,
   "notifications": [
     {
-      "type": 0,
-      "oid": 23,
+      "oid": 1,
       "eventId": {
         "level": 1,
         "index": 1
       },
       "eventData": {
         "propertyId": {
-          "level": 5,
-          "index": 1
+          "level": 1,
+          "index": 6
         },
         "changeType": 0,
-        "value": -3.0,
+        "value": "My mock device HOWTO changed",
         "sequenceItemIndex": null
       }
     }
@@ -683,401 +599,14 @@ You should also receive the notification of the change event as shown below. In 
 
 ### Section conclusions
 
-In this section of the HOW-TO guide you have setup all required NMOS infrastructure to run and interacted with an NMOS Device that provides IS-12 NMOS Control functionality. You loaded an NMOS RDS so that the NMOS device can register its control endpoint for IS-12 in the form of a standard WebSocket. You have installed the NC-01 mock device and used it to explore how NMOS Control works for a simple Stereo Gain Control block. You have used manual copy-and-paste of JSON protocol messages to act as an human-in-the-loop NMOS Controller.
+In this section of the HOW-TO guide you have setup all required NMOS infrastructure to run and interacted with an NMOS Device that provides NMOS IS-12 functionality. You have provisioned an NMOS RDS so that the NMOS device can register its control endpoint for IS-12 in the form of a standard WebSocket. You have installed the NC-01 mock device and used it to explore the device model by finding nested block members. You have also retrieved and set the `userLabel` property of the root block. You have used manual copy-and-paste of JSON protocol messages to act as an human-in-the-loop NMOS Controller.
 
-In addition you have subscribed to property changes for the gain control of interest and verified your WebSocket session has received notifications when you changed the property of interest.
+In addition you have subscribed to property changes for root block and verified your WebSocket session has received notifications when you changed the `userLabel` property.
 
-In the next section you will add a new property to the Stereo Gain Block's left and right gains. You will become familiar with how to modify code to enhance existing NMOS Control classes.
+## Non-standard control classes
 
-## Modifications to the Stereo Gain Block
-
-This section shows how to add in a simple `mute` property to the left and right gains that you worked with in the previous section. The requirements for this additional functionality are simple. Each of the stereo channels will have an additional `boolean` property that controls if the channel is muted. Turning on and off the muting does not effect the gain of the channel. The strategy we will take is the recommended practice for extending the framework. You will create a subclass of the NMOS Control Framework NcGain class and extend this class to add in a `mute` property.
-
-**Steps to Implement**
-
-- Edit the Features.ts file located in `code/src/NCModel` of the cloned mock node repo
-- Create a subclass of NcGain called NcGainCustom
-- Add in a boolean `mute` property to the NcGainCustom block
-- Set the default value to `false`
-- Update the Server.ts file located in `code/src` to use the new class in the StereoGain Block
-- Restart the Mock Node.
-- Explore the changes
-
-**Editing Features.ts**
-
-Open the Features.ts file with any editor. Make the following changes to the file to create the `NcGainCustom` class that extends the framework's NcGain class.
-
-```typescript
-export class NcGainCustom extends NcGain
-{
-    @myIdDecorator('6p1')
-    public mute: Boolean;
-
-    public classID: number[] = [ 1, 2, 1, 1, 1, 0, 1 ];
-
-    public constructor(
-        oid: number,
-        constantOid: boolean,
-        owner: number | null,
-        role: string,
-        userLabel: string,
-        lockable: boolean,
-        lockState: NcLockState,
-        touchpoints: NcTouchpoint[],
-        enabled: boolean,
-        ports: NcPort[] | null,
-        latency: number | null,
-        gainValue: number,
-        mute: boolean,
-        description: string,
-        notificationContext: INotificationContext)
-    {
-        super(oid, constantOid, owner, role, userLabel, lockable, lockState, touchpoints, enabled, ports, latency, gainValue, description, notificationContext);
-
-        this.mute = mute;
-    }
-
-    //'1m1'
-    public override Get(oid: number, propertyId: NcElementId, handle: number) : CommandResponseNoValue
-    {
-        if(oid == this.oid)
-        {
-            let key: string = `${propertyId.level}p${propertyId.index}`;
-
-            switch(key)
-            {
-                case '6p1':
-                  return new CommandResponseWithValue(handle, NcMethodStatus.OK, this.mute, null);
-                default:
-                    return super.Get(oid, propertyId, handle);
-            }
-        }
-
-        return new CommandResponseNoValue(handle, NcMethodStatus.InvalidRequest, 'OID could not be found');
-    }
-
-    //'1m2'
-    public override Set(oid: number, id: NcElementId, value: any, handle: number) : CommandResponseNoValue
-    {
-        if(oid == this.oid)
-        {
-            let key: string = `${id.level}p${id.index}`;
-
-            switch(key)
-            {
-              case '6p1':
-                    this.mute = value;
-                    this.notificationContext.NotifyPropertyChanged(this.oid, id, this.mute);
-                    return new CommandResponseNoValue(handle, NcMethodStatus.OK, null);
-              default:
-                    return super.Set(oid, id, value, handle);
-            }
-        }
-
-        return new CommandResponseNoValue(handle, NcMethodStatus.InvalidRequest, 'OID could not be found');
-    }
-
-    public static override GetClassDescriptor(): NcClassDescriptor 
-    {
-        let baseDescriptor = super.GetClassDescriptor();
-
-        let currentClassDescriptor = new NcClassDescriptor("NcGainCustom class descriptor",
-            [ 
-                new NcPropertyDescriptor(new NcElementId(6, 1), "mute", "NcBoolean", false, false, false, false, null, "TRUE iff muted"),
-            ],
-            [],
-            []
-        );
-
-        currentClassDescriptor.properties = currentClassDescriptor.properties.concat(baseDescriptor.properties);
-        currentClassDescriptor.methods = currentClassDescriptor.methods.concat(baseDescriptor.methods);
-        currentClassDescriptor.events = currentClassDescriptor.events.concat(baseDescriptor.events);
-
-        return currentClassDescriptor;
-    }
-}
-```
-
-Key modifications to the code for the derived class include the following code snippet:
-
-```typescript
-export class NcGainCustom extends NcGain
-{
-    @myIdDecorator('6p1')
-    public mute: Boolean;
-
-    public classID: number[] = [ 1, 2, 1, 1, 1, 0, 1 ]; // classID, 1 extra level below NcGain (includes the authority key 0 in this case)
-}
-```
-
-Here you have created a subclass of NcGain which is a standard class in the NMOS Control Framework. The new class has all the features of the framework including discoverability, event notification subscriptions and communications via the IS-12 protocol.
-
-The code snippet below shows the additions needed to override the `get` and `set` methods inherited from the base class `NcObject`:
-
-```typescript
- //'1m1'
-    public override Get(oid: number, propertyId: NcElementId, handle: number) : CommandResponseNoValue
-    {
-        if(oid == this.oid)
-        {
-            let key: string = `${propertyId.level}p${propertyId.index}`;
-
-            switch(key)
-            {
-                case '6p1':
-                    return new CommandResponseWithValue(handle, NcMethodStatus.OK, this.mute, null);
-                default:
-                    return super.Get(oid, propertyId, handle);
-            }
-        }
-
-        return new CommandResponseNoValue(handle, NcMethodStatus.InvalidRequest, 'OID could not be found');
-    }
-
-    //'1m2'
-    public override Set(oid: number, id: NcElementId, value: any, handle: number) : CommandResponseNoValue
-    {
-        if(oid == this.oid)
-        {
-            let key: string = `${id.level}p${id.index}`;
-
-            switch(key)
-            {
-              case '6p1':
-                    this.mute = value;
-                    this.notificationContext.NotifyPropertyChanged(this.oid, id, this.mute);
-                    return new CommandResponseNoValue(handle, NcMethodStatus.OK, null);
-              default:
-                    return super.Set(oid, id, value, handle);
-            }
-        }
-
-        return new CommandResponseNoValue(handle, NcMethodStatus.InvalidRequest, 'OID could not be found');
-    }
-```
-
-In this code you override the base class `Get` and `Set` methods to also handle the new `mute` property before passing back up to the base class for other inherited properties.
-Finally in the following code section you override the `GetClassDescriptor` to provide information about your new derived class specific to the new class (in this case the additional `mute` property).
-
-```typescript
-public static override GetClassDescriptor(): NcClassDescriptor
-{
-      let baseDescriptor = super.GetClassDescriptor();
-
-      let currentClassDescriptor = new NcClassDescriptor("NcGainCustom class descriptor",
-          [ 
-              new NcPropertyDescriptor(new NcElementId(6, 1), "mute", "NcBoolean", false, false, false, false, null, "TRUE iff muted"),
-          ],
-          [],
-          []
-      );
-
-      currentClassDescriptor.properties = currentClassDescriptor.properties.concat(baseDescriptor.properties);
-      currentClassDescriptor.methods = currentClassDescriptor.methods.concat(baseDescriptor.methods);
-      currentClassDescriptor.events = currentClassDescriptor.events.concat(baseDescriptor.events);
-
-      return currentClassDescriptor;
-}
-```
-
-Next, Modify the file `code/src/Server.ts` to make the following changes that plug in your new `NcGainCustom` block into the overall controls provided by the NMOS device control mock code only in the replacement of the framework's `NcGain` with your new extended `NcGainCustom`.
-
-```typescript
-const channelGainBlock = new NcBlock(
-        false,
-        21,
-        true,
-        31,
-        'channel-gain',
-        'Channel gain',
-        false,
-        NcLockState.NoLock,
-        null,
-        true,
-        null,
-        null,
-        null,
-        null,
-        null,
-        false,
-        [
-            new NcGainCustom(22, true, 21, "left-gain", "Left gain", false, NcLockState.NoLock, [], true, [
-                new NcPort('input_1', NcIoDirection.Input, null),
-                new NcPort('output_1', NcIoDirection.Output, null),
-            ], null, 0, false, "Left channel gain with mute", sessionManager),
-            new NcGainCustom(23, true, 21, "right-gain", "Right gain", false, NcLockState.NoLock, [], true, [
-                new NcPort('input_1', NcIoDirection.Input, null),
-                new NcPort('output_1', NcIoDirection.Output, null),
-            ], null, 0, false, "Right channel gain with mute", sessionManager)
-        ],
-
-        ... 
-        [ 
-            new NcPort('stereo_gain_input_1', NcIoDirection.Input, null),
-            new NcPort('stereo_gain_input_2', NcIoDirection.Input, null),
-            new NcPort('stereo_gain_output_1', NcIoDirection.Output, null),
-            new NcPort('stereo_gain_output_2', NcIoDirection.Output, null)
-        ],
-        [
-            new NcSignalPath('left_gain_input', 'Left gain input', new NcPortReference([], "stereo_gain_input_1"), new NcPortReference(['left-gain'], 'input_1')),
-            new NcSignalPath('left_gain_output', 'Left gain output', new NcPortReference(['left-gain'], 'output_1'), new NcPortReference([], "stereo_gain_output_1")),
-            new NcSignalPath('right_gain_input', 'Right gain input', new NcPortReference([], "stereo_gain_input_2"), new NcPortReference(['right-gain'], 'input_1')),
-            new NcSignalPath('right_gain_output', 'Right gain output', new NcPortReference(['right-gain'], 'output_1'), new NcPortReference([], "stereo_gain_output_2")),
-        ],
-        "Channel gain block with Mute",
-        sessionManager);
-
-        const stereoGainBlock = new NcBlock(
-            false,
-            31,
-            true,
-            1,
-            'stereo-gain',
-            'Stereo gain',
-            false,
-            NcLockState.NoLock,
-            null,
-            true,
-            null,
-            null,
-            null,
-            null,
-            null,
-            false,
-            [
-                channelGainBlock,
-                new NcGainCustom(24, true, 31, "master-gain", "Master gain", false, NcLockState.NoLock, [], true, [
-                    new NcPort('input_1', NcIoDirection.Input, null),
-                    new NcPort('input_2', NcIoDirection.Input, null),
-                    new NcPort('output_1', NcIoDirection.Output, null),
-                    new NcPort('output_2', NcIoDirection.Output, null),
-                ], null, 0, false, "Master gain with mute", sessionManager)
-            ],
-            [ 
-                new NcPort('block_input_1', NcIoDirection.Input, null),
-                new NcPort('block_input_2', NcIoDirection.Input, null),
-                new NcPort('block_output_1', NcIoDirection.Output, null),
-                new NcPort('block_output_2', NcIoDirection.Output, null)
-            ],
-            [
-                new NcSignalPath('block-in-1-to-left-gain-in', 'Block input 1 to left gain input', new NcPortReference([], "block_input_1"), new NcPortReference(['stereo-gain'], 'stereo_gain_input_1')),
-                new NcSignalPath('left-gain-out-to-master-gain-in-1', 'Left gain output to master gain input 1', new NcPortReference(['stereo-gain'], 'stereo_gain_output_1'), new NcPortReference(['master-gain'], "input_1")),
-                new NcSignalPath('master-gain-out-1-to-block-out-1', 'Master gain output 1 to block output 1', new NcPortReference(['master-gain'], "output_1"), new NcPortReference([], 'block_output_1')),
-                new NcSignalPath('block-in-2-to-right-gain-in', 'Block input 2 to right gain input', new NcPortReference([], "block_input_2"), new NcPortReference(['stereo-gain'], 'stereo_gain_input_2')),
-                new NcSignalPath('right-gain-out-to-master-gain-in-2', 'Right gain output to master gain input 2', new NcPortReference(['stereo-gain'], 'stereo_gain_output_2'), new NcPortReference(['master-gain'], "input_2")),
-                new NcSignalPath('master-gain-out-2-to-block-out-2', 'Master gain output 2 to block output 2', new NcPortReference(['master-gain'], "output_2"), new NcPortReference([], 'block_output_2'))
-            ],
-            "Stereo gain block with Mute",
-            sessionManager);
-```
-
-The changes to the original Server.ts file are simply replacements of the NMOS Control Framework's NcGain with the new NcGainCustom. A clearer picture of the changes is shown below as a standard `diff` format.
-
-```typescript
-@@ -14,7 +14,7 @@ import { SessionManager } from './SessionManager';
- import { NcBlock, RootBlock } from './NCModel/Blocks';
- import { NcClassManager, NcDeviceManager } from './NCModel/Managers';
- import { NcIoDirection, NcLockState, NcPort, NcPortReference, NcSignalPath, NcTouchpointNmos, NcTouchpointResourceNmos } from './NCModel/Core';
--import { NcDemo, NcGain, NcReceiverMonitor } from './NCModel/Features';
-+import { NcDemo, NcGainCustom, NcReceiverMonitor } from './NCModel/Features';
- 
- export interface WebSocketConnection extends WebSocket {
-     isAlive: boolean;
-@@ -141,14 +141,14 @@ try
-         null,
-         false,
-         [
--            new NcGain(22, true, 21, "left-gain", "Left gain", false, NcLockState.NoLock, [], true, [
-+            new NcGainCustom(22, true, 21, "left-gain", "Left gain", false, NcLockState.NoLock, [], true, [
-                 new NcPort('input_1', NcIoDirection.Input, null),
-                 new NcPort('output_1', NcIoDirection.Output, null),
--            ], null, 0, "Left channel gain", sessionManager),
--            new NcGain(23, true, 21, "right-gain", "Right gain", false, NcLockState.NoLock, [], true, [
-+            ], null, 0, false, "Left channel gain with mute", sessionManager),
-+            new NcGainCustom(23, true, 21, "right-gain", "Right gain", false, NcLockState.NoLock, [], true, [
-                 new NcPort('input_1', NcIoDirection.Input, null),
-                 new NcPort('output_1', NcIoDirection.Output, null),
--            ], null, 0, "Right channel gain", sessionManager)
-+            ], null, 0, false, "Right channel gain with mute", sessionManager)
-         ],
-         [ 
-             new NcPort('stereo_gain_input_1', NcIoDirection.Input, null),
-@@ -162,7 +162,7 @@ try
-             new NcSignalPath('right_gain_input', 'Right gain input', new NcPortReference([], "stereo_gain_input_2"), new NcPortReference(['right-gain'], 'input_1')),
-             new NcSignalPath('right_gain_output', 'Right gain output', new NcPortReference(['right-gain'], 'output_1'), new NcPortReference([], "stereo_gain_output_2")),
-         ],
--        "Channel gain block",
-+        "Channel gain block with Mute",
-         sessionManager);
- 
-         const stereoGainBlock = new NcBlock(
-@@ -184,12 +184,12 @@ try
-             false,
-             [
-                 channelGainBlock,
--                new NcGain(24, true, 31, "master-gain", "Master gain", false, NcLockState.NoLock, [], true, [
-+                new NcGainCustom(24, true, 31, "master-gain", "Master gain", false, NcLockState.NoLock, [], true, [
-                     new NcPort('input_1', NcIoDirection.Input, null),
-                     new NcPort('input_2', NcIoDirection.Input, null),
-                     new NcPort('output_1', NcIoDirection.Output, null),
-                     new NcPort('output_2', NcIoDirection.Output, null),
--                ], null, 0, "Master gain", sessionManager)
-+                ], null, 0, false, "Master gain with mute", sessionManager)
-             ],
-             [ 
-                 new NcPort('block_input_1', NcIoDirection.Input, null),
-@@ -205,7 +205,7 @@ try
-                 new NcSignalPath('right-gain-out-to-master-gain-in-2', 'Right gain output to master gain input 2', new NcPortReference(['stereo-gain'], 'stereo_gain_output_2'), new NcPortReference(['master-gain'], "input_2")),
-                 new NcSignalPath('master-gain-out-2-to-block-out-2', 'Master gain output 2 to block output 2', new NcPortReference(['master-gain'], "output_2"), new NcPortReference([], 'block_output_2'))
-             ],
--            "Stereo gain block",
-+            "Stereo gain block with Mute",
-             sessionManager);
- 
-     const rootBlock = new RootBlock(
-@@ -497,4 +497,4 @@ try
- catch (err) 
- {
-     console.log(err);
--}
-\ No newline at end of file
-+}
-```
-
-Now restart `npm run build-and-start` and explore the changes you have made to the `right-gain`. Since you've used the new NcGainCustom for `master gain` and `left-gain` these will now also have the new `mute` property.
-
-The `oids` remain the same with this change but we must use the level and property index for the derived class to interact with the `mute` property. The level is now 6 in the class hierarchy and the property for `mute` is 1 as indicated in the code `@myIdDecorator('6p1')`.
-
-**Read the Default Value for Mute**
-
-Now paste in the JSON formatted command below into your WebSocket client. Note that the command is directed to the NcGainCustom's (oid 23) method (1m1) which is the `get` method. The command requests the value of the new `mute` property (level 6, index 1).
-
-```json
-{
-  "protocolVersion": "1.0.0",
-  "messageType": 0,
-  "commands": [
-    {
-      "handle": 2,
-      "oid": 23,
-      "methodId": {
-        "level": 1,
-        "index": 1
-      },
-      "arguments": {
-        "id": {
-          "level": 6,
-          "index": 1
-        }
-      }
-    }
-  ]
-}
-```
-
-**Expected Value**
-
-The JSON formatted response should be returned by the NMOS device with the default value for `mute` which we set in the code to be `false`.
+In the previous section we have learned how to explore the device model by getting the members of each nested block.
+One of the blocks was the "Stereo gain" block which returned the following member descriptors:
 
 ```json
 {
@@ -1088,16 +617,89 @@ The JSON formatted response should be returned by the NMOS device with the defau
       "handle": 2,
       "result": {
         "status": 200,
-        "value": false
+        "value": [
+          {
+            "role": "channel-gain",
+            "oid": 21,
+            "constantOid": true,
+            "classId": [
+              1,
+              1
+            ],
+            "userLabel": "Channel gain",
+            "owner": 31,
+            "description": "Channel gain block"
+          },
+          {
+            "role": "master-gain",
+            "oid": 24,
+            "constantOid": true,
+            "classId": [
+              1,
+              2,
+              0,
+              1
+            ],
+            "userLabel": "Master gain",
+            "owner": 31,
+            "description": "Master gain"
+          }
+        ]
       }
     }
   ]
 }
 ```
 
-**Set the Mute for Right Channel to True**
+We can see that one of the members is the "Master gain" which is a non-standard control class because its `classId` property contains an authority key of 0 (see [NcClassId](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Framework.html#ncclassid) in the framework for more details). The `classId` property also informs us that the class is derived from the standard class [NcWorker](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Framework.html#ncworker).
 
-Now paste in the JSON formatted command below into your WebSocket client. Note that the command is directed to the NcGainCustom instance (oid 23) method (1m2) which is the `set` method. The command sets the value of the new `mute` property (level 6, index 1) to `true`.
+One of the members of our root block discovered in the previous section was the [Class Manager](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Managers.html#class-manager):
+
+```json
+{
+  "protocolVersion": "1.0.0",
+  "messageType": 1,
+  "responses": [
+    {
+      "handle": 1,
+      "result": {
+        "status": 200,
+        "value": [
+          {
+            "role": "DeviceManager",
+            "oid": 2,
+            "constantOid": true,
+            "classId": [
+              1,
+              3,
+              1
+            ],
+            "userLabel": "Device manager",
+            "owner": 1,
+            "description": "The device manager offers information about the product this device is representing"
+          },
+          {
+            "role": "ClassManager",
+            "oid": 3,
+            "constantOid": true,
+            "classId": [
+              1,
+              3,
+              2
+            ],
+            "userLabel": "Class manager",
+            "owner": 1,
+            "description": "The class manager offers access to control class and data type descriptors"
+          },
+          ...
+        ]
+      }
+    }
+  ]
+}
+```
+
+The [Class Manager](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Managers.html#class-manager) allows us to retrieve a class descriptor for our "Master gain" control by sending the following command for `oid` 3 representing the Class Manager, invoking method `GetControlClass` (3m1) with arguments including the `classId` of our "Master gain" as the `identity`.
 
 ```json
 {
@@ -1105,54 +707,146 @@ Now paste in the JSON formatted command below into your WebSocket client. Note t
   "messageType": 0,
   "commands": [
     {
-      "handle": 2,
-      "oid": 23,
+      "handle": 7,
+      "oid": 3,
+      "methodId": {
+        "level": 3,
+        "index": 1
+      },
+      "arguments":
+      {
+        "identity": [1, 2, 0, 1],
+        "includeInherited": false
+      }
+    }
+  ]
+}
+```
+
+**Expected result**
+
+The device returns the class descriptor in the response. This contains a name, description and descriptors for all of its properties and methods.
+
+```json
+{
+  "protocolVersion": "1.0.0",
+  "messageType": 1,
+  "responses": [
+    {
+      "handle": 7,
+      "result": {
+        "status": 200,
+        "value": {
+          "description": "GainControl class descriptor",
+          "identity": [
+            1,
+            2,
+            0,
+            1
+          ],
+          "name": "GainControl",
+          "fixedRole": null,
+          "properties": [
+            {
+              "description": "Gain value",
+              "id": {
+                "level": 3,
+                "index": 1
+              },
+              "name": "gainValue",
+              "typeName": "NcFloat32",
+              "isReadOnly": false,
+              "isPersistent": false,
+              "isNullable": false,
+              "isSequence": false,
+              "constraints": null,
+              "isDeprecated": false,
+              "isConstant": false
+            }
+          ],
+          "methods": [],
+          "events": []
+        }
+      }
+    }
+  ]
+}
+```
+
+This reveals that our "Master gain" object is an instance of the `GainControl` non-standard class which holds a numeric property named `gainValue` (level 3 index 1).
+
+As exemplified in the previous section we can now use the `Get` and `Set` methods to retrieve and set the `gainValue` property.
+
+Getting the value by targeting the "Master gain" `oid` of 24 and its `gainValue` property with level 3 and index 1:
+
+```json
+{
+  "protocolVersion": "1.0.0",
+  "messageType": 0,
+  "commands": [
+    {
+      "handle": 8,
+      "oid": 24,
+      "methodId": {
+        "level": 1,
+        "index": 1
+      },
+      "arguments": {
+        "id": {
+          "level": 3,
+          "index": 1
+        }
+      }
+    }
+  ]
+}
+```
+
+Gives us the following response where the `gainValue` is 0.
+
+```json
+{
+  "protocolVersion": "1.0.0",
+  "messageType": 1,
+  "responses": [
+    {
+      "handle": 8,
+      "result": {
+        "status": 200,
+        "value": 0
+      }
+    }
+  ]
+}
+```
+
+And setting the value to 21
+
+```json
+{
+  "protocolVersion": "1.0.0",
+  "messageType": 0,
+  "commands": [
+    {
+      "handle": 9,
+      "oid": 24,
       "methodId": {
         "level": 1,
         "index": 2
       },
       "arguments": {
         "id": {
-          "level": 6,
+          "level": 3,
           "index": 1
         },
-        "value": true
+        "value": 21
       }
     }
   ]
 }
 ```
 
-**Read New Value**
-
-Now paste in the JSON formatted command below to re-read the value of the `mute` property. The method is again `level` 1 `index` 1 which is the `get` method. The `arguments` for the command indicate the target property which is the new `mute` property (level 6, index 1).
-
-```json
-{
-  "protocolVersion": "1.0.0",
-  "messageType": 0,
-  "commands": [
-    {
-      "handle": 2,
-      "oid": 23,
-      "methodId": {
-        "level": 1,
-        "index": 1
-      },
-      "arguments": {
-        "id": {
-          "level": 6,
-          "index": 1
-        }
-      }
-    }
-  ]
-}
-```
-
-**Expected Value**
-
-The retrieved value for the mute on the `right-gain` shows the new value for `mute` as true as expected.
+Gives us the following response
 
 ```json
 {
@@ -1160,23 +854,62 @@ The retrieved value for the mute on the `right-gain` shows the new value for `mu
   "messageType": 1,
   "responses": [
     {
-      "handle": 2,
+      "handle": 9,
       "result": {
-        "status": 200,
-        "value": true
+        "status": 200
       }
     }
   ]
 }
 ```
 
+And Getting the value again returns
+
+```json
+{
+  "protocolVersion": "1.0.0",
+  "messageType": 1,
+  "responses": [
+    {
+      "handle": 10,
+      "result": {
+        "status": 200,
+        "value": 21
+      }
+    }
+  ]
+}
+```
+
+Similar to the previous section we can now subscribe to the "Master gain" for property changes by adding its `oid` to our subscriptions list.
+
+```json
+{
+  "protocolVersion": "1.0.0",
+  "messageType": 3,
+  "subscriptions": [
+    1,
+    24
+  ]
+}
+```
+
+A visual diagram which summarizes the steps taken in the mock device to implement the `GainControl` is available below.
+
+| ![Non standard-model](images/non-standard-model.png) |
+|:--:|
+| _**GainControl model**_ |
+
+The full implementation of the `GainControl` can be viewed in the code base of the [mock device repository](https://github.com/AMWA-TV/nmos-device-control-mock/blob/0e50eb8c9fca9934ae0f5dca746576bd5f656bea/code/src/NCModel/Features.ts#L115)
+
 ### Section conclusions
 
-In this section you learned how to extend the NMOS Control framework though class inheritance. You created a derived class that added functionality to the `NcGain` control clock to allow a client to `mute` the master, left or right channels independently. You saw how simple inheritance can create additional capabilities in the framework while the overall interaction with control blocks remains the same and all the functionality provided by the framework including discoverability, subscription for change events and control over a standard WebSocket come for free.
+In this section you learned how non-standard control classes are created and exposed by a device in order to include vendor specific functionality.
+You saw how simple inheritance can create additional capabilities whilst maintaining discoverability, subscription for change events and control over a standard WebSocket.
 
 ## Overall conclusions
 
-This HOW-TO has shown how to work with the NMOS Control Framework. You have created a simple NMOS Device that uses NMOS IS-04 to advertise its control endpoint with an NMOS RDS. You have worked with the IS-12 protocol to discover an NMOS Control Stereo Gain and modified a property of one leg of the Stereo Gain Block. You have gained experience with making simple modifications to the code for a TypeScript implementation of an NMOS Controllable Device based on the open-sourced NMOS Control Mock Node.
+This HOW-TO has shown how to work with the NMOS Control Framework. You have explored a simple NMOS Device that uses NMOS IS-04 to advertise its control endpoint with an NMOS RDS. You have worked with the IS-12 protocol to discover a non-standard `GainControl` used to express the "Master gain" inside a "Stereo gain" block.
 
 ## Further Directions
 
