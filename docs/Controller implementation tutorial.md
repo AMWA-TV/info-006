@@ -114,11 +114,11 @@ A controller is expected to decode touchpoint information where available and as
 |:--:|
 | _**Context identity mapping**_ |
 
-### Discovering vendor specific control classes and data types
+### Discovering non-standard models used to expose vendor specific functionality
 
 As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Managers.html#class-manager) specification the `Class manager` can be used to discover the properties of any control class and the fields of any data type.
 
-Vendor specific control classes can be created by branching off from a standard control class and following the class ID generation guidelines specified in [MS-05-01](https://specs.amwa.tv/ms-05-01/branches/v1.0-dev/docs/Appendix_A_-_Class_ID_Format.html).
+Non-standard control classes can be created by branching off from a standard control class and following the class ID generation guidelines specified in [MS-05-01](https://specs.amwa.tv/ms-05-01/branches/v1.0-dev/docs/Appendix_A_-_Class_ID_Format.html).
 
 Here is an example of a new worker control class called `DemoClassAlpha`. It inherits from [NcWorker](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Framework.html#ncworker) which has an identity of `[1, 2]` and adds the authority key (in this case 0, but would be a negative number if the vendor has an OUI or CID) followed by the index 1.
 
@@ -140,7 +140,7 @@ Here is an example of a new worker control class called `DemoClassAlpha`. It inh
 }
 ```
 
-A subsequent vendor specific worker would look like this:
+A subsequent non-standard worker would look like this:
 
 ```json
 {
@@ -162,11 +162,11 @@ A subsequent vendor specific worker would look like this:
 
 ensuring class identity uniqueness.
 
-Controllers are expected to use the class identity lineage information alongside their core framework knowledge to determine when a control class is a vendor specific control class.
+Controllers are expected to use the class identity lineage information alongside their core framework knowledge to determine when a control class is a non-standard control class.
 
-| ![Vendor specific branching](images/vendor-specific-branching.png) |
+| ![Non-standard branching](images/non-standard-branching.png) |
 |:--:|
-| _**Vendor specific branching**_ |
+| _**Non-standard branching**_ |
 
 #### Control class definition discovery
 

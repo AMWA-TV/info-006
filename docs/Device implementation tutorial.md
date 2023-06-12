@@ -63,7 +63,7 @@ As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Work
 
 Different devices will need to use different workers depending on their functionality set.
 
-Indeed, sometimes devices might also need to create vendor specific worker classes (see [Vendor specific control classes](Device%20implementation%20tutorial.md#vendor-specific-control-classes)) either because they implement functionality not catered yet by the standard framework or because they require to derive a standard control class worker.
+Indeed, sometimes devices might also need to expose vendor specific functionality by creating non-standard worker classes (see [Non-standard classes](#non-standard-classes-used-to-expose-vendor-specific-functionality)).
 
 #### Context identity mapping (Receiver monitor example)
 
@@ -94,9 +94,9 @@ A minimal implementation of a device will have at least two [managers](Device%20
 
 A device is expected to allow its structure to be discovered (see [Block control classes](Device%20implementation%20tutorial.md#block-control-classes)) by exposing its capabilities in nested blocks starting with the `root block`.
 
-#### Vendor specific control classes
+#### Non-standard classes used to expose vendor specific functionality
 
-Vendor specific control classes can be created by branching off from a standard control class and following the class ID generation guidelines specified in [MS-05-01](https://specs.amwa.tv/ms-05-01/branches/v1.0-dev/docs/Appendix_A_-_Class_ID_Format.html).
+Non-standard control classes can be created by branching off from a standard control class and following the class ID generation guidelines specified in [MS-05-01](https://specs.amwa.tv/ms-05-01/branches/v1.0-dev/docs/Appendix_A_-_Class_ID_Format.html).
 
 Here is an example of a new worker control class called `DemoClassAlpha`. It inherits from [NcWorker](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Framework.html#ncworker) which has an identity of `[1, 2]` and adds the authority key (in this case 0, but would be a negative number if the vendor has an OUI or CID) followed by the index 1.
 
@@ -118,7 +118,7 @@ Here is an example of a new worker control class called `DemoClassAlpha`. It inh
 }
 ```
 
-A subsequent vendor specific worker would look like this:
+A subsequent non-standard worker would look like this:
 
 ```json
 {
@@ -140,9 +140,9 @@ A subsequent vendor specific worker would look like this:
 
 ensuring class identity uniqueness.
 
-| ![Vendor specific branching](images/vendor-specific-branching.png) |
+| ![Non-standard branching](images/non-standard-branching.png) |
 |:--:|
-| _**Vendor specific branching**_ |
+| _**Non-standard branching**_ |
 
 ### Exposing models through the protocol
 
