@@ -114,7 +114,7 @@ A controller is expected to decode touchpoint information where available and as
 |:--:|
 | _**Context identity mapping**_ |
 
-### Discovering non-standard models used to expose vendor specific functionality
+### Discovering non-standard models used to model vendor specific functionality
 
 As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Managers.html#class-manager) specification the `Class manager` can be used to discover the properties of any control class and the fields of any data type.
 

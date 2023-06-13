@@ -63,7 +63,7 @@ As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Work
 
 Different devices will need to use different workers depending on their functionality set.
 
-Indeed, sometimes devices might also need to expose vendor specific functionality by creating non-standard worker classes (see [Non-standard classes](#non-standard-classes-used-to-expose-vendor-specific-functionality)).
+Indeed, sometimes devices might also need to expose vendor specific functionality by creating non-standard worker classes (see [Non-standard classes](#non-standard-classes-used-to-model-vendor-specific-functionality)).
 
 #### Context identity mapping (Receiver monitor example)
 
@@ -94,7 +94,7 @@ A minimal implementation of a device will have at least two [managers](Device%20
 
 A device is expected to allow its structure to be discovered (see [Block control classes](Device%20implementation%20tutorial.md#block-control-classes)) by exposing its capabilities in nested blocks starting with the `root block`.
 
-#### Non-standard classes used to expose vendor specific functionality
+#### Non-standard classes used to model vendor specific functionality
 
 Non-standard control classes can be created by branching off from a standard control class and following the class ID generation guidelines specified in [MS-05-01](https://specs.amwa.tv/ms-05-01/branches/v1.0-dev/docs/Appendix_A_-_Class_ID_Format.html).
 
