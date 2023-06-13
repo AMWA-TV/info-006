@@ -40,13 +40,13 @@ As per the [MS-05-01](https://specs.amwa.tv/ms-05-01/branches/v1.0-dev/docs/Iden
 
 As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Blocks.html) specification blocks are containers for other control classes.
 
-All devices have at the very least a `root block` which is the top most block in the device tree. The root block has an `oid` of 1 and the role of `root`.
+All devices have at the very least a `root block` which is the top most block in the device model. The root block has an `oid` of 1 and the role of `root`.
 
 Control classes which are nested inside a block are advertised using descriptors in the `members` property of [NcBlock](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Framework.html#ncblock).
 
-The `members` property in blocks enables [tree discovery](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Blocks.html#tree-discovery) of the device structure.
+The `members` property in blocks enables [device model discovery](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Blocks.html#device-model-discovery) of the device structure.
 
-Blocks are also useful for quickly finding a particular control class by using the [search methods](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Blocks.html#tree-discovery) provided.
+Blocks are also useful for quickly finding a particular control class by using the [search methods](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Blocks.html#search-methods) provided.
 
 #### Manager control classes
 
@@ -63,7 +63,7 @@ As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Work
 
 Different devices will need to use different workers depending on their functionality set.
 
-Indeed, sometimes devices might also need to create vendor specific worker classes (see [Vendor specific control classes](Device%20implementation%20tutorial.md#vendor-specific-control-classes)) either because they implement functionality not catered yet by the standard framework or because they require to derive a standard control class worker.
+Indeed, sometimes devices might also need to expose vendor specific functionality by creating non-standard worker classes (see [Non-standard classes](#non-standard-classes-used-to-model-vendor-specific-functionality)).
 
 #### Context identity mapping (Receiver monitor example)
 
@@ -94,9 +94,9 @@ A minimal implementation of a device will have at least two [managers](Device%20
 
 A device is expected to allow its structure to be discovered (see [Block control classes](Device%20implementation%20tutorial.md#block-control-classes)) by exposing its capabilities in nested blocks starting with the `root block`.
 
-#### Vendor specific control classes
+#### Non-standard classes used to model vendor specific functionality
 
-Vendor specific control classes can be created by branching off from a standard control class and following the class ID generation guidelines specified in [MS-05-01](https://specs.amwa.tv/ms-05-01/branches/v1.0-dev/docs/Appendix_A_-_Class_ID_Format.html).
+Non-standard control classes can be created by branching off from a standard control class and following the class ID generation guidelines specified in [MS-05-01](https://specs.amwa.tv/ms-05-01/branches/v1.0-dev/docs/Appendix_A_-_Class_ID_Format.html).
 
 Here is an example of a new worker control class called `DemoClassAlpha`. It inherits from [NcWorker](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Framework.html#ncworker) which has an identity of `[1, 2]` and adds the authority key (in this case 0, but would be a negative number if the vendor has an OUI or CID) followed by the index 1.
 
@@ -118,7 +118,7 @@ Here is an example of a new worker control class called `DemoClassAlpha`. It inh
 }
 ```
 
-A subsequent vendor specific worker would look like this:
+A subsequent non-standard worker would look like this:
 
 ```json
 {
@@ -140,9 +140,9 @@ A subsequent vendor specific worker would look like this:
 
 ensuring class identity uniqueness.
 
-| ![Vendor specific branching](images/vendor-specific-branching.png) |
+| ![Non-standard branching](images/non-standard-branching.png) |
 |:--:|
-| _**Vendor specific branching**_ |
+| _**Non-standard branching**_ |
 
 ### Exposing models through the protocol
 
