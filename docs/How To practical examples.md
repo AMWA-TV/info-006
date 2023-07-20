@@ -195,7 +195,6 @@ Next retrieve the members of the root block by sending the following JSON format
 
 ```json
 {
-  "protocolVersion": "1.0.0",
   "messageType": 0,
   "commands": [
     {
@@ -222,7 +221,6 @@ The device responds with a JSON containing [NcBlockMemberDescriptor](https://spe
 
 ```json
 {
-  "protocolVersion": "1.0.0",
   "messageType": 1,
   "responses": [
     {
@@ -318,7 +316,6 @@ In the response above we can see that the "Stereo gain" member is a block becaus
 
 ```json
 {
-  "protocolVersion": "1.0.0",
   "messageType": 0,
   "commands": [
     {
@@ -345,7 +342,6 @@ The device responds with a JSON containing the member descriptors for the "Stere
 
 ```json
 {
-  "protocolVersion": "1.0.0",
   "messageType": 1,
   "responses": [
     {
@@ -394,7 +390,6 @@ You will now make use of the generic [Get method](https://specs.amwa.tv/ms-05-02
 
 ```json
 {
-  "protocolVersion": "1.0.0",
   "messageType": 0,
   "commands": [
     {
@@ -421,7 +416,6 @@ The device responds to the above command with a JSON formatted response containi
 
 ```json
 {
-  "protocolVersion": "1.0.0",
   "messageType": 3,
   "responses": [
     {
@@ -439,7 +433,6 @@ Now we will set the `userLabel` (1p6) to "My mock device HOWTO" and verify the c
 
 ```json
 {
-  "protocolVersion": "1.0.0",
   "messageType": 0,
   "commands": [
     {
@@ -469,7 +462,6 @@ Now retrieve the `userLabel` property again.
 
 ```json
 {
-  "protocolVersion": "1.0.0",
   "messageType": 0,
   "commands": [
     {
@@ -496,7 +488,6 @@ The device returns the new value of "My mock device HOWTO" in the response.
 
 ```json
 {
-  "protocolVersion": "1.0.0",
   "messageType": 1,
   "responses": [
     {
@@ -516,7 +507,6 @@ Add a subscription to changes on the root block by sending a `Subscription` mess
 
 ```json
 {
-  "protocolVersion": "1.0.0",
   "messageType": 3,
   "subscriptions": [
     1
@@ -530,7 +520,6 @@ The device will respond with a `SubscriptionResponse` message indicating the sub
 
 ```json
 {
-  "protocolVersion": "1.0.0",
   "messageType": 4,
   "subscriptions": [
     1
@@ -546,7 +535,6 @@ Try it now by changing the `userLabel` property again to "My mock device HOWTO c
 
 ```json
 {
-  "protocolVersion": "1.0.0",
   "messageType": 0,
   "commands": [
     {
@@ -574,7 +562,6 @@ Since you subscribed for changes on the root block you should see notifications 
 
 ```json
 {
-  "protocolVersion": "1.0.0",
   "messageType": 2,
   "notifications": [
     {
@@ -610,7 +597,6 @@ One of the blocks was the "Stereo gain" block which returned the following membe
 
 ```json
 {
-  "protocolVersion": "1.0.0",
   "messageType": 1,
   "responses": [
     {
@@ -657,7 +643,6 @@ One of the members of our root block discovered in the previous section was the 
 
 ```json
 {
-  "protocolVersion": "1.0.0",
   "messageType": 1,
   "responses": [
     {
@@ -699,11 +684,10 @@ One of the members of our root block discovered in the previous section was the 
 }
 ```
 
-The [Class Manager](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Managers.html#class-manager) allows us to retrieve a class descriptor for our "Master gain" control by sending the following command for `oid` 3 representing the Class Manager, invoking method `GetControlClass` (3m1) with arguments including the `classId` of our "Master gain" as the `identity`.
+The [Class Manager](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Managers.html#class-manager) allows us to retrieve a class descriptor for our "Master gain" control by sending the following command for `oid` 3 representing the Class Manager, invoking method `GetControlClass` (3m1) with arguments including the `classId` of our "Master gain".
 
 ```json
 {
-  "protocolVersion": "1.0.0",
   "messageType": 0,
   "commands": [
     {
@@ -715,7 +699,7 @@ The [Class Manager](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Manage
       },
       "arguments":
       {
-        "identity": [1, 2, 0, 1],
+        "classId": [1, 2, 0, 1],
         "includeInherited": false
       }
     }
@@ -729,7 +713,6 @@ The device returns the class descriptor in the response. This contains a name, d
 
 ```json
 {
-  "protocolVersion": "1.0.0",
   "messageType": 1,
   "responses": [
     {
@@ -738,7 +721,7 @@ The device returns the class descriptor in the response. This contains a name, d
         "status": 200,
         "value": {
           "description": "GainControl class descriptor",
-          "identity": [
+          "classId": [
             1,
             2,
             0,
@@ -781,7 +764,6 @@ Getting the value by targeting the "Master gain" `oid` of 24 and its `gainValue`
 
 ```json
 {
-  "protocolVersion": "1.0.0",
   "messageType": 0,
   "commands": [
     {
@@ -806,7 +788,6 @@ Gives us the following response where the `gainValue` is 0.
 
 ```json
 {
-  "protocolVersion": "1.0.0",
   "messageType": 1,
   "responses": [
     {
@@ -824,7 +805,6 @@ And setting the value to 21
 
 ```json
 {
-  "protocolVersion": "1.0.0",
   "messageType": 0,
   "commands": [
     {
@@ -850,7 +830,6 @@ Gives us the following response
 
 ```json
 {
-  "protocolVersion": "1.0.0",
   "messageType": 1,
   "responses": [
     {
@@ -867,7 +846,6 @@ And Getting the value again returns
 
 ```json
 {
-  "protocolVersion": "1.0.0",
   "messageType": 1,
   "responses": [
     {
@@ -885,7 +863,6 @@ Similar to the previous section we can now subscribe to the "Master gain" for pr
 
 ```json
 {
-  "protocolVersion": "1.0.0",
   "messageType": 3,
   "subscriptions": [
     1,
