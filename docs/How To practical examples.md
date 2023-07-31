@@ -741,8 +741,8 @@ The device returns the class descriptor in the response. This contains a name, d
               "isReadOnly": false,
               "isNullable": false,
               "isSequence": false,
-              "constraints": null,
-              "isDeprecated": false
+              "isDeprecated": false,
+              "constraints": null
             }
           ],
           "methods": [],
