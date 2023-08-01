@@ -739,12 +739,10 @@ The device returns the class descriptor in the response. This contains a name, d
               "name": "gainValue",
               "typeName": "NcFloat32",
               "isReadOnly": false,
-              "isPersistent": false,
               "isNullable": false,
               "isSequence": false,
-              "constraints": null,
               "isDeprecated": false,
-              "isConstant": false
+              "constraints": null
             }
           ],
           "methods": [],
