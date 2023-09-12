@@ -191,7 +191,7 @@ After completing the installation of WebSocket King open the extension in a new 
 Next we will verify the ability to read and write to the device model on the mock node.  
 For purposes of this HOW-TO we will focus on working with the root block and its properties. Note that in an actual system most of the manual steps we are performing here would be performed by an NMOS Controller using the IS-12 specification. For more information about implementing an IS-12 NMOS Controller see the HOW-TO section for [Controller implementations](Controller%20implementation%20tutorial.md).
 
-Next retrieve the members of the root block by sending the following JSON formatted command to the NC-01 WebSocket. In the JSON command the value of `oid` 1 indicates we are directing this command at the [root block](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Blocks.html). The `methodId` with level 1 and index 1 is the [getter](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/NcObject.html#generic-getter-and-setter) method and the `id` level and index of 2 and 2 respectively targets the `2p2` `members` property of the root [block](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Framework.html#ncblock).
+Next retrieve the members of the root block by sending the following JSON formatted command to the NC-01 WebSocket. In the JSON command the value of `oid` 1 indicates we are directing this command at the [root block](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/Blocks.html). The `methodId` with level 1 and index 1 is the [getter](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/NcObject.html#generic-getter-and-setter) method and the `id` level and index of 2 and 2 respectively targets the `2p2` `members` property of the root [block](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/Framework.html#ncblock).
 
 ```json
 {
@@ -217,7 +217,7 @@ Next retrieve the members of the root block by sending the following JSON format
 
 **Expected Output**
 
-The device responds with a JSON containing [NcBlockMemberDescriptor](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Framework.html#ncblockmemberdescriptor) member descriptors for the root block. Every member class can be determined by reading the `classId` field and they can be targeted with commands by using their `oid` value.
+The device responds with a JSON containing [NcBlockMemberDescriptor](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/Framework.html#ncblockmemberdescriptor) member descriptors for the root block. Every member class can be determined by reading the `classId` field and they can be targeted with commands by using their `oid` value.
 
 ```json
 {
@@ -386,7 +386,7 @@ Repeating the process of retrieving the members for all nested blocks allows a c
 
 **Read, Write the root block user label**
 
-You will now make use of the generic [Get method](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/NcObject.html#generic-getter-and-setter) (level 1, index 1) to read the value of the `userLabel` (level 1, index 6) property of the root block. All classes contain the `userLabel` property as defined in [NcObject](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Framework.html#ncobject).
+You will now make use of the generic [Get method](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/NcObject.html#generic-getter-and-setter) (level 1, index 1) to read the value of the `userLabel` (level 1, index 6) property of the root block. All classes contain the `userLabel` property as defined in [NcObject](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/Framework.html#ncobject).
 
 ```json
 {
@@ -412,7 +412,7 @@ You will now make use of the generic [Get method](https://specs.amwa.tv/ms-05-02
 
 **Expected Output**
 
-The device responds to the above command with a JSON formatted response containing a result of type [NcMethodResultPropertyValue](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Framework.html#ncmethodresultpropertyvalue) holding the value of "Root".
+The device responds to the above command with a JSON formatted response containing a result of type [NcMethodResultPropertyValue](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/Framework.html#ncmethodresultpropertyvalue) holding the value of "Root".
 
 ```json
 {
@@ -429,7 +429,7 @@ The device responds to the above command with a JSON formatted response containi
 }
 ```
 
-Now we will set the `userLabel` (1p6) to "My mock device HOWTO" and verify the change has taken effect. We will use the generic [Set method](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/NcObject.html#generic-getter-and-setter) for this (level 1, index 2). Copy and paste the following JSON formatted command to set the new value:
+Now we will set the `userLabel` (1p6) to "My mock device HOWTO" and verify the change has taken effect. We will use the generic [Set method](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/NcObject.html#generic-getter-and-setter) for this (level 1, index 2). Copy and paste the following JSON formatted command to set the new value:
 
 ```json
 {
@@ -637,9 +637,9 @@ One of the blocks was the "Stereo gain" block which returned the following membe
 }
 ```
 
-We can see that one of the members is the "Master gain" which is a non-standard control class because its `classId` property contains an authority key of 0 (see [NcClassId](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Framework.html#ncclassid) in the framework for more details). The `classId` property also informs us that the class is derived from the standard class [NcWorker](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Framework.html#ncworker).
+We can see that one of the members is the "Master gain" which is a non-standard control class because its `classId` property contains an authority key of 0 (see [NcClassId](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/Framework.html#ncclassid) in the framework for more details). The `classId` property also informs us that the class is derived from the standard class [NcWorker](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/Framework.html#ncworker).
 
-One of the members of our root block discovered in the previous section was the [Class Manager](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Managers.html#class-manager):
+One of the members of our root block discovered in the previous section was the [Class Manager](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/Managers.html#class-manager):
 
 ```json
 {
@@ -684,7 +684,7 @@ One of the members of our root block discovered in the previous section was the 
 }
 ```
 
-The [Class Manager](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Managers.html#class-manager) allows us to retrieve a class descriptor for our "Master gain" control by sending the following command for `oid` 3 representing the Class Manager, invoking method `GetControlClass` (3m1) with arguments including the `classId` of our "Master gain".
+The [Class Manager](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/Managers.html#class-manager) allows us to retrieve a class descriptor for our "Master gain" control by sending the following command for `oid` 3 representing the Class Manager, invoking method `GetControlClass` (3m1) with arguments including the `classId` of our "Master gain".
 
 ```json
 {

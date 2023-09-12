@@ -11,7 +11,7 @@ This section covers the basis for quickly building an MS-05 / IS-12 device imple
 
 This section provides guidance in select focus areas required for device implementations.
 
-For full definitions of models referred to in this document please check the models published in the [Framework](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Framework.html) or the [Feature Sets Register](https://specs.amwa.tv/nmos-control-feature-sets/).
+For full definitions of models referred to in this document please check the models published in the [Framework](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/Framework.html) or the [Feature Sets Register](https://specs.amwa.tv/nmos-control-feature-sets/).
 
 The basic device workflow follows the diagram below where individual steps are detailed in the following subsections.
 
@@ -21,13 +21,13 @@ The basic device workflow follows the diagram below where individual steps are d
 
 ### Modelling the control classes
 
-As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/NcObject.html) specification all control classes inherit from `NcObject`.
+As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/NcObject.html) specification all control classes inherit from `NcObject`.
 
-This base control class exposes important properties but also [generic methods](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/NcObject.html#generic-getter-and-setter) for getting and setting property values.
+This base control class exposes important properties but also [generic methods](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/NcObject.html#generic-getter-and-setter) for getting and setting property values.
 
-`NcObject` also defines the [PropertyChanged](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/NcObject.html#propertychanged-event) event which is fundamental for subscriptions and notifications to work.
+`NcObject` also defines the [PropertyChanged](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/NcObject.html#propertychanged-event) event which is fundamental for subscriptions and notifications to work.
 
-As per the [MS-05-01](https://specs.amwa.tv/ms-05-01/branches/v1.0-dev/docs/Identification.html) specification there are different types of identifiers which ultimately can be split into two categories:
+As per the [MS-05-01](https://specs.amwa.tv/ms-05-01/branches/v1.0.x/docs/Identification.html) specification there are different types of identifiers which ultimately can be split into two categories:
 
 - dynamic identifiers (object identifiers)
 - persistent identifiers (roles, class identities and data type names)
@@ -38,19 +38,19 @@ As per the [MS-05-01](https://specs.amwa.tv/ms-05-01/branches/v1.0-dev/docs/Iden
 
 #### Block control classes
 
-As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Blocks.html) specification blocks are containers for other control classes.
+As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/Blocks.html) specification blocks are containers for other control classes.
 
 All devices have at the very least a `root block` which is the top most block in the device model. The root block has an `oid` of 1 and the role of `root`.
 
-Control classes which are nested inside a block are advertised using descriptors in the `members` property of [NcBlock](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Framework.html#ncblock).
+Control classes which are nested inside a block are advertised using descriptors in the `members` property of [NcBlock](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/Framework.html#ncblock).
 
-The `members` property in blocks enables [device model discovery](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Blocks.html#device-model-discovery) of the device structure.
+The `members` property in blocks enables [device model discovery](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/Blocks.html#device-model-discovery) of the device structure.
 
-Blocks are also useful for quickly finding a particular control class by using the [search methods](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Blocks.html#search-methods) provided.
+Blocks are also useful for quickly finding a particular control class by using the [search methods](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/Blocks.html#search-methods) provided.
 
 #### Manager control classes
 
-As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Managers.html) specification managers are special classes which collate information which pertains to the entire device.
+As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/Managers.html) specification managers are special classes which collate information which pertains to the entire device.
 
 Typical managers included in the root block are:
 
@@ -59,7 +59,7 @@ Typical managers included in the root block are:
 
 #### Worker control classes
 
-As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Workers.html) specification workers are special classes which handle control or monitoring features for a particular specific device domain.
+As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/Workers.html) specification workers are special classes which handle control or monitoring features for a particular specific device domain.
 
 Different devices will need to use different workers depending on their functionality set.
 
@@ -67,7 +67,7 @@ Indeed, sometimes devices might also need to expose vendor specific functionalit
 
 #### Context identity mapping (Receiver monitor example)
 
-[MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/NcObject.html#touchpoints) specifies an identity mapping mechanism available in the base `NcObject` class. This touchpoint mechanism can be used to associate identities from outside contexts with entities inside the control structure of the device.
+[MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/NcObject.html#touchpoints) specifies an identity mapping mechanism available in the base `NcObject` class. This touchpoint mechanism can be used to associate identities from outside contexts with entities inside the control structure of the device.
 
 One such example is the [ReceiverMonitor](https://specs.amwa.tv/nmos-control-feature-sets/branches/main/monitoring/#ncreceivermonitor) control class which is used to express connection and payload statuses for an attached stream receiver.
 
@@ -81,7 +81,7 @@ A device is expected to offer touchpoints to map identities wherever relevant (F
 
 #### Minimum requirements
 
-As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Blocks.html) specification all MS-05 / IS-12 devices need to expose a structure starting with the root block which always has an `oid` of 1.
+As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/Blocks.html) specification all MS-05 / IS-12 devices need to expose a structure starting with the root block which always has an `oid` of 1.
 
 A minimal implementation of a device will have at least two [managers](Device%20implementation%20tutorial.md#manager-control-classes) listed in the root block:
 
@@ -96,9 +96,9 @@ A device is expected to allow its structure to be discovered (see [Block control
 
 #### Non-standard classes used to model vendor specific functionality
 
-Non-standard control classes can be created by branching off from a standard control class and following the class ID generation guidelines specified in [MS-05-01](https://specs.amwa.tv/ms-05-01/branches/v1.0-dev/docs/Appendix_A_-_Class_ID_Format.html).
+Non-standard control classes can be created by branching off from a standard control class and following the class ID generation guidelines specified in [MS-05-01](https://specs.amwa.tv/ms-05-01/branches/v1.0.x/docs/Appendix_A_-_Class_ID_Format.html).
 
-Here is an example of a new worker control class called `DemoClassAlpha`. It inherits from [NcWorker](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Framework.html#ncworker) which has an classId of `[1, 2]` and adds the authority key (in this case 0, but would be a negative number if the vendor has an OUI or CID) followed by the index 1.
+Here is an example of a new worker control class called `DemoClassAlpha`. It inherits from [NcWorker](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/Framework.html#ncworker) which has an classId of `[1, 2]` and adds the authority key (in this case 0, but would be a negative number if the vendor has an OUI or CID) followed by the index 1.
 
 ```json
 {
@@ -148,11 +148,11 @@ ensuring class identity uniqueness.
 
 After a device has initiated its device model structure and allocated oids to every control class instance, it then either waits for external commands which interact with these entities (e.g. get/set values, invoke actions) or sends notifications for properties which have changed if there are subscriptions.
 
-[IS-12](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Protocol_messaging.html) defines the protocol messaging behavior but also what the different JSON representations are for specific [data types](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Data_type_marshalling.html).
+[IS-12](https://specs.amwa.tv/is-12/branches/v1.0.x/docs/Protocol_messaging.html) defines the protocol messaging behavior but also what the different JSON representations are for specific [data types](https://specs.amwa.tv/is-12/branches/v1.0.x/docs/Data_type_marshalling.html).
 
 #### Control endpoint advertisement (in NMOS IS-04)
 
-The [NMOS IS-12](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/IS-04_interactions.html) specification explains that the control endpoint is advertised in the controls array as part of the NMOS device resource. The schema for the NMOS device resource is available in the [NMOS IS-04](https://specs.amwa.tv/is-04/branches/v1.3.1/APIs/schemas/with-refs/device.html) specification.
+The [NMOS IS-12](https://specs.amwa.tv/is-12/branches/v1.0.x/docs/IS-04_interactions.html) specification explains that the control endpoint is advertised in the controls array as part of the NMOS device resource. The schema for the NMOS device resource is available in the [NMOS IS-04](https://specs.amwa.tv/is-04/branches/v1.3.1/APIs/schemas/with-refs/device.html) specification.
 
 It is expected that an IS-12 enabled device exposes a `urn:x-nmos:control:ncp` control type in the controls array for its NMOS device resource.
 
@@ -181,15 +181,15 @@ Control endpoint example:
 
 #### Mapping commands and returning responses
 
-As per the [NMOS IS-12](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Protocol_messaging.html#command-message-type) specification a device is expected to respond to [Commands](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Sending_commands.html) sent by a controller.
+As per the [NMOS IS-12](https://specs.amwa.tv/is-12/branches/v1.0.x/docs/Protocol_messaging.html#command-message-type) specification a device is expected to respond to [Commands](https://specs.amwa.tv/is-12/branches/v1.0.x/docs/Sending_commands.html) sent by a controller.
 
 `Note`: Multiple commands can be sent in the commands array.
 
-As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/NcObject.html#generic-getter-and-setter) specification all control classes inherit from `NcObject` which specifies generic `Get` and `Set` methods.
+As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/NcObject.html#generic-getter-and-setter) specification all control classes inherit from `NcObject` which specifies generic `Get` and `Set` methods.
 
 These methods can be used by a controller to get the value of a property in a control class or set the value of a property in a control class if write allowed. Furthermore, any control class could have other methods which can be invoked in the same way as the generic methods.
 
-As specified by `MS-05-02` any method response inherits from the base data type [NcMethodResult](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/Framework.html#ncmethodresult).
+As specified by `MS-05-02` any method response inherits from the base data type [NcMethodResult](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/Framework.html#ncmethodresult).
 
 | ![Command example](images/command-example.png) |
 |:--:|
@@ -197,10 +197,10 @@ As specified by `MS-05-02` any method response inherits from the base data type 
 
 #### Subscriptions, events and notifications
 
-As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0-dev/docs/NcObject.html#propertychanged-event) specification all control classes inherit from `NcObject` which specifies the `PropertyChanged` event.
+As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/NcObject.html#propertychanged-event) specification all control classes inherit from `NcObject` which specifies the `PropertyChanged` event.
 
 This means any object in the device model can be subscribed to in order to receive property change notifications.
-A device is expected to allow controllers to [Subscribe](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Subscribing_to_events.html) to object ids it is interested in by correctly handling `Subscription` messages and sending back `SubscriptionResponse` messages as specified in [NMOS IS-12](https://specs.amwa.tv/is-12/branches/v1.0-dev/docs/Protocol_messaging.html).
+A device is expected to allow controllers to [Subscribe](https://specs.amwa.tv/is-12/branches/v1.0.x/docs/Subscribing_to_events.html) to object ids it is interested in by correctly handling `Subscription` messages and sending back `SubscriptionResponse` messages as specified in [NMOS IS-12](https://specs.amwa.tv/is-12/branches/v1.0.x/docs/Protocol_messaging.html).
 
 A device is also expected to use the underlying WebSocket control protocol context and the subscriptions received in order to determine when a notification message needs to be sent to a controller.
 

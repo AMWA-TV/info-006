@@ -1,4 +1,4 @@
-# AMWA INFO-006: Implementation Guide for NMOS Device Capabilities Control \[Work In Progress\]
+# AMWA INFO-006: Implementation Guide for NMOS Device Capabilities Control
 
 [![Lint Status](https://github.com/AMWA-TV/info-006/workflows/Lint/badge.svg)](https://github.com/AMWA-TV/info-006/actions?query=workflow%3ALint)
 [![Render Status](https://github.com/AMWA-TV/info-006/workflows/Render/badge.svg)](https://github.com/AMWA-TV/info-006/actions?query=workflow%3ARender)
