@@ -130,7 +130,7 @@ A device is expected to offer touchpoints to map identities wherever relevant (F
 |:--:|
 | _**Context identity mapping**_ |
 
-#### Minimum requirements
+#### Typical device structure
 
 As per the [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/Blocks.html) specification all MS-05 / IS-12 devices need to expose a structure starting with the root block which always has an `oid` of 1.
 
