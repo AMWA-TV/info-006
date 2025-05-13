@@ -5,13 +5,15 @@
 - This will be replaced with a table of contents
 {:toc}
 
-This Implementation Guide aims to present implementers with a launchpad to propel their MS-05 / IS-12 implementations quickly off the ground.
+This Implementation Guide aims to present implementers with a launchpad to propel their MS-05 / IS-12 / BCP-008 implementations quickly off the ground.
 
 Target specifications:
 
 - [MS-05-01 NMOS Control Architecture](https://specs.amwa.tv/ms-05-01)
 - [MS-05-02 NMOS Control Framework](https://specs.amwa.tv/ms-05-02)
 - [AMWA IS-12 NMOS Control Protocol](https://specs.amwa.tv/is-12)
+- [AMWA BCP-008-01 NMOS Receiver Status](https://specs.amwa.tv/bcp-008-01)
+- [AMWA BCP-008-02 NMOS Sender Status](https://specs.amwa.tv/bcp-008-02)
 
 `Note:` This guide assumes some previous familiarity with two existing NMOS specifications:
 
