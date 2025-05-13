@@ -31,7 +31,6 @@ This is a summary of main areas to consider when starting your implementation.
       - NcClassManager - implement manager which handles model discovery
         - Class discovery - implement class definition discovery for all classes used
         - Datatype discovery - implement datatype definition discovery for all datatypes used
-
   - Device specific - implement when the device employs the specific functionality
     - Status monitors - implement NcStatusMonitor class model which every other status monitor derives from
       - Overall status - all Status monitors offer an overallStatus and overallStatusMessage
