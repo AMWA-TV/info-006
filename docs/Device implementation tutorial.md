@@ -191,6 +191,8 @@ A subsequent non-standard worker would look like this:
 
 ensuring class identity uniqueness.
 
+Alternatively the following diagram shows how a vendor may create a vendor specific Receiver monitor by deriving the standard Receiver monitor class.
+
 | ![Non-standard branching](images/non-standard-branching.png) |
 |:--:|
 | _**Non-standard branching**_ |
