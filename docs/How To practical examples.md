@@ -20,7 +20,7 @@ This HOW-TO also demonstrates to a certain extent how to construct and operate a
 
 ## HOWTO Steps
 
-This HOWTO will present the steps to install, modify and try out the NMOS Control Framework. The HOW-TO uses a fresh Ubuntu 20.04 installation.
+This HOWTO will present the steps to install, modify and try out the NMOS Control Framework. The HOW-TO uses a fresh Ubuntu 24.04 installation.
 
 ### Basic Installation
 
@@ -39,6 +39,10 @@ This section will cover the basic steps to get a mock NMOS Controllable Node run
 ### Non-standard control classes
 
 This section will explain how the NCMD has created a non-standard control class to expose vendor specific functionality in the form of a `GainControl` class.
+
+### Working with Status monitors
+
+This section will explain how to find all Receiver monitors exposed by the NCMD and how to retrieve the `overallStatus` property of one of them.
 
 ## Installing the Mock NMOS Control Device
 
@@ -200,16 +204,8 @@ Next retrieve the members of the root block by sending the following JSON format
     {
       "handle": 1,
       "oid": 1,
-      "methodId": {
-        "level": 1,
-        "index": 1
-      },
-      "arguments": {
-        "id": {
-          "level": 2,
-          "index": 2
-        }
-      }
+      "methodId": {"level": 1, "index": 1},
+      "arguments": { "id": {"level": 2, "index": 2} }
     }
   ]
 }
@@ -229,81 +225,67 @@ The device responds with a JSON containing [NcBlockMemberDescriptor](https://spe
         "status": 200,
         "value": [
           {
+            "description": "The device manager offers information about the product this device is representing",
             "role": "DeviceManager",
             "oid": 2,
             "constantOid": true,
-            "classId": [
-              1,
-              3,
-              1
-            ],
+            "classId": [1, 3, 1],
             "userLabel": "Device manager",
-            "owner": 1,
-            "description": "The device manager offers information about the product this device is representing"
+            "owner": 1
           },
           {
+            "description": "The class manager offers access to control class and data type descriptors",
             "role": "ClassManager",
             "oid": 3,
             "constantOid": true,
-            "classId": [
-              1,
-              3,
-              2
-            ],
+            "classId": [1, 3, 2],
             "userLabel": "Class manager",
-            "owner": 1,
-            "description": "The class manager offers access to control class and data type descriptors"
+            "owner": 1
           },
           {
+            "description": "Receivers block",
             "role": "receivers",
-            "oid": 10,
+            "oid": 9,
             "constantOid": true,
-            "classId": [
-              1,
-              1
-            ],
+            "classId": [1, 1],
             "userLabel": "Receivers",
-            "owner": 1,
-            "description": "Receivers block"
+            "owner": 1
           },
           {
+            "description": "Senders block",
+            "role": "senders",
+            "oid": 11,
+            "constantOid": true,
+            "classId": [1, 1],
+            "userLabel": "Senders",
+            "owner": 1
+          },
+          {
+            "description": "Stereo gain block",
             "role": "stereo-gain",
-            "oid": 31,
+            "oid": 4,
             "constantOid": true,
-            "classId": [
-              1,
-              1
-            ],
+            "classId": [1, 1],
             "userLabel": "Stereo gain",
-            "owner": 1,
-            "description": "Stereo gain block"
+            "owner": 1
           },
           {
-            "role": "ExampleControl",
-            "oid": 111,
+            "description": "Example controls block",
+            "role": "example-controls",
+            "oid": 14,
             "constantOid": true,
-            "classId": [
-              1,
-              2,
-              0,
-              2
-            ],
-            "userLabel": "Example control worker",
-            "owner": 1,
-            "description": "Example control worker"
+            "classId": [1, 1],
+            "userLabel": "Example controls",
+            "owner": 1
           },
           {
+            "description": "Identification beacon",
             "role": "IdentBeacon",
-            "oid": 51,
+            "oid": 13,
             "constantOid": true,
-            "classId": [
-              1,
-              2,
-              2
-            ],
+            "classId": [1, 2, 1],
             "userLabel": "Identification beacon",
-            "owner": 1,
-            "description": "Identification beacon"
+            "owner": 1
           }
         ]
       }
@@ -312,7 +294,7 @@ The device responds with a JSON containing [NcBlockMemberDescriptor](https://spe
 }
 ```
 
-In the response above we can see that the "Stereo gain" member is a block because of its classId of `[1, 1]`. That means we can next retrieve the members of the "Stereo gain" block by sending the following JSON formatted command to the NC-01 WebSocket. In the JSON command the value of `oid` 31 indicates we are directing this command at the "Stereo gain" object.
+In the response above we can see that the "Receivers block" member is a block because of its classId of `[1, 1]`. That means we can next retrieve the members of the "Receivers block" by sending the following JSON formatted command to the NC-01 WebSocket. In the JSON command the value of `oid` 31 indicates we are directing this command at the "Stereo gain" object.
 
 ```json
 {
@@ -320,17 +302,9 @@ In the response above we can see that the "Stereo gain" member is a block becaus
   "commands": [
     {
       "handle": 2,
-      "oid": 31,
-      "methodId": {
-        "level": 1,
-        "index": 1
-      },
-      "arguments": {
-        "id": {
-          "level": 2,
-          "index": 2
-        }
-      }
+      "oid": 9,
+      "methodId": {"level": 1, "index": 1},
+      "arguments": { "id": {"level": 2, "index": 2} }
     }
   ]
 }
@@ -338,7 +312,7 @@ In the response above we can see that the "Stereo gain" member is a block becaus
 
 **Expected Output**
 
-The device responds with a JSON containing the member descriptors for the "Stereo gain" block.
+The device responds with a JSON containing the member descriptors for the "Receivers block".
 
 ```json
 {
@@ -350,30 +324,13 @@ The device responds with a JSON containing the member descriptors for the "Stere
         "status": 200,
         "value": [
           {
-            "role": "channel-gain",
-            "oid": 21,
+            "description": "Receiver monitor worker",
+            "role": "monitor-01",
+            "oid": 10,
             "constantOid": true,
-            "classId": [
-              1,
-              1
-            ],
-            "userLabel": "Channel gain",
-            "owner": 31,
-            "description": "Channel gain block"
-          },
-          {
-            "role": "master-gain",
-            "oid": 24,
-            "constantOid": true,
-            "classId": [
-              1,
-              2,
-              0,
-              1
-            ],
-            "userLabel": "Master gain",
-            "owner": 31,
-            "description": "Master gain"
+            "classId": [1, 2, 2, 1],
+            "userLabel": "Receiver monitor 01",
+            "owner": 9
           }
         ]
       }
@@ -395,16 +352,8 @@ You will now make use of the generic [Get method](https://specs.amwa.tv/ms-05-02
     {
       "handle": 3,
       "oid": 1,
-      "methodId": {
-        "level": 1,
-        "index": 1
-      },
-      "arguments": {
-        "id": {
-          "level": 1,
-          "index": 6
-        }
-      }
+      "methodId": {"level": 1, "index": 1},
+      "arguments": { "id": {"level": 1, "index": 6} }
     }
   ]
 }
@@ -416,17 +365,12 @@ The device responds to the above command with a JSON formatted response containi
 
 ```json
 {
-  "messageType": 3,
+  "messageType": 1,
   "responses": [
-    {
-      "handle": 3,
-      "result": {
-        "status": 200,
-        "value": "Root"
-      }
-    }
+    { "handle": 3, "result": {"status": 200, "value": "Root"} }
   ]
 }
+
 ```
 
 Now we will set the `userLabel` (1p6) to "My mock device HOWTO" and verify the change has taken effect. We will use the generic [Set method](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/NcObject.html#generic-getter-and-setter) for this (level 1, index 2). Copy and paste the following JSON formatted command to set the new value:
@@ -438,20 +382,15 @@ Now we will set the `userLabel` (1p6) to "My mock device HOWTO" and verify the c
     {
       "handle": 4,
       "oid": 1,
-      "methodId": {
-        "level": 1,
-        "index": 2
-      },
+      "methodId": {"level": 1, "index": 2},
       "arguments": {
-        "id": {
-          "level": 1,
-          "index": 6
-        },
+        "id": {"level": 1, "index": 6},
         "value": "My mock device HOWTO"
       }
     }
   ]
 }
+
 ```
 
 **Expected result**
@@ -467,16 +406,8 @@ Now retrieve the `userLabel` property again.
     {
       "handle": 5,
       "oid": 1,
-      "methodId": {
-        "level": 1,
-        "index": 1
-      },
-      "arguments": {
-        "id": {
-          "level": 1,
-          "index": 6
-        }
-      }
+      "methodId": {"level": 1, "index": 1},
+      "arguments": { "id": {"level": 1, "index": 6} }
     }
   ]
 }
@@ -490,13 +421,7 @@ The device returns the new value of "My mock device HOWTO" in the response.
 {
   "messageType": 1,
   "responses": [
-    {
-      "handle": 5,
-      "result": {
-        "status": 200,
-        "value": "My mock device HOWTO"
-      }
-    }
+    { "handle": 5, "result": {"status": 200, "value": "My mock device HOWTO"} }
   ]
 }
 ```
@@ -506,12 +431,7 @@ The device returns the new value of "My mock device HOWTO" in the response.
 Add a subscription to changes on the root block by sending a `Subscription` message. Paste in the JSON formatted command below to subscribe for changes. Note that the message targets the root block by including its `oid` of 1 in the subscriptions array.
 
 ```json
-{
-  "messageType": 3,
-  "subscriptions": [
-    1
-  ]
-}
+{ "messageType": 3, "subscriptions": [1] }
 ```
 
 **Expected result**
@@ -566,15 +486,9 @@ Since you subscribed for changes on the root block you should see notifications 
   "notifications": [
     {
       "oid": 1,
-      "eventId": {
-        "level": 1,
-        "index": 1
-      },
+      "eventId": {"level": 1, "index": 1},
       "eventData": {
-        "propertyId": {
-          "level": 1,
-          "index": 6
-        },
+        "propertyId": {"level": 1, "index": 6},
         "changeType": 0,
         "value": "My mock device HOWTO changed",
         "sequenceItemIndex": null
@@ -593,7 +507,7 @@ In addition you have subscribed to property changes for root block and verified 
 ## Non-standard control classes
 
 In the previous section we have learned how to explore the device model by getting the members of each nested block.
-One of the blocks was the "Stereo gain" block which returned the following member descriptors:
+One of the blocks was the "Stereo gain" block which has the following member descriptors:
 
 ```json
 {
@@ -605,30 +519,22 @@ One of the blocks was the "Stereo gain" block which returned the following membe
         "status": 200,
         "value": [
           {
+            "description": "Channel gain block",
             "role": "channel-gain",
-            "oid": 21,
+            "oid": 5,
             "constantOid": true,
-            "classId": [
-              1,
-              1
-            ],
+            "classId": [1, 1],
             "userLabel": "Channel gain",
-            "owner": 31,
-            "description": "Channel gain block"
+            "owner": 4
           },
           {
+            "description": "Master gain",
             "role": "master-gain",
-            "oid": 24,
+            "oid": 8,
             "constantOid": true,
-            "classId": [
-              1,
-              2,
-              0,
-              1
-            ],
+            "classId": [1, 2, 0, 1],
             "userLabel": "Master gain",
-            "owner": 31,
-            "description": "Master gain"
+            "owner": 4
           }
         ]
       }
@@ -651,30 +557,22 @@ One of the members of our root block discovered in the previous section was the 
         "status": 200,
         "value": [
           {
+            "description": "The device manager offers information about the product this device is representing",
             "role": "DeviceManager",
             "oid": 2,
             "constantOid": true,
-            "classId": [
-              1,
-              3,
-              1
-            ],
+            "classId": [1, 3, 1],
             "userLabel": "Device manager",
-            "owner": 1,
-            "description": "The device manager offers information about the product this device is representing"
+            "owner": 1
           },
           {
+            "description": "The class manager offers access to control class and data type descriptors",
             "role": "ClassManager",
             "oid": 3,
             "constantOid": true,
-            "classId": [
-              1,
-              3,
-              2
-            ],
+            "classId": [1, 3, 2],
             "userLabel": "Class manager",
-            "owner": 1,
-            "description": "The class manager offers access to control class and data type descriptors"
+            "owner": 1
           },
           ...
         ]
@@ -693,15 +591,8 @@ The [Class Manager](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/Managers
     {
       "handle": 7,
       "oid": 3,
-      "methodId": {
-        "level": 3,
-        "index": 1
-      },
-      "arguments":
-      {
-        "classId": [1, 2, 0, 1],
-        "includeInherited": false
-      }
+      "methodId": {"level": 3, "index": 1},
+      "arguments": { "classId": [1, 2, 0, 1], "includeInherited": false }
     }
   ]
 }
@@ -721,28 +612,20 @@ The device returns the class descriptor in the response. This contains a name, d
         "status": 200,
         "value": {
           "description": "GainControl class descriptor",
-          "classId": [
-            1,
-            2,
-            0,
-            1
-          ],
+          "classId": [1, 2, 0, 1],
           "name": "GainControl",
           "fixedRole": null,
           "properties": [
             {
               "description": "Gain value",
-              "id": {
-                "level": 3,
-                "index": 1
-              },
+              "id": {"level": 3, "index": 1},
               "name": "gainValue",
               "typeName": "NcFloat32",
               "isReadOnly": false,
               "isNullable": false,
               "isSequence": false,
-              "isDeprecated": false,
-              "constraints": null
+              "constraints": null,
+              "isDeprecated": false
             }
           ],
           "methods": [],
@@ -758,7 +641,7 @@ This reveals that our "Master gain" object is an instance of the `GainControl` n
 
 As exemplified in the previous section we can now use the `Get` and `Set` methods to retrieve and set the `gainValue` property.
 
-Getting the value by targeting the "Master gain" `oid` of 24 and its `gainValue` property with level 3 and index 1:
+Getting the value by targeting the "Master gain" `oid` of 8 and its `gainValue` property with level 3 and index 1:
 
 ```json
 {
@@ -766,17 +649,9 @@ Getting the value by targeting the "Master gain" `oid` of 24 and its `gainValue`
   "commands": [
     {
       "handle": 8,
-      "oid": 24,
-      "methodId": {
-        "level": 1,
-        "index": 1
-      },
-      "arguments": {
-        "id": {
-          "level": 3,
-          "index": 1
-        }
-      }
+      "oid": 8,
+      "methodId": {"level": 1, "index": 1},
+      "arguments": { "id": {"level": 3, "index": 1} }
     }
   ]
 }
@@ -788,13 +663,7 @@ Gives us the following response where the `gainValue` is 0.
 {
   "messageType": 1,
   "responses": [
-    {
-      "handle": 8,
-      "result": {
-        "status": 200,
-        "value": 0
-      }
-    }
+    { "handle": 8, "result": {"status": 200, "value": 0} }
   ]
 }
 ```
@@ -807,7 +676,7 @@ And setting the value to 21
   "commands": [
     {
       "handle": 9,
-      "oid": 24,
+      "oid": 8,
       "methodId": {
         "level": 1,
         "index": 2
@@ -827,17 +696,7 @@ And setting the value to 21
 Gives us the following response
 
 ```json
-{
-  "messageType": 1,
-  "responses": [
-    {
-      "handle": 9,
-      "result": {
-        "status": 200
-      }
-    }
-  ]
-}
+{"messageType":1,"responses":[{"handle":9,"result":{"status":200}}]}
 ```
 
 And Getting the value again returns
@@ -846,13 +705,7 @@ And Getting the value again returns
 {
   "messageType": 1,
   "responses": [
-    {
-      "handle": 10,
-      "result": {
-        "status": 200,
-        "value": 21
-      }
-    }
+    { "handle": 8, "result": {"status": 200, "value": 21} }
   ]
 }
 ```
@@ -860,13 +713,7 @@ And Getting the value again returns
 Similar to the previous section we can now subscribe to the "Master gain" for property changes by adding its `oid` to our subscriptions list.
 
 ```json
-{
-  "messageType": 3,
-  "subscriptions": [
-    1,
-    24
-  ]
-}
+{ "messageType": 3, "subscriptions": [1, 8] }
 ```
 
 A visual diagram which summarizes the steps taken in the mock device to implement the `GainControl` is available below.
@@ -882,9 +729,154 @@ The full implementation of the `GainControl` can be viewed in the code base of t
 In this section you learned how non-standard control classes are created and exposed by a device in order to include vendor specific functionality.
 You saw how simple inheritance can create additional capabilities whilst maintaining discoverability, subscription for change events and control over a standard WebSocket.
 
+## Working with Status monitors
+
+The NCMD implements both [Receiver monitors](https://specs.amwa.tv/bcp-008-01/) and [Sender monitors](https://specs.amwa.tv/bcp-008-02/).
+
+The following steps will show you how to find all Receiver monitors and how to retrieve the current `overallStatus` property of one of them.
+
+Please note these steps can be used in a similar fashion when working with Sender monitors or other variants of Status monitors.
+
+We can use the [FindMembersByClassId (2m4)](https://specs.amwa.tv/ms-05-02/latest/docs/Blocks.html#search-methods) exposed by the root block to find all receiver monitors.  
+In the arguments we need to provide the `classId` for our receiver monitor (1.2.2.1), `includeDerived` to give us full descriptors and a `recurse` flag to recursively search through all device model blocks.
+
+```json
+{
+  "messageType": 0,
+  "commands": [
+    {
+      "handle": 9,
+      "oid": 1,
+      "methodId": {"level": 2, "index": 4},
+      "arguments": { "classId": [1, 2, 2, 1], "includeDerived": true, "recurse": true }
+    }
+  ]
+}
+```
+
+The response returns
+
+```json
+{
+  "messageType": 1,
+  "responses": [
+    {
+      "handle": 9,
+      "result": {
+        "status": 200,
+        "value": [
+          {
+            "description": "Receiver monitor worker",
+            "role": "monitor-01",
+            "oid": 10,
+            "constantOid": true,
+            "classId": [1, 2, 2, 1],
+            "userLabel": "Receiver monitor 01",
+            "owner": 9
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+This will give us the descriptors of all Receiver monitors in the device. These descriptors have everything we need including their roles, oids and owner oids.
+
+We could also attempt to be more generic and try to list all Status monitors and any monitors which derive from them. This means repeating the command from above with a classId of `[1, 2, 2]`.
+
+```json
+{
+  "messageType": 0,
+  "commands": [
+    {
+      "handle": 9,
+      "oid": 1,
+      "methodId": {"level": 2, "index": 4},
+      "arguments": {
+        "classId": [1, 2, 2],
+        "includeDerived": true,
+        "recurse": true
+      }
+    }
+  ]
+}
+```
+
+Which returns all monitors
+
+```json
+{
+  "messageType": 1,
+  "responses": [
+    {
+      "handle": 9,
+      "result": {
+        "status": 200,
+        "value": [
+          {
+            "description": "Receiver monitor worker",
+            "role": "monitor-01",
+            "oid": 10,
+            "constantOid": true,
+            "classId": [1, 2, 2, 1],
+            "userLabel": "Receiver monitor 01",
+            "owner": 9
+          },
+          {
+            "description": "Sender monitor worker",
+            "role": "monitor-01",
+            "oid": 12,
+            "constantOid": true,
+            "classId": [1, 2, 2, 2],
+            "userLabel": "Sender monitor 01",
+            "owner": 11
+          }
+        ]
+      }
+    }
+  ]
+}
+```
+
+Now we can attempt to retrieve the `overallStatus (level 3, index 1)` property of our receiver monitor (oid 10) by again making use of the generic [Get method](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/NcObject.html#generic-getter-and-setter) (level 1, index 1).
+
+```json
+{
+  "messageType": 0,
+  "commands": [
+    {
+      "handle": 10,
+      "oid": 10,
+      "methodId": {"level": 1, "index": 1},
+      "arguments": { "id": {"level": 3, "index": 1} }
+    }
+  ]
+}
+```
+
+Which returns
+
+```json
+{
+  "messageType": 1,
+  "responses": [
+    { "handle": 10, "result": {"status": 200, "value": 0} }
+  ]
+}
+```
+
+meaning our Receiver monitor `overallStatus` is currently `Inactive (0)`.
+
+Similar to examples above we can now subscribe to this receiver monitor object by adding its oid (10) to our subscription list. Then, we would receive notifications whenever any of the object's property change.
+
+### Section conclusions
+
+In this section you learned how Receiver monitors and Status monitors can be found by using the `FindMembersByClassId` method. You have also seen how you can retrieve the `overallStatus` property of one of the receiver monitors.
+
 ## Overall conclusions
 
-This HOW-TO has shown how to work with the NMOS Control Framework. You have explored a simple NMOS Device that uses NMOS IS-04 to advertise its control endpoint with an NMOS RDS. You have worked with the IS-12 protocol to discover a non-standard `GainControl` used to express the "Master gain" inside a "Stereo gain" block.
+This HOW-TO has shown how to work with the NMOS Control Framework. You have explored a simple NMOS Device that uses NMOS IS-04 to advertise its control endpoint with an NMOS RDS. You have worked with the IS-12 protocol to discover a non-standard `GainControl` used to express the "Master gain" inside a "Stereo gain" block. You have also seen how to find Receiver monitors and Status monitors and how to retrieve information they present.
 
 ## Further Directions
 
