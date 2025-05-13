@@ -108,11 +108,19 @@ Different devices will need to use different workers depending on their function
 
 Indeed, sometimes devices might also need to expose vendor specific functionality by creating non-standard worker classes (see [Non-standard classes](#non-standard-classes-used-to-model-vendor-specific-functionality)).
 
-#### Context identity mapping (Receiver monitor example)
+#### Status monitors
+
+[BCP-008-01](https://specs.amwa.tv/bcp-008-01/) and [BCP-008-01](https://specs.amwa.tv/bcp-008-02/) define specialised NcReceiverMonitor and NcSenderMonitor worker classes which report relevant statuses, status messages and status transition counters for relevant domains like Connectivity, Synchronization or Stream validation.
+
+Objects implementing these classes MUST publish the IS-04 resource identity they are monitoring (Sender or Receiver) through the [context identity mapping mechanism](#context-identity-mapping).
+
+Sender and Receiver monitors derive from the base class NcStatusMonitor which specified an `overallStatus` property. This property combines the specific domain statuses of a monitor into a single status which can be more easily observed and displayed by a simple client.
+
+#### Context identity mapping
 
 [MS-05-02](https://specs.amwa.tv/ms-05-02/branches/v1.0.x/docs/NcObject.html#touchpoints) specifies an identity mapping mechanism available in the base `NcObject` class. This touchpoint mechanism can be used to associate identities from outside contexts with entities inside the control structure of the device.
 
-One such example is the [ReceiverMonitor](https://specs.amwa.tv/nmos-control-feature-sets/branches/main/monitoring/#ncreceivermonitor) control class which is used to express connection and payload statuses for an attached stream receiver.
+Examples include [Receiver monitors](https://specs.amwa.tv/bcp-008-01/branches/v1.0-dev/docs/Overview.html#touchpoints-and-is-04-receivers) and [Sender monitors](https://specs.amwa.tv/bcp-008-02/branches/v1.0-dev/docs/Overview.html#touchpoints-and-is-04-senders) which is express domain health statuses for an attached stream receiver or sender.
 
 This allows for a `Receiver monitor` to be associated with a specific [NMOS IS-04](https://specs.amwa.tv/is-04/) receiver.
 
