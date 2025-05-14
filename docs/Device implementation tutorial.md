@@ -9,45 +9,46 @@ This section covers the basis for quickly building an MS-05 / IS-12 / BCP-008 de
 
 ## Quick checklist
 
-This is a summary of main areas to consider when starting your implementation.
+This is a summary of the main areas to consider when starting your implementation.
 
 - Implement control classes
-  - Minimum requirements
-    - Objects - implement NcObject base class model which every other class derives from
-      - Oid - all objects have an oid identifier
-      - Role - all objects have a role identifier (their role within their block owner)
-      - ClassId - all objects have a classId
-      - Get method - implement generic Get method
-      - Set method - implement generic Set method
-      - Property changed event - add ability for each object to generate property changed events whenever one of its properties changes
-    - Blocks - implement NcBlock class model which every block instance uses
-      - Members - all blocks have members
-      - Find members - all blocks have Find methods to retrieve members by role path or classId
-      - Root block - Implement top most container of all other objects
-        - Fixed role - Root block has a fixed role of `root`
-        - Fixed oid - Root block has a fixed oid of `1`
-    - Managers
-      - NcDeviceManager - implement manager which contains basic device information
-      - NcClassManager - implement manager which handles model discovery
-        - Class discovery - implement class definition discovery for all classes used
-        - Datatype discovery - implement datatype definition discovery for all datatypes used
-  - Device specific - implement when the device employs the specific functionality
-    - Status monitors - implement NcStatusMonitor class model which every other status monitor derives from
-      - Overall status - all Status monitors offer an overallStatus and overallStatusMessage
-      - Sender monitors - implement NcSenderMonitor class model
-        - Domain status reporting - report relevant statuses, status messages and status transition counters for each relevant domain [ Connectivity, Synchronization, Stream validation ]
-      - Receiver monitors - implement NcReceiverMonitor class model
-        - Domain status reporting - report relevant statuses, status messages and status transition counters for each relevant domain [ Connectivity, Synchronization, Stream validation ]
-    - Nested blocks - Implement other non-root block instances to better organise related objects (e.g. Sender monitors are inside a Senders block and Receiver monitors are inside a Receivers block)
-    - Non-standard classes
-      - Vendor specific workers - Vendor specific classes which derive from NcWorker
+  - Objects - implement NcObject base class model which every other class derives from
+    - Oid - all objects have an oid identifier
+    - Role - all objects have a role identifier (their role within their block owner)
+    - ClassId - all objects have a classId
+    - Get method - implement generic Get method
+    - Set method - implement generic Set method
+    - Property changed event - add ability for each object to generate property changed events whenever one of its properties changes
+  - Blocks - implement NcBlock class model which every block instance uses
+    - Members - all blocks have members
+    - Find members - all blocks have Find methods to retrieve members by role path or classId
+    - Root block - Implement top most container of all other objects
+      - Fixed role - Root block has a fixed role of `root`
+      - Fixed oid - Root block has a fixed oid of `1`
+  - Managers
+    - NcDeviceManager - implement manager which contains basic device information
+    - NcClassManager - implement manager which handles model discovery
+      - Class discovery - implement class definition discovery for all classes used
+      - Datatype discovery - implement datatype definition discovery for all datatypes used
 - Implement control protocol
-  - Minimum requirements
-    - Endpoint advertisement - Advertise the IS-12 control endpoint in the IS-04 device
-    - Mapping commands and returning responses - Mapping commands to objects implementing a particular class and returning appropriate responses
-    - Subscriptions, events and notifications - Implementing the Subscription command/response and generating Notification messages for property changed events of objects subscribed
+  - Endpoint advertisement - Advertise the IS-12 control endpoint in the IS-04 device
+  - Mapping commands and returning responses - Mapping commands to objects implementing a particular class and returning appropriate responses
+  - Subscriptions, events and notifications - Implementing the Subscription command/response and generating Notification messages for property changed events of objects subscribed
 
-Further detail for each step is then included in the [Guidance](#guidance) section.
+The following are other important areas for devices which employ specific functionality.
+
+- Device specific - implement when the device employs the specific functionality
+  - Status monitors - implement NcStatusMonitor class model which every other status monitor derives from
+    - Overall status - all Status monitors offer an overallStatus and overallStatusMessage
+    - Sender monitors - implement NcSenderMonitor class model
+      - Domain status reporting - report relevant statuses, status messages and status transition counters for each relevant domain [ Connectivity, Synchronization, Stream validation ]
+    - Receiver monitors - implement NcReceiverMonitor class model
+      - Domain status reporting - report relevant statuses, status messages and status transition counters for each relevant domain [ Connectivity, Synchronization, Stream validation ]
+  - Nested blocks - Implement other non-root block instances to better organise related objects (e.g. Sender monitors are inside a Senders block and Receiver monitors are inside a Receivers block)
+  - Non-standard classes
+    - Vendor specific workers - Vendor specific classes which derive from NcWorker
+
+Further detail for each step is included in the [Guidance](#guidance) section.
 
 ## Guidance
 
