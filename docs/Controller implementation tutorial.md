@@ -40,9 +40,9 @@ The following are other important areas relevant when working with devices which
   - Status monitors - treatment for NcStatusMonitor class model which every other status monitor derives from
     - Overall status - ability to consume overallStatus and overallStatusMessage properties
     - Sender monitors - treatment for NcSenderMonitor class model
-      - Domain status reporting - ability to consume relevant statuses, status messages and status transition counters for each relevant domain [ Connectivity, Synchronization, Stream validation ]
+      - Domain status reporting - ability to consume relevant statuses, status messages and status transition counters for each relevant domain (Connectivity, Synchronization, Stream validation)
     - Receiver monitors - treatment for NcReceiverMonitor class model
-      - Domain status reporting - ability to consume relevant statuses, status messages and status transition counters for each relevant domain [ Connectivity, Synchronization, Stream validation ]
+      - Domain status reporting - ability to consume relevant statuses, status messages and status transition counters for each relevant domain (Connectivity, Synchronization, Stream validation)
   - Non-standard classes
     - Vendor specific workers - Ability to work generically with vendor specific classes by using the Class manager to discover their class definition and then interact with the properties and methods advertised
 
