@@ -5,7 +5,48 @@
 - This will be replaced with a table of contents
 {:toc}
 
-This section covers the basis for quickly building an MS-05 / IS-12 controller implementation.
+This section covers the basis for quickly building an MS-05 / IS-12 / BCP-008 controller implementation.
+
+## Quick checklist
+
+This is a summary of the main areas to consider when starting your implementation.
+
+- Add ability to consume control classes
+  - Objects - treatment for NcObject base class model which every other class derives from
+    - Oid - all objects have an oid identifier
+    - Role - all objects have a role identifier (their role within their block owner)
+    - ClassId - all objects have a classId
+    - Get method - treatment generic Get method
+    - Set method - treatment generic Set method
+  - Blocks - treatment for NcBlock class model which every block instance uses
+    - Members - all blocks have members which can be iterated recursively to discover the whole device structure
+    - Find members - all blocks have Find methods to retrieve members by role path or classId
+    - Root block - treatment for working with the root block (top most container of all other objects)
+      - Fixed role - Root block has a fixed role of `root`
+      - Fixed oid - Root block has a fixed oid of `1`
+  - Managers
+    - NcDeviceManager - treatment for working with the Device manager in order to retrieve basic device information
+    - NcClassManager - treatment for working with the Class manager in order to handle model discovery
+      - Class discovery - perform definition discovery for all classes used
+      - Datatype discovery - perform datatype definition discovery for all datatypes used
+- Implement control protocol
+  - Endpoint advertisement - Discover the IS-12 control endpoint in the IS-04 device
+  - Issue commands and consume responses - Issue commands to objects targeted by oids and react to responses
+  - Subscriptions, events and notifications - Issue Subscription command, and consume Notification messages for property changed events of objects subscribed
+
+The following are other important areas relevant when working with devices which employ specific functionality.
+
+- Device specific - treatment for devices which employ the specific functionality
+  - Status monitors - treatment for NcStatusMonitor class model which every other status monitor derives from
+    - Overall status - ability to consume overallStatus and overallStatusMessage properties
+    - Sender monitors - treatment for NcSenderMonitor class model
+      - Domain status reporting - ability to consume relevant statuses, status messages and status transition counters for each relevant domain [ Connectivity, Synchronization, Stream validation ]
+    - Receiver monitors - treatment for NcReceiverMonitor class model
+      - Domain status reporting - ability to consume relevant statuses, status messages and status transition counters for each relevant domain [ Connectivity, Synchronization, Stream validation ]
+  - Non-standard classes
+    - Vendor specific workers - Ability to work generically with vendor specific classes by using the Class manager to discover their class definition and then interact with the properties and methods advertised
+
+Further detail for each step is included in the [Guidance](#guidance) section.
 
 ## Guidance
 
