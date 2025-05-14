@@ -36,15 +36,14 @@ This is a summary of the main areas to consider when starting your implementatio
 
 The following are other important areas relevant when working with devices which employ specific functionality.
 
-- Device specific - treatment for devices which employ the specific functionality
-  - Status monitors - treatment for NcStatusMonitor class model which every other status monitor derives from
-    - Overall status - ability to consume overallStatus and overallStatusMessage properties
-    - Sender monitors - treatment for NcSenderMonitor class model
-      - Domain status reporting - ability to consume relevant statuses, status messages and status transition counters for each relevant domain (Connectivity, Synchronization, Stream validation)
-    - Receiver monitors - treatment for NcReceiverMonitor class model
-      - Domain status reporting - ability to consume relevant statuses, status messages and status transition counters for each relevant domain (Connectivity, Synchronization, Stream validation)
-  - Non-standard classes
-    - Vendor specific workers - Ability to work generically with vendor specific classes by using the Class manager to discover their class definition and then interact with the properties and methods advertised
+- Status monitors - treatment for NcStatusMonitor class model which every other status monitor derives from
+  - Overall status - ability to consume overallStatus and overallStatusMessage properties
+  - Sender monitors - treatment for NcSenderMonitor class model
+    - Domain status reporting - ability to consume relevant statuses, status messages and status transition counters for each relevant domain (Connectivity, Synchronization, Stream validation)
+  - Receiver monitors - treatment for NcReceiverMonitor class model
+    - Domain status reporting - ability to consume relevant statuses, status messages and status transition counters for each relevant domain (Connectivity, Synchronization, Stream validation)
+- Non-standard classes
+  - Vendor specific workers - Ability to work generically with vendor specific classes by using the Class manager to discover their class definition and then interact with the properties and methods advertised
 
 Further detail for each step is included in the [Guidance](#guidance) section.
 

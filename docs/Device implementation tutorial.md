@@ -37,16 +37,15 @@ This is a summary of the main areas to consider when starting your implementatio
 
 The following are other important areas for devices which employ specific functionality.
 
-- Device specific - implement when the device employs the specific functionality
-  - Status monitors - implement NcStatusMonitor class model which every other status monitor derives from
-    - Overall status - all Status monitors offer an overallStatus and overallStatusMessage
-    - Sender monitors - implement NcSenderMonitor class model
-      - Domain status reporting - report relevant statuses, status messages and status transition counters for each relevant domain (Connectivity, Synchronization, Stream validation)
-    - Receiver monitors - implement NcReceiverMonitor class model
-      - Domain status reporting - report relevant statuses, status messages and status transition counters for each relevant domain (Connectivity, Synchronization, Stream validation)
-  - Nested blocks - Implement other non-root block instances to better organise related objects (e.g. Sender monitors are inside a Senders block and Receiver monitors are inside a Receivers block)
-  - Non-standard classes
-    - Vendor specific workers - Vendor specific classes which derive from NcWorker
+- Status monitors - implement NcStatusMonitor class model which every other status monitor derives from
+  - Overall status - all Status monitors offer an overallStatus and overallStatusMessage
+  - Sender monitors - implement NcSenderMonitor class model
+    - Domain status reporting - report relevant statuses, status messages and status transition counters for each relevant domain (Connectivity, Synchronization, Stream validation)
+  - Receiver monitors - implement NcReceiverMonitor class model
+    - Domain status reporting - report relevant statuses, status messages and status transition counters for each relevant domain (Connectivity, Synchronization, Stream validation)
+- Nested blocks - Implement other non-root block instances to better organise related objects (e.g. Sender monitors are inside a Senders block and Receiver monitors are inside a Receivers block)
+- Non-standard classes
+  - Vendor specific workers - Vendor specific classes which derive from NcWorker
 
 Further detail for each step is included in the [Guidance](#guidance) section.
 
