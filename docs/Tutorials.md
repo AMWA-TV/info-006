@@ -7,7 +7,7 @@
 
 This Implementation Guide aims to present implementers with a launchpad to propel their MS-05 / IS-12 / BCP-008 implementations quickly off the ground.
 
-Target specifications:
+The guide targets the following specifications:
 
 - [MS-05-01 NMOS Control Architecture](https://specs.amwa.tv/ms-05-01)
 - [MS-05-02 NMOS Control Framework](https://specs.amwa.tv/ms-05-02)
@@ -15,12 +15,14 @@ Target specifications:
 - [AMWA BCP-008-01 NMOS Receiver Status](https://specs.amwa.tv/bcp-008-01)
 - [AMWA BCP-008-02 NMOS Sender Status](https://specs.amwa.tv/bcp-008-02)
 
-`Note:` This guide assumes some previous familiarity with two existing NMOS specifications:
+Guidance sections will include links to relevant sections of these specifications.
+
+This guide also assumes some previous familiarity with two existing NMOS specifications:
 
 - [AMWA IS-04 NMOS Discovery and Registration](https://specs.amwa.tv/is-04)
 - [AMWA IS-05 NMOS Device Connection Management](https://specs.amwa.tv/is-05)
 
-Resources:
+The following resources will be used in later sections of this guide:
 
 - [NMOS Device control mock](https://github.com/AMWA-TV/nmos-device-control-mock)
 - [Browser WebSocket extensions](https://chrome.google.com/webstore/search/websocket)
