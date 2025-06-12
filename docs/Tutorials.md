@@ -27,7 +27,7 @@ The following resources will be used in later sections of this guide:
 - [NMOS Device control mock](https://github.com/AMWA-TV/nmos-device-control-mock)
 - [Browser WebSocket extensions](https://chrome.google.com/webstore/search/websocket)
 
-A comprehensive testing tool is available in the form of the [NMOS API Testing Tool](https://github.com/AMWA-TV/nmos-testing).
+A comprehensive testing tool is available in the form of the [NMOS API Testing Tool](https://specs.amwa.tv/nmos-testing).
 
 An open source media node framework is available in the form of [nmos-cpp](https://github.com/sony/nmos-cpp).
 
