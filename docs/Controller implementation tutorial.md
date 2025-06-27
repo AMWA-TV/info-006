@@ -166,7 +166,7 @@ For full controller requirements check the relevant sections in [BCP-008-01](htt
 
 Examples include [Receiver monitors](https://specs.amwa.tv/bcp-008-01/branches/v1.0-dev/docs/Overview.html#touchpoints-and-is-04-receivers) and [Sender monitors](https://specs.amwa.tv/bcp-008-02/branches/v1.0-dev/docs/Overview.html#touchpoints-and-is-04-senders) which is express domain health statuses for an attached stream receiver or sender.
 
-This allows for a `Receiver monitor` to be associated with a specific [NMOS IS-04](https://specs.amwa.tv/is-04/) receiver.
+This allows a `Receiver monitor` to be associated with a specific [NMOS IS-04](https://specs.amwa.tv/is-04/) receiver.
 
 A controller is expected to decode touchpoint information where available and associate identities if it has access to the data domains exposed (For example a controller would be able to identify which NMOS IS-04 receiver is associated with a given `Receiver monitor` object).
 
