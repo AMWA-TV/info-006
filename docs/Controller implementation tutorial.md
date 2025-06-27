@@ -5,7 +5,7 @@
 - This will be replaced with a table of contents
 {:toc}
 
-This section covers the basis for quickly building an MS-05 / IS-12 / BCP-008 controller implementation.
+This section covers quickly building an MS-05 / IS-12 / BCP-008 controller implementation.
 
 ## Quick checklist
 
