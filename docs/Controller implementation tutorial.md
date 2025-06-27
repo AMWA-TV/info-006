@@ -150,7 +150,7 @@ A controller is expected to [Subscribe](https://specs.amwa.tv/is-12/latest/docs/
 
 #### Status monitors
 
-[BCP-008-01](https://specs.amwa.tv/bcp-008-01/) and [BCP-008-01](https://specs.amwa.tv/bcp-008-02/) define specialised NcReceiverMonitor and NcSenderMonitor worker classes which report relevant statuses, status messages and status transition counters for relevant domains like Connectivity, Synchronization or Stream validation.
+[BCP-008-01](https://specs.amwa.tv/bcp-008-01/) and [BCP-008-01](https://specs.amwa.tv/bcp-008-02/) define specialised NcReceiverMonitor and NcSenderMonitor worker classes which report statuses, status messages and status transition counters for relevant domains like Connectivity, Synchronization or Stream validation.
 
 Objects implementing these classes publish the IS-04 resource identity they are monitoring (Sender or Receiver) through the [context identity mapping mechanism](#context-identity-mapping).
 
