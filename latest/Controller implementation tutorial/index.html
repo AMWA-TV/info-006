@@ -1,0 +1,729 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://specs.amwa.tv/new/info-006/latest/Controller%20implementation%20tutorial/">
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="zensical-0.0.62">
+    
+    
+      
+        <title>Controller implementation tutorial - AMWA INFO-006: Implementation Guide for NMOS Device Control & Monitoring</title>
+      
+    
+    
+      
+        
+      
+      <link rel="stylesheet" href="../assets/stylesheets/modern/main.ce62732f.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,500,500i,700,700i%7CJetBrains+Mono:400,400i,700,700i&amp;display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+      <link rel="stylesheet" href="../stylesheets/amwa-branding.css">
+    
+    <script>__md_scope=new URL("..",location),__md_scope.pathname.endsWith("/")||(__md_scope=new URL(__md_scope.pathname+"/",location)),__md_hash=e=>[...e].reduce(((e,t)=>(e<<5)-e+t.charCodeAt(0)),0),__md_get=(e,t=localStorage,_=__md_scope)=>JSON.parse(t.getItem(_.pathname+"."+e)),__md_set=(e,t,_=localStorage,a=__md_scope)=>{try{_.setItem(a.pathname+"."+e,JSON.stringify(t))}catch(e){}},document.documentElement.setAttribute("data-platform",navigator.platform)</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer" aria-label="Navigation"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#controller-implementation-tutorial" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="./.." title="AMWA INFO-006: Implementation Guide for NMOS Device Control &amp; Monitoring" class="md-header__button md-logo" aria-label="AMWA INFO-006: Implementation Guide for NMOS Device Control & Monitoring" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-book-open" viewBox="0 0 24 24"><path d="M12 5v16M20.001 19A2 2 0 0 0 22 17V5a2 2 0 0 0-1.999-2L16 3.002A5 5 0 0 0 12 5a5 5 0 0 0-4-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 1.999 2H8a5 5 0 0 1 4 2 5 5 0 0 1 4-2z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer" aria-label="Navigation">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-menu" viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h16"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            AMWA INFO-006: Implementation Guide for NMOS Device Control & Monitoring
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Controller implementation tutorial
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search" aria-label="Search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-search" viewBox="0 0 24 24"><path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog" aria-label="Search">
+  <button type="button" class="md-search__button">
+    Search
+  </button>
+</div>
+      
+    
+    <div class="md-header__source">
+      
+        <a href="https://github.com/AMWA-TV/info-006" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AMWA-TV/info-006
+  </div>
+</a>
+      
+    </div>
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="./.." title="AMWA INFO-006: Implementation Guide for NMOS Device Control &amp; Monitoring" class="md-nav__button md-logo" aria-label="AMWA INFO-006: Implementation Guide for NMOS Device Control & Monitoring" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-book-open" viewBox="0 0 24 24"><path d="M12 5v16M20.001 19A2 2 0 0 0 22 17V5a2 2 0 0 0-1.999-2L16 3.002A5 5 0 0 0 12 5a5 5 0 0 0-4-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 1.999 2H8a5 5 0 0 1 4 2 5 5 0 0 1 4-2z"/></svg>
+
+    </a>
+    AMWA INFO-006: Implementation Guide for NMOS Device Control & Monitoring
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/AMWA-TV/info-006" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.3.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2026 Fonticons, Inc.--><path fill="currentColor" d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    AMWA-TV/info-006
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="./.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+  AMWA INFO-006: Implementation Guide for NMOS Device Control &amp; Monitoring
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  
+                    
+                    
+                    
+                      
+                    
+                    
+                      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+                      <div class="md-sidebar-button__wrapper">
+                        <label class="md-sidebar-button" for="__toc"></label>
+                      </div>
+                    
+                  
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--secondary" aria-label="On this page">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      On this page
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#quick-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Quick checklist
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#guidance" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Guidance
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Guidance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#exploring-the-device-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Exploring the device model
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Exploring the device model">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#control-class-definition-discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Control class definition discovery
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-type-definition-discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Data type definition discovery
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discovering-the-device-control-endpoint-in-nmos-is-04" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Discovering the device control endpoint (in NMOS IS-04)
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sending-commands-and-receiving-responses" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Sending commands and receiving responses
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#subscribing-and-receiving-notifications" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Subscribing and receiving notifications
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Subscribing and receiving notifications">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#status-monitors" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Status monitors
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#context-identity-mapping" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Context identity mapping
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discovering-non-standard-models-used-to-model-vendor-specific-functionality" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Discovering non-standard models used to model vendor specific functionality
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-to" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        How to
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+  
+  
+
+
+<h1 id="controller-implementation-tutorial">Controller implementation tutorial</h1>
+<p>This section covers quickly building an MS-05 / IS-12 / BCP-008 controller implementation.</p>
+<h2 id="quick-checklist">Quick checklist</h2>
+<p>This is a summary of the main areas to consider when starting your implementation.</p>
+<ul>
+<li>Add ability to consume control classes</li>
+<li>Objects - treatment for NcObject base class model which every other class derives from<ul>
+<li>Oid - all objects have an oid identifier</li>
+<li>Role - all objects have a role identifier (their role within their block owner)</li>
+<li>ClassId - all objects have a classId</li>
+<li>Get method - treatment generic Get method</li>
+<li>Set method - treatment generic Set method</li>
+</ul>
+</li>
+<li>Blocks - treatment for NcBlock class model which every block instance uses<ul>
+<li>Members - all blocks have members which can be iterated recursively to discover the whole device structure</li>
+<li>Find members - all blocks have Find methods to retrieve members by role path or classId</li>
+<li>Root block - treatment for working with the root block (top most container of all other objects)</li>
+<li>Fixed role - Root block has a fixed role of <code>root</code></li>
+<li>Fixed oid - Root block has a fixed oid of <code>1</code></li>
+</ul>
+</li>
+<li>Managers<ul>
+<li>NcDeviceManager - treatment for working with the Device manager in order to retrieve basic device information</li>
+<li>NcClassManager - treatment for working with the Class manager in order to handle model discovery</li>
+<li>Class discovery - perform definition discovery for all classes used</li>
+<li>Datatype discovery - perform datatype definition discovery for all datatypes used</li>
+</ul>
+</li>
+<li>Implement control protocol</li>
+<li>Endpoint advertisement - Discover the IS-12 control endpoint in the IS-04 device</li>
+<li>Issue commands and consume responses - Issue commands to objects targeted by oids and react to responses</li>
+<li>Subscriptions, events and notifications - Issue Subscription command, and consume Notification messages for property changed events of objects subscribed</li>
+</ul>
+<p>The following are other important areas relevant when working with devices which employ specific functionality.</p>
+<ul>
+<li>Status monitors - treatment for NcStatusMonitor class model which every other status monitor derives from</li>
+<li>Overall status - ability to consume overallStatus and overallStatusMessage properties</li>
+<li>Sender monitors - treatment for NcSenderMonitor class model<ul>
+<li>Domain status reporting - ability to consume relevant statuses, status messages and status transition counters for each relevant domain (Connectivity, Synchronization, Stream validation)</li>
+</ul>
+</li>
+<li>Receiver monitors - treatment for NcReceiverMonitor class model<ul>
+<li>Domain status reporting - ability to consume relevant statuses, status messages and status transition counters for each relevant domain (Connectivity, Synchronization, Stream validation)</li>
+</ul>
+</li>
+<li>Non-standard classes</li>
+<li>Vendor specific workers - Ability to work generically with vendor specific classes by using the Class manager to discover their class definition and then interact with the properties and methods advertised</li>
+</ul>
+<p>Further detail for each step is included in the <a href="#guidance">Guidance</a> section.</p>
+<h2 id="guidance">Guidance</h2>
+<p>This section provides guidance in select focus areas required for controller implementations.</p>
+<p>The basic controller workflow follows the diagram below where individual steps are detailed in the following subsections.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;"><img alt="Basic controller sequence" src="../images/basic-controller-sequence.png" /></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><em><strong>Basic controller sequence</strong></em></td>
+</tr>
+</tbody>
+</table>
+<h3 id="exploring-the-device-model">Exploring the device model</h3>
+<p>As per the <a href="https://specs.amwa.tv/ms-05-02/latest/docs/Blocks.html">MS-05-02</a> specification all MS-05 / IS-12 devices expose a structure starting with the root block which always has an <code>oid</code> of 1.</p>
+<p>The root block, among other things holds <a href="https://specs.amwa.tv/ms-05-02/latest/docs/Managers.html">Managers</a> which are special singleton control classes which collate information which pertains to the entire device.</p>
+<p>A minimal implementation of a device has at least two managers listed in the root block:</p>
+<ul>
+<li>Device manager</li>
+<li>Class manager</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;"><img alt="Typical device structure" src="../images/typical-device-structure.png" /></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><em><strong>Typical device structure</strong></em></td>
+</tr>
+</tbody>
+</table>
+<p>A controller is expected to <a href="https://specs.amwa.tv/is-12/latest/docs/Exploring_the_device_model.html">Discover the structure</a> of a device by recursively querying the members of nested blocks. It also discovers the implemented managers in the root block by checking their class identity or roles.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;"><img alt="Exploring device model" src="../images/exploring-device-model.png" /></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><em><strong>Exploring the device model</strong></em></td>
+</tr>
+</tbody>
+</table>
+<p>As per the <a href="https://specs.amwa.tv/ms-05-01/latest/docs/Identification.html">MS-05-01</a> specification there are different types of identifiers which ultimately can be split into two categories:</p>
+<ul>
+<li>dynamic identifiers (object identifiers)</li>
+<li>persistent identifiers (roles, class identities and data type names)</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;"><img alt="Identities" src="../images/identities.png" /></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><em><strong>Identities</strong></em></td>
+</tr>
+</tbody>
+</table>
+<p>A controller is expected to be able to work with all the identifiers exposed by a device.</p>
+<p><code>Note</code>: Persistent identifiers like role paths can be used to consistently identify a particular control class instance in the device structure and then rediscover some of its properties including the runtime object id.</p>
+<h4 id="control-class-definition-discovery">Control class definition discovery</h4>
+<p>Controllers are expected to use the <a href="https://specs.amwa.tv/is-12/latest/docs/Class_definition_discovery.html">Class manager</a> in order to discover any control classes used by the devices they are connected to.</p>
+<h4 id="data-type-definition-discovery">Data type definition discovery</h4>
+<p>Controllers are expected to use the <a href="https://specs.amwa.tv/is-12/latest/docs/Data_type_definition_discovery.html">Class manager</a> in order to discover any data types used by the devices they are connected to.</p>
+<h3 id="discovering-the-device-control-endpoint-in-nmos-is-04">Discovering the device control endpoint (in NMOS IS-04)</h3>
+<p>The <a href="https://specs.amwa.tv/is-12/latest/docs/IS-04_interactions.html">NMOS IS-12</a> specification explains that the control endpoint is advertised in the controls array as part of the NMOS device resource. The schema for the NMOS device resource is available in the <a href="https://specs.amwa.tv/is-04/latest/APIs/schemas/with-refs/device.html">NMOS IS-04</a> specification.</p>
+<p>This means that a controller can discover if an NMOS device exposes an NMOS IS-12 control endpoint by checking if the controls array in the NMOS device resource contains the control type of <code>urn:x-nmos:control:ncp</code>.</p>
+<p>Control endpoint example:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="err">...</span>
+<span class="w">    </span><span class="nt">"senders"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="err">...</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"receivers"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="err">...</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"controls"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"urn:x-nmos:control:ncp/v1.0"</span><span class="p">,</span>
+<span class="w">            </span><span class="nt">"href"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ws://hostname/example"</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"urn:x-nmos:device:generic"</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"58f6b536-ca4c-43fd-880a-9df2501fc125"</span><span class="p">,</span>
+<span class="w">  </span><span class="err">...</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The controller can then use the discovered control endpoint to make the initial WebSocket connection which will subsequently be used for NMOS IS-12 parameter control.</p>
+<h3 id="sending-commands-and-receiving-responses">Sending commands and receiving responses</h3>
+<p>As per the <a href="https://specs.amwa.tv/is-12/latest/docs/Protocol_messaging.html#command-message-type">NMOS IS-12</a> specification a controller can send <a href="https://specs.amwa.tv/is-12/latest/docs/Sending_commands.html">Commands</a> and receive responses.</p>
+<p><code>Note</code>: Multiple commands can be sent in the commands array.</p>
+<p>As per the <a href="https://specs.amwa.tv/ms-05-02/latest/docs/NcObject.html#generic-getter-and-setter">MS-05-02</a> specification all control classes inherit from <code>NcObject</code> which specifies generic <code>Get</code> and <code>Set</code> methods.</p>
+<p>These methods can be used by a controller to get the value of a property in an object or set the value of a property in an object if write allowed.</p>
+<h3 id="subscribing-and-receiving-notifications">Subscribing and receiving notifications</h3>
+<p>As per the <a href="https://specs.amwa.tv/ms-05-02/latest/docs/NcObject.html#propertychanged-event">MS-05-02</a> specification all control classes inherit from <code>NcObject</code> which specifies the <code>PropertyChanged</code> event.</p>
+<p>This means any object can be subscribed to in order to receive property change notifications.</p>
+<p>A controller is expected to <a href="https://specs.amwa.tv/is-12/latest/docs/Subscribing_to_events.html">Subscribe</a> to object ids it is interested in by sending <code>Subscription</code> messages as specified in <a href="https://specs.amwa.tv/is-12/latest/docs/Protocol_messaging.html">NMOS IS-12</a>.</p>
+<h4 id="status-monitors">Status monitors</h4>
+<p><a href="https://specs.amwa.tv/bcp-008-01/">BCP-008-01</a> and <a href="https://specs.amwa.tv/bcp-008-02/">BCP-008-01</a> define specialised NcReceiverMonitor and NcSenderMonitor worker classes which report statuses, status messages and status transition counters for relevant domains like Connectivity, Synchronization or Stream validation.</p>
+<p>Objects implementing these classes publish the IS-04 resource identity they are monitoring (Sender or Receiver) through the <a href="#context-identity-mapping">context identity mapping mechanism</a>.</p>
+<p>Sender and Receiver monitors derive from the base class NcStatusMonitor which specified an <code>overallStatus</code> property. This property combines the specific domain statuses of a monitor into a single status which can be more easily observed and displayed by a simple client.</p>
+<p>Controllers are expected to be able to find all status monitors published by a device and be able to retrieve statuses, status messages and status transition counters for relevant domains from these objects. They are also expected to retrieve the overallStatus property of each status monitor object.</p>
+<p>For full controller requirements check the relevant sections in <a href="https://specs.amwa.tv/bcp-008-01/branches/v1.0-dev/docs/Overview.html#controller">BCP-008-01</a> and <a href="https://specs.amwa.tv/bcp-008-02/branches/v1.0-dev/docs/Overview.html#controller">BCP-008-02</a>.</p>
+<h3 id="context-identity-mapping">Context identity mapping</h3>
+<p><a href="https://specs.amwa.tv/ms-05-02/latest/docs/NcObject.html#touchpoints">MS-05-02</a> specifies an identity mapping mechanism available in the base <code>NcObject</code> class. This touchpoint mechanism can be used to associate identities from outside contexts with entities inside the control structure of the device.</p>
+<p>Examples include <a href="https://specs.amwa.tv/bcp-008-01/branches/v1.0-dev/docs/Overview.html#touchpoints-and-is-04-receivers">Receiver monitors</a> and <a href="https://specs.amwa.tv/bcp-008-02/branches/v1.0-dev/docs/Overview.html#touchpoints-and-is-04-senders">Sender monitors</a> which is express domain health statuses for an attached stream receiver or sender.</p>
+<p>This allows a <code>Receiver monitor</code> to be associated with a specific <a href="https://specs.amwa.tv/is-04/">NMOS IS-04</a> receiver.</p>
+<p>A controller is expected to decode touchpoint information where available and associate identities if it has access to the data domains exposed (For example a controller would be able to identify which NMOS IS-04 receiver is associated with a given <code>Receiver monitor</code> object).</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;"><img alt="Context identity mapping" src="../images/context-identity-mapping.png" /></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><em><strong>Context identity mapping</strong></em></td>
+</tr>
+</tbody>
+</table>
+<h3 id="discovering-non-standard-models-used-to-model-vendor-specific-functionality">Discovering non-standard models used to model vendor specific functionality</h3>
+<p>As per the <a href="https://specs.amwa.tv/ms-05-02/latest/docs/Managers.html#class-manager">MS-05-02</a> specification the <code>Class manager</code> can be used to discover the properties of any control class and the fields of any data type.</p>
+<p>Non-standard control classes can be created by inheriting from a standard control class and following the class ID generation guidelines specified in <a href="https://specs.amwa.tv/ms-05-01/latest/docs/Appendix_A_-_Class_ID_Format.html">MS-05-01</a>.</p>
+<p>Here is an example of a new worker control class called <code>DemoClassAlpha</code>. It inherits from <a href="https://specs.amwa.tv/ms-05-02/latest/docs/Framework.html#ncworker">NcWorker</a> which has a classId of <code>[1, 2]</code> and adds the authority key (in this case 0, but would be a negative number if the vendor has an OUI or CID) followed by the index 1.</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"role"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DemoClassAlpha"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"oid"</span><span class="p">:</span><span class="w"> </span><span class="mi">111</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"constantOid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"classId"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">      </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">      </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">      </span><span class="mi">1</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"userLabel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Demo class alpha"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"owner"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Demo control class alpha"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"constraints"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>A subsequent non-standard worker would look like this:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"role"</span><span class="p">:</span><span class="w"> </span><span class="s2">"DemoClassBeta"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"oid"</span><span class="p">:</span><span class="w"> </span><span class="mi">150</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"constantOid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"classId"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">      </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">      </span><span class="mi">2</span><span class="p">,</span>
+<span class="w">      </span><span class="mi">0</span><span class="p">,</span>
+<span class="w">      </span><span class="mi">2</span>
+<span class="w">    </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">"userLabel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Demo class beta"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"owner"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Demo control class beta"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"constraints"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>ensuring class identity uniqueness.</p>
+<p>Controllers are expected to use the class identity lineage information alongside their core framework knowledge to determine when a control class is a non-standard control class.
+The following diagram shows how a vendor created a vendor specific Receiver monitor by deriving the standard Receiver monitor class.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;"><img alt="Non-standard branching" src="../images/non-standard-branching.png" /></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;"><em><strong>Non-standard branching</strong></em></td>
+</tr>
+</tbody>
+</table>
+<h2 id="how-to">How to</h2>
+<p>HOW TO practical examples are available <a href="../How%20To%20practical%20examples/">here</a>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://zensical.org/" target="_blank" rel="noopener">
+      Zensical
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      
+      
+        
+        
+      <script id="__config" type="application/json">{"annotate":null,"base":"..","features":[],"redirect":null,"search":"../assets/javascripts/workers/search.7d14d953.min.js","tags":null,"translations":{"clipboard.copied":"Copied to clipboard","clipboard.copy":"Copy to clipboard","search.result.more.one":"1 more on this page","search.result.more.other":"# more on this page","search.result.none":"No matching documents","search.result.one":"1 matching document","search.result.other":"# matching documents","search.result.placeholder":"Type to start searching","search.result.term.missing":"Missing","select.version":"Select version"},"version":{"provider":"mike"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.8dcc8e9c.min.js"></script>
+      
+        <script src="../javascripts/json-viewer.js"></script>
+      
+        <script src="../javascripts/amwa-branding.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "amwa_id": "INFO-006",
+  "url": "https://specs.amwa.tv/info-006",
+  "name": "Implementation guide for NMOS Device Control & Monitoring",
+  "status": "AMWA Specification",
+  "repo_name": "info-006",
+  "alt_repo_name": "info-device-capabilities-control",
+  "repo_url": "https://github.com/AMWA-TV/info-006",
+  "releases": null,
+  "default_branch": "main",
+  "show_in_index": true,
+  "intro": {
+    "what_does_it_do": [
+      "It guides the reader through some of the most important aspects when implementing a compliant AMWA IS-12, BCP-008 device or controller."
+    ],
+    "why_does_it_matter": [
+      "It provides an easy way of navigating the NMOS Device Control & Monitoring suite when attempting to create a compliant device or controller implementation."
+    ],
+    "how_does_it_work": [
+      "It provides tutorials and How-To examples to assist with implementing a compliant AMWA IS-12, BCP-008 device or controller."
+    ]
+  }
+}
