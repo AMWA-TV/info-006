@@ -3,4 +3,16 @@
       <url>
         <loc>https://specs.amwa.tv/new/info-006/latest/</loc>
       </url>
+      <url>
+        <loc>https://specs.amwa.tv/new/info-006/latest/Tutorials/</loc>
+      </url>
+      <url>
+        <loc>https://specs.amwa.tv/new/info-006/latest/Device%20implementation%20tutorial/</loc>
+      </url>
+      <url>
+        <loc>https://specs.amwa.tv/new/info-006/latest/Controller%20implementation%20tutorial/</loc>
+      </url>
+      <url>
+        <loc>https://specs.amwa.tv/new/info-006/latest/How%20To%20practical%20examples/</loc>
+      </url>
 </urlset>
