@@ -1,7 +1,8 @@
 # AMWA INFO-006: Implementation Guide for NMOS Device Control & Monitoring
 
 [![Lint Status](https://github.com/AMWA-TV/info-006/workflows/Lint/badge.svg)](https://github.com/AMWA-TV/info-006/actions?query=workflow%3ALint)
-[![Render Status](https://github.com/AMWA-TV/info-006/workflows/Render/badge.svg)](https://github.com/AMWA-TV/info-006/actions?query=workflow%3ARender)
+[![Zensical Render Status](https://github.com/AMWA-TV/info-006/actions/workflows/docs.yml/badge.svg)](https://github.com/AMWA-TV/info-006/actions/workflows/docs.yml)
+[![Legacy Render Status](https://github.com/AMWA-TV/info-006/workflows/Render/badge.svg)](https://github.com/AMWA-TV/info-006/actions?query=workflow%3ARender)
 
 This repository holds the source for this Implementation Guide, part of the family of [Networked Media Open Specifications](https://specs.amwa.tv/nmos) from the [Advanced Media Workflow Association](https://amwa.tv)
 
